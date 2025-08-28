@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,10 +8,19 @@
     <link rel="shortcut icon" href="./assets/icons/El_Pollo_Loco.ico" type="image/x-icon">
     <link rel="stylesheet" href="./style.css">
 </head>
-<body>
-    <canvas>
+
+<body onload="init()">
+    <main>
+        <H1>El Pllo Loco</H1>
+    </main>
+    <canvas id="canvas">
     </canvas>
 
+
     <script src="./script.js"></script>
+    <script src="./classes/movable-object.class.js"></script>
+    <script src="./js/game.js"></script>
+    
 </body>
+
 </html>
