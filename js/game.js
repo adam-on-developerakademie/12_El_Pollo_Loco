@@ -1,12 +1,11 @@
-let ctx;
-let character = new movableObject();
+let canvas;
+let world;
 
-function context() {
-  ctx = canvas.getContext("2d");
 
-  console.log(`My character is:`, character);
-  
+function init() {
+ canvas = document.getElementById("canvas");
+ world = new World(canvas);
+
+ 
+  console.log(`My character is:`, world.character);
 }
-
-
-
