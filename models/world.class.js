@@ -17,7 +17,7 @@ class World {
       this.character.height
     );
     let self = this;
-    requestAnimationFrame(function () {
+    requestAnimationFrame( ()=> {
       self.draw();
     });
   }
