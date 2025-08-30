@@ -8,7 +8,7 @@ IMAGES_WALKING = [
     "./img/2-character-pepe/2-walk/w-25.png",
     "./img/2-character-pepe/2-walk/w-26.png",
   ];  
-  curentImage = 0;
+
 
   constructor() {
     super().loadImage("./img/2-character-pepe/2-walk/w-21.png");

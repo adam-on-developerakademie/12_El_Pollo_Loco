@@ -15,7 +15,14 @@ class Cloud extends MovableObject {
   }
   animate() {
     setInterval(() => {
-      this.width + this.x <= 0 ? (this.x = 720) : (this.x -= this.random / 10);
-    }, 1000 / 60);
+      this.width + this.x <= 0 ? (this.x = 720) : (this.x -= this.random / 30);
+    }, 1);
   }
+
+moveLeft() {
+    setInterval(() => {
+      this.width + this.x <= 0 ? (this.x = 720) : (this.x -= this.random / 30);
+    }, 1);
+  }
+
 }
