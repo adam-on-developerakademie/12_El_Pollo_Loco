@@ -1,4 +1,6 @@
 class MovableObject {
+  worldHight = 480;
+  worldWidth = 720;
   x = 100;
   y = 270;
   height = 200;
@@ -6,6 +8,8 @@ class MovableObject {
   img;
   imageCache = {};
   curentImage = 0;
+  random = Math.random();
+  speed = 4;
 
   loadImage(path) {
     this.img = new Image();
@@ -19,11 +23,15 @@ class MovableObject {
       this.imageCache[path] = img;
     });
   }
-  moveRight() {
-    console.log("moving right...");
-  }
 
   moveLeft() {
-    console.log("moving left...");
+    setInterval(() => {
+      this.width + this.x <= 0
+        ? (this.x = this.worldWidth)
+        : (this.x -= this.speed / 100);
+    }, 1);
+  }
+  moveRight() {
+    console.log("moving right...");
   }
 }

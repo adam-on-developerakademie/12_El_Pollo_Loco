@@ -1,7 +1,7 @@
 class Cloud extends MovableObject {
   y = -20 + Math.random() * 100;
   x = 0 + Math.random() * 500;
-  random =  Math.random()
+
   constructor() {
     super().loadImage(
       this.random > 0.5
@@ -14,15 +14,8 @@ class Cloud extends MovableObject {
     this.animate();
   }
   animate() {
-    setInterval(() => {
-      this.width + this.x <= 0 ? (this.x = 720) : (this.x -= this.random / 30);
-    }, 1);
+    this.moveLeft();
   }
 
-moveLeft() {
-    setInterval(() => {
-      this.width + this.x <= 0 ? (this.x = 720) : (this.x -= this.random / 30);
-    }, 1);
-  }
 
 }

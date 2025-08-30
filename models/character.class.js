@@ -12,9 +12,10 @@ IMAGES_WALKING = [
 
   constructor() {
     super().loadImage("./img/2-character-pepe/2-walk/w-21.png");
-    this.y = 420 - this.height;
+    this.y = this.worldHight - this.height -55;
     this.loadImages(this.IMAGES_WALKING);
     this.animate();
+     
   }
 
 
