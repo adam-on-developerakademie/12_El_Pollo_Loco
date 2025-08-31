@@ -1,6 +1,6 @@
 class World {
   character = new Character();
-  level=level1;
+  level = level1;
   ctx;
   canvas;
   keyboard;
@@ -23,7 +23,7 @@ class World {
     this.addObjectsToMap(this.level.clouds);
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.level.boss);
-    
+
     this.ctx.translate(-this.camera_x, 0);
 
     let self = this;
@@ -45,12 +45,17 @@ class World {
       this.ctx.scale(-1, 1);
     }
     this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height);
+    this.ctx.beginPath();
+    this.ctx.lineWidth = "5";
+    this.ctx.strokeStyle = "blue";
+    this.ctx.rect(mo.x, mo.y, mo.width, mo.height);
+    this.ctx.stroke();
+
     if (mo.otherDirection) {
       this.ctx.restore();
     }
   }
- setWorld() {
+  setWorld() {
     this.character.world = this;
   }
-
 }
