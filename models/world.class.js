@@ -1,13 +1,8 @@
 class World {
   character = new Character();
-  enemies = [new Chicken(), new Chicken(), new Chicken()];
-  clauds = [new Cloud(), new Cloud()];
-  backgroundObjects = [
-    new BackgroundObject("./img/5-background/layers/air.png",0),
-    new BackgroundObject("./img/5-background/layers/3-third-layer/1.png",0),
-    new BackgroundObject("./img/5-background/layers/2-second-layer/1.png",0),
-    new BackgroundObject("./img/5-background/layers/1-first-layer/1.png",0),
-  ];
+  enemies = level1.enemies;
+  clauds = level1.clouds;
+  backgroundObjects = level1.backgroundObjects;
   ctx;
   canvas;
   keyboard;
@@ -37,7 +32,7 @@ class World {
       self.draw();
     });
   }
-  
+
   addObjectsToMap(objects) {
     objects.forEach((obj) => {
       this.addToMap(obj);
