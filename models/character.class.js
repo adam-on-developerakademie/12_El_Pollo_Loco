@@ -16,8 +16,22 @@ class Character extends MovableObject {
     "./img/2-character-pepe/3-jump/j-35.png",
     "./img/2-character-pepe/3-jump/j-36.png",
     "./img/2-character-pepe/3-jump/j-37.png",
-     "./img/2-character-pepe/3-jump/j-38.png",
-     "./img/2-character-pepe/3-jump/j-39.png",
+    "./img/2-character-pepe/3-jump/j-38.png",
+    "./img/2-character-pepe/3-jump/j-39.png",
+  ];
+  IMAGES_DEAD = [
+    "./img/2-character-pepe/5-dead/d-51.png",
+    "./img/2-character-pepe/5-dead/d-52.png",
+    "./img/2-character-pepe/5-dead/d-53.png",
+    "./img/2-character-pepe/5-dead/d-54.png",
+    "./img/2-character-pepe/5-dead/d-55.png",
+    "./img/2-character-pepe/5-dead/d-56.png",
+    "./img/2-character-pepe/5-dead/d-57.png",
+  ];
+  IMAGES_HURT = [
+    "img/2-character-pepe/4-hurt/h-41.png",
+    "img/2-character-pepe/4-hurt/h-42.png",
+    "img/2-character-pepe/4-hurt/h-43.png",
   ];
 
   world;
@@ -29,6 +43,8 @@ class Character extends MovableObject {
     this.applayGravity();
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_JUMPING);
+    this.loadImages(this.IMAGES_DEAD);
+    this.loadImages(this.IMAGES_HURT);
     this.animate();
   }
 
@@ -42,26 +58,25 @@ class Character extends MovableObject {
         this.x -= this.speed;
         this.otherDirection = true;
       }
-      if(this.world.keyboard.UP && this.isAboveGround()==false ){this.speedY=20}
+      if (this.world.keyboard.UP && this.isAboveGround() == false) {
+        this.speedY = 20;
+      }
       this.world.camera_x = -this.x + 100;
     }, 1000 / 60);
 
     setInterval(() => {
-      if (this.isAboveGround()) {
-        let i = this.curentImage % this.IMAGES_JUMPING.length;
-        let path = this.IMAGES_JUMPING[i];
-        this.img = this.imageCache[path];
-        this.curentImage++;
+      if (this.isDead()) {
+        this.playAnimation(this.IMAGES_DEAD,0);
+      } else if (this.isHurt()) {
+        this.playAnimation(this.IMAGES_HURT,0);
+      } else if (this.isAboveGround()) {
+        this.playFullAnimation(this.IMAGES_JUMPING);
+      } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+       this.playAnimation(this.IMAGES_WALKING,0);
       } else {
-        this.img = this.imageCache["./img/2-character-pepe/3-jump/j-31.png"]
-        if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-          let i = this.curentImage % this.IMAGES_WALKING.length;
-          let path = this.IMAGES_WALKING[i];
-          this.img = this.imageCache[path];
-          this.curentImage++;
-        }
+        this.img = this.imageCache["./img/2-character-pepe/3-jump/j-31.png"];
       }
-    }, 80);
+    }, 60);
   }
 
   jump() {

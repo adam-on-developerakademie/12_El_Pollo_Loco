@@ -12,6 +12,5 @@ class Level {
     this.backgroundObjects = backgroundObjects;
     this.levelEndX = levelEndX;
 
-    console.log(boss);
   }
 }
