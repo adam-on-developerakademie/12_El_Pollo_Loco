@@ -11,6 +11,8 @@ class MovableObject {
   random = Math.random();
   speed = 4;
   otherDirection = false;
+  speedY = 0;
+  acceleration = 2;
 
   loadImage(path) {
     this.img = new Image();
@@ -33,15 +35,30 @@ class MovableObject {
     }, 1);
   }
 
-playAnimation(images,speed) {
+  playAnimation(images, speed) {
     setInterval(() => {
-      let i = this.curentImage % this.IMAGES_WALKING.length;
+      let i=0;
+      if (speed != 0) {i = this.curentImage % images.length};
       let path = images[i];
       this.img = this.imageCache[path];
       this.curentImage++;
-    }, speed);}
+    }, speed);
+  }
 
   moveRight() {
     console.log("moving right...");
+  }
+
+  applayGravity() {
+    setInterval(() => {
+      if (this.isAboveGround()) {
+        this.y -= this.speedY;
+        this.speedY -= this.acceleration;
+      }
+    }, 1000 / 25);
+  }
+
+  isAboveGround() {
+    return this.y < this.worldHight - this.height - 55;
   }
 }
