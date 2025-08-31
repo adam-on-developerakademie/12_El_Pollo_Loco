@@ -16,8 +16,8 @@ class Character extends MovableObject {
     "./img/2-character-pepe/3-jump/j-35.png",
     "./img/2-character-pepe/3-jump/j-36.png",
     "./img/2-character-pepe/3-jump/j-37.png",
-    // "./img/2-character-pepe/3-jump/j-38.png",
-    // "./img/2-character-pepe/3-jump/j-39.png",
+     "./img/2-character-pepe/3-jump/j-38.png",
+     "./img/2-character-pepe/3-jump/j-39.png",
   ];
 
   world;
@@ -42,6 +42,7 @@ class Character extends MovableObject {
         this.x -= this.speed;
         this.otherDirection = true;
       }
+      if(this.world.keyboard.UP && this.isAboveGround()==false ){this.speedY=20}
       this.world.camera_x = -this.x + 100;
     }, 1000 / 60);
 
@@ -60,7 +61,7 @@ class Character extends MovableObject {
           this.curentImage++;
         }
       }
-    }, 50);
+    }, 80);
   }
 
   jump() {
