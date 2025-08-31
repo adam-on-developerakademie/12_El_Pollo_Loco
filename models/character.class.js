@@ -7,6 +7,7 @@ class Character extends MovableObject {
     "./img/2-character-pepe/2-walk/w-25.png",
     "./img/2-character-pepe/2-walk/w-26.png",
   ];
+  
   world;
   speed = 10;
 

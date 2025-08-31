@@ -32,6 +32,15 @@ class MovableObject {
         : (this.x -= this.speed / 100);
     }, 1);
   }
+
+playAnimation(images,speed) {
+    setInterval(() => {
+      let i = this.curentImage % this.IMAGES_WALKING.length;
+      let path = images[i];
+      this.img = this.imageCache[path];
+      this.curentImage++;
+    }, speed);}
+
   moveRight() {
     console.log("moving right...");
   }
