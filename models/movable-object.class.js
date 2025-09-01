@@ -1,13 +1,5 @@
-class MovableObject {
-  worldHight = 480;
-  worldWidth = 720;
-  x = 100;
-  y = 270;
-  height = 200;
-  width = 100;
-  img;
-  imageCache = {};
-  curentImage = 0;
+class MovableObject extends DrawableObject {
+ 
   animationBusy = 0;
   element;
   intervallID;
@@ -18,24 +10,7 @@ class MovableObject {
   acceleration = 2;
   energy = 100;
 
-  loadImage(path) {
-    this.img = new Image();
-    this.img.src = path;
-  }
-
-  draw(ctx) {
-    ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-  }
-
-  drawFrameBorder(ctx) {
-    if (this instanceof Character || this instanceof Chicken) {
-      ctx.beginPath();
-      ctx.lineWidth = "5";
-      ctx.strokeStyle = "blue";
-      ctx.rect(this.x, this.y, this.width, this.height);
-      ctx.stroke();
-    }
-  }
+ 
 
   isColliding(mo) {
     return (
@@ -46,13 +21,6 @@ class MovableObject {
     );
   }
 
-  loadImages(arr) {
-    arr.forEach((path) => {
-      let img = new Image();
-      img.src = path;
-      this.imageCache[path] = img;
-    });
-  }
 
   moveLeft() {
     setInterval(() => {
@@ -122,4 +90,4 @@ class MovableObject {
   isDead() {
     return this.energy == 0;
   }
-}
+} 
