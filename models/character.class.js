@@ -9,9 +9,9 @@ class Character extends MovableObject {
     "./img/2-character-pepe/3-jump/j-31.png",
   ];
   IMAGES_JUMPING = [
-    "./img/2-character-pepe/3-jump/j-31.png",
-    "./img/2-character-pepe/3-jump/j-32.png",
-    "./img/2-character-pepe/3-jump/j-33.png",
+    //"./img/2-character-pepe/3-jump/j-31.png",
+    //"./img/2-character-pepe/3-jump/j-32.png",
+    //"./img/2-character-pepe/3-jump/j-33.png",
     "./img/2-character-pepe/3-jump/j-34.png",
     "./img/2-character-pepe/3-jump/j-35.png",
     "./img/2-character-pepe/3-jump/j-36.png",
@@ -70,7 +70,7 @@ class Character extends MovableObject {
       } else if (this.isHurt()) {
         this.playAnimation(this.IMAGES_HURT,0);
       } else if (this.isAboveGround()) {
-        this.playFullAnimation(this.IMAGES_JUMPING);
+        this.playFullAnimation(this.IMAGES_JUMPING,1);
       } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
        this.playAnimation(this.IMAGES_WALKING,0);
       } else {

@@ -8,6 +8,9 @@ class MovableObject {
   img;
   imageCache = {};
   curentImage = 0;
+  animationBusy = 0;
+  element;
+  intervallID;
   random = Math.random();
   speed = 4;
   otherDirection = false;
@@ -60,16 +63,28 @@ class MovableObject {
   }
 
   playAnimation(images) {
-      let i = this.curentImage % images.length;
-      let path = images[i];
-      this.img = this.imageCache[path];
-      this.curentImage++;
+    let i = this.curentImage % images.length;
+    let path = images[i];
+    this.img = this.imageCache[path];
+    this.curentImage++;
   }
-    playFullAnimation(images) {
-     let i = this.curentImage % images.length;
-      let path = images[i];
-      this.img = this.imageCache[path];
-      this.curentImage++;
+
+  playFullAnimation(images, duration) {
+    let nowTime = new Date().getTime();
+    if (this.animationBusy < nowTime) {
+      this.animationBusy = nowTime + duration * 1000;
+      images.forEach((element) => {
+        setTimeout(() => {
+          this.element = element;
+          this.img = this.imageCache[this.element];
+        }, ((1000 * duration) / images.length) * images.indexOf(element));
+      });
+    } else {
+      this.intervallID = setInterval(() => {
+        this.img = this.imageCache[this.element];
+      }, 1);
+    }
+    clearInterval(this.intervallID);
   }
 
   moveRight() {
@@ -93,21 +108,18 @@ class MovableObject {
     this.energy -= 1;
     if (this.energy <= 0) {
       this.energy = 0;
-    } else{
+    } else {
       this.lastHit = new Date().getTime();
     }
   }
 
   isHurt() {
     let timepassed = new Date().getTime() - this.lastHit;
-    timepassed= timepassed/1000; 
+    timepassed = timepassed / 1000;
     return timepassed < 0.5;
   }
 
-
   isDead() {
     return this.energy == 0;
-  } 
-
-
+  }
 }
