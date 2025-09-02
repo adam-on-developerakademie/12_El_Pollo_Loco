@@ -6,7 +6,7 @@ class Character extends MovableObject {
     "./img/2-character-pepe/2-walk/w-24.png",
     "./img/2-character-pepe/2-walk/w-25.png",
     "./img/2-character-pepe/2-walk/w-26.png",
-    "./img/2-character-pepe/3-jump/j-31.png",
+    "./img/2-character-pepe/2-walk/w-21.png",
   ];
   IMAGES_JUMPING = [
     //"./img/2-character-pepe/3-jump/j-31.png",
@@ -18,6 +18,7 @@ class Character extends MovableObject {
     "./img/2-character-pepe/3-jump/j-37.png",
     "./img/2-character-pepe/3-jump/j-38.png",
     "./img/2-character-pepe/3-jump/j-39.png",
+    "./img/2-character-pepe/3-jump/j-31.png",
   ];
   IMAGES_DEAD = [
     "./img/2-character-pepe/5-dead/d-51.png",
@@ -35,21 +36,25 @@ class Character extends MovableObject {
   ];
 
   world;
-  y = 50; // -55 = ground
-  speed = 10;
+  y = 50;
+  speed = 3;
 
   constructor() {
-    super().loadImage("./img/2-character-pepe/2-walk/w-21.png");
-    this.applayGravity();
+    super().loadImage("./img/2-character-pepe/3-jump/j-31.png");
+    this.applyGravity();
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_JUMPING);
     this.loadImages(this.IMAGES_DEAD);
     this.loadImages(this.IMAGES_HURT);
-    this.animate();
+    this.keyboardControl();
   }
 
-  animate() {
+  keyboardControl() {
     setInterval(() => {
+      if (this.world.keyboard.SPACE) {
+        this.throwBottle();
+      }
+
       if (this.world.keyboard.RIGHT && this.x < this.world.level.levelEndX) {
         this.x += this.speed;
         this.otherDirection = false;
@@ -62,22 +67,31 @@ class Character extends MovableObject {
         this.speedY = 20;
       }
       this.world.camera_x = -this.x + 100;
-    }, 1000 / 60);
+    }, 1);
 
     setInterval(() => {
       if (this.isDead()) {
-        this.playAnimation(this.IMAGES_DEAD,0);
+        this.playAnimation(this.IMAGES_DEAD, 0);
       } else if (this.isHurt()) {
-        this.playAnimation(this.IMAGES_HURT,0);
+        this.playAnimation(this.IMAGES_HURT, 0);
       } else if (this.isAboveGround()) {
-        this.playFullAnimation(this.IMAGES_JUMPING,1);
+        this.playFullAnimation(this.IMAGES_JUMPING, 1);
       } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-       this.playAnimation(this.IMAGES_WALKING,0);
+        this.playFullAnimation(this.IMAGES_WALKING, 0.3);
       } else {
         this.img = this.imageCache["./img/2-character-pepe/3-jump/j-31.png"];
       }
-    }, 60);
+    }, 1);
   }
+
+   throwBottle(){
+     let nowTime = new Date().getTime();
+    if (this.animationBusy < nowTime) {
+      this.animationBusy = nowTime +200;
+        let bottle = new ThrowableObject(this.world.character.x, this.world.character.y);
+        this.world.throwableObjects.push(bottle);
+   }};
+
 
   jump() {
     console.log("jumping...");

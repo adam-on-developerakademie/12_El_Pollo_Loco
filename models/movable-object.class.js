@@ -1,5 +1,4 @@
 class MovableObject extends DrawableObject {
- 
   animationBusy = 0;
   element;
   intervallID;
@@ -10,8 +9,6 @@ class MovableObject extends DrawableObject {
   acceleration = 2;
   energy = 100;
 
- 
-
   isColliding(mo) {
     return (
       this.x + this.width > mo.x &&
@@ -20,7 +17,6 @@ class MovableObject extends DrawableObject {
       this.y < mo.y + mo.height
     );
   }
-
 
   moveLeft() {
     setInterval(() => {
@@ -59,7 +55,7 @@ class MovableObject extends DrawableObject {
     console.log("moving right...");
   }
 
-  applayGravity() {
+  applyGravity() {
     setInterval(() => {
       if (this.isAboveGround() || this.speedY > 0) {
         this.y -= this.speedY;
@@ -69,9 +65,12 @@ class MovableObject extends DrawableObject {
   }
 
   isAboveGround() {
-    return this.y < this.worldHight - this.height - 55;
+    if (this instanceof ThrowableObject) {
+      return true;
+    } else {
+      return this.y < this.worldHight - this.height - 55;
+    }
   }
-
   hit() {
     this.energy -= 1;
     if (this.energy <= 0) {
@@ -90,4 +89,4 @@ class MovableObject extends DrawableObject {
   isDead() {
     return this.energy == 0;
   }
-} 
+}

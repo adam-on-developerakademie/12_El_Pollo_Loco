@@ -6,6 +6,8 @@ class World {
   keyboard;
   camera_x = 0;
   statusBar = new StatusBar();
+  throwableObjects = [new ThrowableObject()];
+
 
   constructor(canvas) {
     this.ctx = canvas.getContext("2d");
@@ -14,6 +16,7 @@ class World {
     this.draw();
     this.setWorld();
     this.checkCollisions();
+    
   }
 
   setWorld() {
@@ -21,6 +24,8 @@ class World {
   }
 
   checkCollisions() {
+
+
     setInterval(() => {
       this.level.enemies.forEach((enemy) => {
         if (this.character.isColliding(enemy)) {
@@ -43,6 +48,7 @@ class World {
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.clouds);
     this.addObjectsToMap(this.level.enemies);
+    this.addObjectsToMap(this.throwableObjects);
     this.addObjectsToMap(this.level.boss);
 
     this.ctx.translate(-this.camera_x, 0);
