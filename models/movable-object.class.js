@@ -1,5 +1,8 @@
 class MovableObject extends DrawableObject {
   animationBusy = 0;
+  jumpTime = 0;
+  frameTime = 0;
+  currentFrame = 0;
   element;
   intervallID;
   random = Math.random();
@@ -33,23 +36,22 @@ class MovableObject extends DrawableObject {
     this.curentImage++;
   }
 
-  playFullAnimation(images, duration) {
-    let nowTime = new Date().getTime();
-    if (this.animationBusy < nowTime) {
-      this.animationBusy = nowTime + duration * 1000;
-      images.forEach((element) => {
-        setTimeout(() => {
-          this.element = element;
-          this.img = this.imageCache[this.element];
-        }, ((1000 * duration) / images.length) * images.indexOf(element));
-      });
-    } else {
-      this.intervallID = setInterval(() => {
-        this.img = this.imageCache[this.element];
-      }, 1);
-    }
-    clearInterval(this.intervallID);
+  playSequenceAnimation(images, duration){
+          let nowTime = new Date().getTime();
+      if (this.jumpTime < nowTime) {
+        this.jumpTime = nowTime + duration * 1000;
+        this.currentFrame = 0;
+     }
+     if (this.jumpTime > nowTime){
+        if (this.frameTime < nowTime) {
+          this.frameTime = nowTime + duration / images.length * 1000;
+          if(images[this.currentFrame]){this.img = this.imageCache[images[this.currentFrame]]} else {
+          this.img = this.imageCache["./img/2-character-pepe/3-jump/j-31.png"];}
+          this.currentFrame++;
+     } 
+   } 
   }
+
 
   moveRight() {
     console.log("moving right...");
