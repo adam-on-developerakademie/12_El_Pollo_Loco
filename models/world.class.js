@@ -7,6 +7,8 @@ class World {
   camera_x = 0;
   healthBar = new StatusBar('HEALTH_BAR');
   bottleBar = new StatusBar('BOTTLE_BAR');
+  coinBar = new StatusBar('COIN_BAR');
+  bossBar = new StatusBar('BOSS_BAR');
 
   throwableObjects = [new ThrowableObject()];
 
@@ -35,6 +37,8 @@ class World {
           this.character.hit();
           this.healthBar.setPercentage(this.character.energy);
           this.bottleBar.setPercentage(this.character.energy);
+          this.coinBar.setPercentage(this.character.energy);
+          this.bossBar.setPercentage(this.character.energy);
 
         }
       });
@@ -56,6 +60,8 @@ class World {
      this.ctx.translate(-this.camera_x, 0);
     this.addToMap(this.healthBar);
     this.addToMap(this.bottleBar);
+    this.addToMap(this.coinBar);
+    this.addToMap(this.bossBar);
     this.ctx.translate(this.camera_x, 0);
 
     this.ctx.translate(-this.camera_x, 0);
