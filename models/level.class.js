@@ -1,13 +1,13 @@
 class Level {
-  bottels
+  bottles
   enemies;
   boss;
   clouds;
   backgroundObjects;
   levelEndX;
 
-  constructor(bottels,enemies, boss, clouds, backgroundObjects, levelEndX) {
-    this.bottels = bottels;
+  constructor(bottles,enemies, boss, clouds, backgroundObjects, levelEndX) {
+    this.bottles = bottles;
     this.enemies = enemies;
     this.boss = boss;
     this.clouds = clouds;

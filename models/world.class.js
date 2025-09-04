@@ -30,17 +30,21 @@ class World {
   }
 
   checkCollisions() {
-
-
     setInterval(() => {
       this.level.enemies.forEach((enemy) => {
         if (this.character.isColliding(enemy)) {
-          console.log(this.character.energy,this.character.bottels,this.character.coins);
+          //console.log(this.character.energy,this.character.bottles,this.character.coins);
           this.character.hit();
           this.healthBar.setPercentage(this.character.energy);
         }
       });
-      this.bottlesBar.setPercentage(this.character.bottels);
+      this.bottles.forEach((bottle) => {
+        if (this.character.isColliding(bottle)) {
+          //console.log(this.character.energy,this.character.bottlesNumber,this.character.coins);
+          this.character.takeBottle(this.bottles,this.bottles.indexOf(bottle)) 
+          this.bottlesBar.setPercentage(this.character.bottlesNumber)}
+      });
+
       this.coinsBar.setPercentage(this.character.coins);
       this.bossBar.setPercentage(this.character.energy);
     }, 1000 / 60);
@@ -53,7 +57,7 @@ class World {
     this.addObjectsToMap(this.level.backgroundObjects);
 
     this.addToMap(this.character);
-    this.addObjectsToMap(this.level.bottels);
+    //this.addObjectsToMap(this.level.bottles);
     this.addObjectsToMap(this.bottles);
     this.addObjectsToMap(this.level.clouds);
     this.addObjectsToMap(this.level.enemies);

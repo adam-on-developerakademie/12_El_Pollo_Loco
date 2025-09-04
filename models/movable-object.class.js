@@ -11,6 +11,8 @@ class MovableObject extends DrawableObject {
   speedY = 0;
   acceleration = 2;
   energy = 100;
+  bottlesNumber = 0;
+  coinsNumber = 0;
 
   isColliding(mo) {
     return (
@@ -36,22 +38,24 @@ class MovableObject extends DrawableObject {
     this.curentImage++;
   }
 
-  playSequenceAnimation(images, duration){
-          let nowTime = new Date().getTime();
-      if (this.jumpTime < nowTime) {
-        this.jumpTime = nowTime + duration * 1000;
-        this.currentFrame = 0;
-     }
-     if (this.jumpTime > nowTime){
-        if (this.frameTime < nowTime) {
-          this.frameTime = nowTime + duration / images.length * 1000;
-          if(images[this.currentFrame]){this.img = this.imageCache[images[this.currentFrame]]} else {
-          this.img = this.imageCache["./img/2-character-pepe/3-jump/j-31.png"];}
-          this.currentFrame++;
-     } 
-   } 
+  playSequenceAnimation(images, duration) {
+    let nowTime = new Date().getTime();
+    if (this.jumpTime < nowTime) {
+      this.jumpTime = nowTime + duration * 1000;
+      this.currentFrame = 0;
+    }
+    if (this.jumpTime > nowTime) {
+      if (this.frameTime < nowTime) {
+        this.frameTime = nowTime + (duration / images.length) * 1000;
+        if (images[this.currentFrame]) {
+          this.img = this.imageCache[images[this.currentFrame]];
+        } else {
+          this.img = this.imageCache["./img/2-character-pepe/3-jump/j-31.png"];
+        }
+        this.currentFrame++;
+      }
+    }
   }
-
 
   moveRight() {
     console.log("moving right...");
@@ -79,6 +83,16 @@ class MovableObject extends DrawableObject {
       this.energy = 0;
     } else {
       this.lastHit = new Date().getTime();
+    }
+  }
+
+  takeBottle(bottles, index) {
+    if (this.bottlesNumber < 25) {
+      this.bottlesNumber++;
+      console.log(bottles, index);
+      bottles.splice(index, 1);
+    } else {
+      this.bottlesNumber = 25;
     }
   }
 

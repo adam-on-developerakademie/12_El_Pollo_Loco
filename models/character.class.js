@@ -60,7 +60,7 @@ class Character extends MovableObject {
       this.characterJump();
       this.playAnimations();
       this.throwBottle();
-       this.spawnBottle()
+      this.spawnBottle()
       this.world.camera_x = -this.x + 100;
     }, 1);
   }
@@ -80,6 +80,7 @@ class Character extends MovableObject {
   }
 
   throwBottle() {
+    if (this.world.character.bottlesNumber > 0 ){
     if (this.world.keyboard.SPACE) {
       let nowTime = new Date().getTime();
       if (this.animationBusy < nowTime) {
@@ -90,15 +91,17 @@ class Character extends MovableObject {
           this.otherDirection 
         );
         this.world.throwableObjects.push(throwableBottle);
+        this.world.character.bottlesNumber--;
+        this.world.bottlesBar.setPercentage(this.world.character.bottlesNumber)
       }
-    }
+    }}
   }
 
   spawnBottle() {
     if(Math.random()>0.998){
     let bottle = new Bottle(this.x);
     this.world.bottles.push(bottle);
-    console.log("bottle spawned:", bottle);
+    //console.log("bottle spawned:", bottle);
   }}
 
   characterGoRight() {
