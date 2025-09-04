@@ -6,8 +6,8 @@ class World {
   keyboard;
   camera_x = 0;
   healthBar = new StatusBar('HEALTH_BAR');
-  bottleBar = new StatusBar('BOTTLE_BAR');
-  coinBar = new StatusBar('COIN_BAR');
+  bottlesBar = new StatusBar('BOTTLES_BAR');
+  coinsBar = new StatusBar('COINS_BAR');
   bossBar = new StatusBar('BOSS_BAR');
 
   throwableObjects = [new ThrowableObject()];
@@ -33,11 +33,11 @@ class World {
     setInterval(() => {
       this.level.enemies.forEach((enemy) => {
         if (this.character.isColliding(enemy)) {
-          console.log(this.character.energy);
+          console.log(this.character.energy,this.character.bottels,this.character.coins);
           this.character.hit();
           this.healthBar.setPercentage(this.character.energy);
-          this.bottleBar.setPercentage(this.character.energy);
-          this.coinBar.setPercentage(this.character.energy);
+          this.bottlesBar.setPercentage(this.character.bottels);
+          this.coinsBar.setPercentage(this.character.coins);
           this.bossBar.setPercentage(this.character.energy);
 
         }
@@ -59,8 +59,8 @@ class World {
 
      this.ctx.translate(-this.camera_x, 0);
     this.addToMap(this.healthBar);
-    this.addToMap(this.bottleBar);
-    this.addToMap(this.coinBar);
+    this.addToMap(this.bottlesBar);
+    this.addToMap(this.coinsBar);
     this.addToMap(this.bossBar);
     this.ctx.translate(this.camera_x, 0);
 

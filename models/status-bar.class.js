@@ -8,7 +8,7 @@ class StatusBar extends DrawableObject {
     "./img/7-statusbars/1-statusbar/2-statusbar-health/green/100.png",
   ];
 
-  BOTTLE_BAR = [
+  BOTTLES_BAR = [
     "./img/7-statusbars/1-statusbar/3-statusbar-bottle/orange/0.png",
     "./img/7-statusbars/1-statusbar/3-statusbar-bottle/orange/20.png",
     "./img/7-statusbars/1-statusbar/3-statusbar-bottle/orange/40.png",
@@ -17,7 +17,7 @@ class StatusBar extends DrawableObject {
     "./img/7-statusbars/1-statusbar/3-statusbar-bottle/orange/100.png",
   ];
 
-    COIN_BAR = [
+  COINS_BAR = [
     "./img/7-statusbars/1-statusbar/1-statusbar-coin/blue/0.png",
     "./img/7-statusbars/1-statusbar/1-statusbar-coin/blue/20.png",
     "./img/7-statusbars/1-statusbar/1-statusbar-coin/blue/40.png",
@@ -33,31 +33,33 @@ class StatusBar extends DrawableObject {
     "./img/7-statusbars/2-statusbar-endboss/green/green60.png",
     "./img/7-statusbars/2-statusbar-endboss/green/green80.png",
     "./img/7-statusbars/2-statusbar-endboss/green/green100.png",
-  ];  
+  ];
 
   BARS_POSITIONS = {
-    HEALTH_BAR: { x: 10, y: 0 },
-    BOTTLE_BAR: { x: 10, y: 50 },
-    COIN_BAR: { x: 10, y: 100 },
-    BOSS_BAR: { x: 10, y: 150 },
+    HEALTH_BAR: { x: 10, y: 0 ,percentage: 100},
+    BOTTLES_BAR: { x: 10, y: 50 ,percentage: 0},
+    COINS_BAR: { x: 10, y: 100 ,percentage: 0},
+    BOSS_BAR: { x: 10, y: 150 ,percentage: 100},
   };
 
   statusBar = [];
-  percentage = 100;
+   percentage;
 
   constructor(statusBar) {
     super();
     this.statusBar = eval(`this.${statusBar}`);
     this.loadImages(this.statusBar);
-    this.setPercentage(100);
+    this.percentage = eval(`this.BARS_POSITIONS.${statusBar}.percentage`);
+    this.setPercentage(this.percentage)
     this.x = eval(`this.BARS_POSITIONS.${statusBar}.x`);
     this.y = eval(`this.BARS_POSITIONS.${statusBar}.y`);
+    
     this.width = 200;
     this.height = 50;
   }
 
   setPercentage(percentage) {
-    //console.log(this.statusBar);
+    console.log(this.statusBar);
     this.percentage = percentage;
     let path = this.statusBar[this.resolveImageIndex()];
     this.img = this.imageCache[path];

@@ -11,6 +11,9 @@ class MovableObject extends DrawableObject {
   speedY = 0;
   acceleration = 2;
   energy = 100;
+  bottels = 0;
+  coins = 0;
+
 
   isColliding(mo) {
     return (
