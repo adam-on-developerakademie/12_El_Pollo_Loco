@@ -15,6 +15,7 @@ class ThrowableObject extends MovableObject {
     let intervalId = setInterval(() => {
       this.y < 1000 ? (otherDirection?this.x-=5:this.x += 5) : clearInterval(intervalId);
     }, 1);
+    this.y=this.y+120;
     this.speedY = 20;
     this.applyGravity();
   }

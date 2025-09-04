@@ -1,5 +1,5 @@
 class StatusBar extends DrawableObject {
-  IMAGES = [
+  HEALTH_BAR = [
     "./img/7-statusbars/1-statusbar/2-statusbar-health/green/0.png",
     "./img/7-statusbars/1-statusbar/2-statusbar-health/green/20.png",
     "./img/7-statusbars/1-statusbar/2-statusbar-health/green/40.png",
@@ -8,21 +8,38 @@ class StatusBar extends DrawableObject {
     "./img/7-statusbars/1-statusbar/2-statusbar-health/green/100.png",
   ];
 
+  BOTTLE_BAR = [
+    "./img/7-statusbars/1-statusbar/2-statusbar-health/green/0.png",
+    "./img/7-statusbars/1-statusbar/2-statusbar-health/green/20.png",
+    "./img/7-statusbars/1-statusbar/2-statusbar-health/green/40.png",
+    "./img/7-statusbars/1-statusbar/2-statusbar-health/green/60.png",
+    "./img/7-statusbars/1-statusbar/2-statusbar-health/green/80.png",
+    "./img/7-statusbars/1-statusbar/2-statusbar-health/green/100.png",
+  ];
+
+  BARS_POSITIONS = {
+    HEALTH_BAR: { x: 10, y: 0 },
+    BOTTLE_BAR: { x: 10, y: 60 },
+  };
+
+  statusBar = [];
   percentage = 100;
 
-  constructor() {
+  constructor(statusBar) {
     super();
-    this.loadImages(this.IMAGES);
+    this.statusBar = eval(`this.${statusBar}`);
+    this.loadImages(this.statusBar);
     this.setPercentage(100);
-    this.x = 10;
-    this.y = 0;
+    this.x = eval(`this.BARS_POSITIONS.${statusBar}.x`);
+    this.y = eval(`this.BARS_POSITIONS.${statusBar}.y`);
     this.width = 200;
     this.height = 50;
   }
 
   setPercentage(percentage) {
+    //console.log(this.statusBar);
     this.percentage = percentage;
-    let path = this.IMAGES[this.resolveImageIndex()];
+    let path = this.statusBar[this.resolveImageIndex()];
     this.img = this.imageCache[path];
   }
   resolveImageIndex() {

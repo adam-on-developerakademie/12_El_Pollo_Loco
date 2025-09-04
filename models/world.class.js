@@ -5,7 +5,9 @@ class World {
   canvas;
   keyboard;
   camera_x = 0;
-  statusBar = new StatusBar();
+  healthBar = new StatusBar('HEALTH_BAR');
+  bottleBar = new StatusBar('BOTTLE_BAR');
+
   throwableObjects = [new ThrowableObject()];
 
 
@@ -31,7 +33,9 @@ class World {
         if (this.character.isColliding(enemy)) {
           console.log(this.character.energy);
           this.character.hit();
-          this.statusBar.setPercentage(this.character.energy);
+          this.healthBar.setPercentage(this.character.energy);
+          this.bottleBar.setPercentage(this.character.energy);
+
         }
       });
     }, 1000 / 60);
@@ -42,14 +46,17 @@ class World {
     this.ctx.translate(this.camera_x, 0);
 
     this.addObjectsToMap(this.level.backgroundObjects);
-    this.ctx.translate(-this.camera_x, 0);
-    this.addToMap(this.statusBar);
-    this.ctx.translate(this.camera_x, 0);
+
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.clouds);
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.throwableObjects);
     this.addObjectsToMap(this.level.boss);
+
+     this.ctx.translate(-this.camera_x, 0);
+    this.addToMap(this.healthBar);
+    this.addToMap(this.bottleBar);
+    this.ctx.translate(this.camera_x, 0);
 
     this.ctx.translate(-this.camera_x, 0);
 
