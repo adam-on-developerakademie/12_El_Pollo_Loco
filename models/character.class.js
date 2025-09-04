@@ -50,6 +50,7 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGE_STAY);
     this.run();
+
   }
 
   run() {
@@ -59,6 +60,7 @@ class Character extends MovableObject {
       this.characterJump();
       this.playAnimations();
       this.throwBottle();
+       this.spawnBottle()
       this.world.camera_x = -this.x + 100;
     }, 1);
   }
@@ -82,15 +84,22 @@ class Character extends MovableObject {
       let nowTime = new Date().getTime();
       if (this.animationBusy < nowTime) {
         this.animationBusy = nowTime + 150;
-        let bottle = new ThrowableObject(
+        let throwableBottle = new ThrowableObject(
           this.world.character.x,
           this.world.character.y,
           this.otherDirection 
         );
-        this.world.throwableObjects.push(bottle);
+        this.world.throwableObjects.push(throwableBottle);
       }
     }
   }
+
+  spawnBottle() {
+    if(Math.random()>0.998){
+    let bottle = new Bottle(this.x);
+    this.world.bottles.push(bottle);
+    console.log("bottle spawned:", bottle);
+  }}
 
   characterGoRight() {
     if (this.world.keyboard.RIGHT && this.x < this.world.level.levelEndX) {
@@ -111,4 +120,7 @@ class Character extends MovableObject {
       this.speedY = 20;
     }
   }
+
+
+
 }

@@ -11,6 +11,8 @@ class World {
   bossBar = new StatusBar('BOSS_BAR');
 
   throwableObjects = [new ThrowableObject()];
+  bottles = [new Bottle()];
+  coins = [];
 
 
   constructor(canvas) {
@@ -36,12 +38,11 @@ class World {
           console.log(this.character.energy,this.character.bottels,this.character.coins);
           this.character.hit();
           this.healthBar.setPercentage(this.character.energy);
-          this.bottlesBar.setPercentage(this.character.bottels);
-          this.coinsBar.setPercentage(this.character.coins);
-          this.bossBar.setPercentage(this.character.energy);
-
         }
       });
+      this.bottlesBar.setPercentage(this.character.bottels);
+      this.coinsBar.setPercentage(this.character.coins);
+      this.bossBar.setPercentage(this.character.energy);
     }, 1000 / 60);
   }
 
@@ -52,6 +53,8 @@ class World {
     this.addObjectsToMap(this.level.backgroundObjects);
 
     this.addToMap(this.character);
+    this.addObjectsToMap(this.level.bottels);
+    this.addObjectsToMap(this.bottles);
     this.addObjectsToMap(this.level.clouds);
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.throwableObjects);
