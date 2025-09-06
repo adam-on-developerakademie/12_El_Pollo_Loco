@@ -1,6 +1,7 @@
 class ThrowableObject extends MovableObject {
   constructor(x, y, otherDirection) {
     super().loadImage("./img/6-salsa-bottle/salsa-bottle.png");
+     this.actionDistance(10, 5, 20, 20);
     this.x = x;
     this.y = y;
     this.width = 70;

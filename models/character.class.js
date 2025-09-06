@@ -43,6 +43,7 @@ class Character extends MovableObject {
 
   constructor() {
     super().loadImage("./img/2-character-pepe/3-jump/j-31.png");
+    this.actionDistance(100,10,30,30);
     this.applyGravity();
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_JUMPING);
@@ -50,8 +51,8 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGE_STAY);
     this.run();
-
   }
+
 
   run() {
     setInterval(() => {
@@ -60,7 +61,7 @@ class Character extends MovableObject {
       this.characterJump();
       this.playAnimations();
       this.throwBottle();
-      this.spawnBottle()
+      this.spawnBottle();
       this.world.camera_x = -this.x + 100;
     }, 1);
   }
@@ -80,29 +81,33 @@ class Character extends MovableObject {
   }
 
   throwBottle() {
-    if (this.world.character.bottlesNumber > 0 ){
-    if (this.world.keyboard.SPACE) {
-      let nowTime = new Date().getTime();
-      if (this.animationBusy < nowTime) {
-        this.animationBusy = nowTime + 150;
-        let throwableBottle = new ThrowableObject(
-          this.world.character.x,
-          this.world.character.y,
-          this.otherDirection 
-        );
-        this.world.throwableObjects.push(throwableBottle);
-        this.world.character.bottlesNumber--;
-        this.world.bottlesBar.setPercentage(this.world.character.bottlesNumber)
+    if (this.world.character.bottlesNumber > 0) {
+      if (this.world.keyboard.SPACE) {
+        let nowTime = new Date().getTime();
+        if (this.animationBusy < nowTime) {
+          this.animationBusy = nowTime + 150;
+          let throwableBottle = new ThrowableObject(
+            this.world.character.x,
+            this.world.character.y,
+            this.otherDirection
+          );
+          this.world.throwableObjects.push(throwableBottle);
+          this.world.character.bottlesNumber--;
+          this.world.bottlesBar.setPercentage(
+            this.world.character.bottlesNumber
+          );
+        }
       }
-    }}
+    }
   }
 
   spawnBottle() {
-    if(Math.random()>0.998){
-    let bottle = new Bottle(this.x);
-    this.world.bottles.push(bottle);
-    //console.log("bottle spawned:", bottle);
-  }}
+    if (Math.random() > 0.998 && this.world.bottles.length < 50) {
+      let bottle = new Bottle(this.x);
+      this.world.bottles.push(bottle);
+      //console.log("bottle spawned:", bottle);
+    }
+  }
 
   characterGoRight() {
     if (this.world.keyboard.RIGHT && this.x < this.world.level.levelEndX) {
@@ -123,7 +128,4 @@ class Character extends MovableObject {
       this.speedY = 20;
     }
   }
-
-
-
 }

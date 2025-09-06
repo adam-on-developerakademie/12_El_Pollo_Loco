@@ -5,28 +5,23 @@ class Bottle extends MovableObject {
   ];
 
   y = this.worldHeight - this.height - 55;
-  
 
   constructor(x) {
     super().loadImage(this.IMAGES_BOTTLE[this.setBottleImage()]);
+    this.actionDistance(10, 5, 20, 20);
     this.height = this.height / 4;
-    this.width =  this.width / 2;
-    this.y = -85
-    this.x = x + (Math.random()-0.5) * this.worldWidth *2;
-    console.log( );
+    this.width = this.width / 2;
+    this.y = -85;
+    this.x = x + (Math.random() - 0.5) * this.worldWidth * 2;
+    console.log();
 
     this.speed = 10 + Math.random() * 20;
-    this.applyGravity()
+    this.applyGravity();
   }
-
 
   setBottleImage() {
     let i = Math.round(Math.random());
     this.loadImage(this.IMAGES_BOTTLE[i]);
     return i;
   }
-
-
-
-
 }
