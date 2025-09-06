@@ -43,7 +43,8 @@ class Character extends MovableObject {
 
   constructor() {
     super().loadImage("./img/2-character-pepe/3-jump/j-31.png");
-    this.actionDistance(100,10,30,30);
+    this.actionDistance(90, 10, 30, 30);
+    //this.actionDistance(180, 10, 30, 30);
     this.applyGravity();
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_JUMPING);
@@ -53,12 +54,9 @@ class Character extends MovableObject {
     this.run();
   }
 
-
   run() {
     setInterval(() => {
-      this.characterGoLeft();
-      this.characterGoRight();
-      this.characterJump();
+      this.characterMove();
       this.playAnimations();
       this.throwBottle();
       this.spawnBottle();
@@ -103,6 +101,7 @@ class Character extends MovableObject {
 
   spawnBottle() {
     if (Math.random() > 0.998 && this.world.bottles.length < 50) {
+      this.lastMoveTime = new Date().getTime();
       let bottle = new Bottle(this.x);
       this.world.bottles.push(bottle);
       //console.log("bottle spawned:", bottle);
@@ -111,13 +110,15 @@ class Character extends MovableObject {
 
   characterGoRight() {
     if (this.world.keyboard.RIGHT && this.x < this.world.level.levelEndX) {
+      this.lastMoveTime = new Date().getTime();
       this.x += this.speed / 10;
       this.otherDirection = false;
     }
   }
 
   characterGoLeft() {
-    if (this.world.keyboard.LEFT && this.x > 0) {
+    if (this.world.keyboard.LEFT && this.x > -500) {
+      this.lastMoveTime = new Date().getTime();
       this.x -= this.speed / 10;
       this.otherDirection = true;
     }
@@ -125,7 +126,26 @@ class Character extends MovableObject {
 
   characterJump() {
     if (this.world.keyboard.UP && this.isAboveGround() == false) {
+      this.lastMoveTime = new Date().getTime();
       this.speedY = 20;
     }
+  }
+
+  characterMove() {
+    this.characterGoLeft();
+    this.characterGoRight();
+    this.characterJump();
+  }
+
+  killerJump(mo) {
+    let checkThis =
+      this.isColliding(mo) && this.speedY < 0 && this.isAboveGround() == true;
+    if (checkThis) {
+       console.log(this.isColliding(mo), this.speedY)
+       this.world.level.enemies.splice(this.world.level.enemies.indexOf(mo), 1)
+
+    }
+
+    return checkThis;
   }
 }

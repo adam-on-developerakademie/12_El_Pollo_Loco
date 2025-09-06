@@ -32,9 +32,15 @@ class World {
   checkCollisions() {
     setInterval(() => {
       this.level.enemies.forEach((enemy) => {
+        this.character.killerJump(enemy);
         if (this.character.isColliding(enemy)) {
           //console.log(this.character.energy,this.character.bottles,this.character.coins);
-          this.character.hit();
+          this.character.hit(0.0);
+          this.healthBar.setPercentage(this.character.energy);
+        }
+      if (this.character.isColliding(this.level.boss[0])) {
+          //console.log(this.character.energy,this.character.bottles,this.character.coins);
+          this.character.hit(0.5);
           this.healthBar.setPercentage(this.character.energy);
         }
       });
@@ -44,6 +50,8 @@ class World {
           this.character.takeBottle(this.bottles,this.bottles.indexOf(bottle)) 
           this.bottlesBar.setPercentage(this.character.bottlesNumber)}
       });
+
+
 
       this.coinsBar.setPercentage(this.character.coins);
       this.bossBar.setPercentage(this.character.energy);
@@ -107,4 +115,7 @@ class World {
   flipImageBack(mo) {
     this.ctx.restore();
   }
+
+
+
 }

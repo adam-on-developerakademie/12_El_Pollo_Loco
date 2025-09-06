@@ -5,6 +5,7 @@ class DrawableObject {
   distanceBottom = 0;
   distanceLeft = 0;
   distanceRight = 0;
+  lastMoveTime = 0
   x = 100;
   y = 270;
   height = 200;
@@ -18,7 +19,8 @@ class DrawableObject {
     if (this instanceof Character || this instanceof Chicken || this instanceof Bottle || this instanceof Endboss || this instanceof ThrowableObject) {
       ctx.beginPath();
       ctx.lineWidth = "1";
-      ctx.strokeStyle = "blue";
+      //ctx.strokeStyle = "transparent";
+      ctx.strokeStyle = "black";
       ctx.rect(
         this.x + this.distanceLeft,
         this.y + this.distanceTop,

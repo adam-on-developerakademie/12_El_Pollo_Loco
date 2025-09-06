@@ -23,6 +23,7 @@ class MovableObject extends DrawableObject {
     );
   }
 
+
   moveLeft() {
     setInterval(() => {
       this.width + this.x <= 0
@@ -77,8 +78,8 @@ class MovableObject extends DrawableObject {
       return this.y < this.worldHight - this.height - 55;
     }
   }
-  hit() {
-    this.energy -= 1;
+  hit(x) {
+    this.energy -= x;
     if (this.energy <= 0) {
       this.energy = 0;
     } else {
@@ -99,7 +100,7 @@ class MovableObject extends DrawableObject {
   isHurt() {
     let timepassed = new Date().getTime() - this.lastHit;
     timepassed = timepassed / 1000;
-    return timepassed < 0.5;
+    return timepassed < 0.1;
   }
 
   isDead() {

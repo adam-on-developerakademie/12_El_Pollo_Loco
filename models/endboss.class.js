@@ -18,8 +18,8 @@ class Endboss extends MovableObject {
   constructor() {
     super().loadImage(this.IMAGES_WALKING[0]);
      this.actionDistance(70, 120, 80, 50);
-    this.x = 340;
-    this.y = this.worldHight - this.height - 340;
+    this.x = 300;
+    this.y = this.worldHight - this.height - 230;
     this.height = 400;
     this.width = 400;
 

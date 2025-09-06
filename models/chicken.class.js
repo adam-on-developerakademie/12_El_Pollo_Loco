@@ -7,7 +7,8 @@ class Chicken extends MovableObject {
 
   constructor() {
     super().loadImage("./img/3-enemies-chicken/chicken-normal/1-walk/1-w.png");
-    this.actionDistance(5, 5, 5, 5);
+    this.actionDistance(15, 5, 5, 5);
+    //this.actionDistance(5, 40, 5, 5);
     this.height = this.height / 4;
     this.width = this.width / 2;
     this.y = this.worldHight - this.height - 55;
