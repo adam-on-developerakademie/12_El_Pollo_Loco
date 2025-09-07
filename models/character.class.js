@@ -44,7 +44,6 @@ class Character extends MovableObject {
   constructor() {
     super().loadImage("./img/2-character-pepe/3-jump/j-31.png");
     this.actionDistance(90, 10, 30, 30);
-    //this.actionDistance(180, 10, 30, 30);
     this.applyGravity();
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_JUMPING);
@@ -141,9 +140,15 @@ class Character extends MovableObject {
     let checkThis =
       this.isColliding(mo) && this.speedY < 0 && this.isAboveGround() == true;
     if (checkThis) {
-       console.log(this.isColliding(mo), this.speedY)
-       this.world.level.enemies.splice(this.world.level.enemies.indexOf(mo), 1)
+      console.log(this.isColliding(mo), this.speedY);
+      this.world.level.enemies.splice(this.world.level.enemies.indexOf(mo), 1);
 
+      let chicken = new Chicken(this.x);
+      this.world.level.enemies.push(chicken);
+      this.world.level.enemies.push(chicken);
+      this.world.level.enemies.push(chicken);
+      this.world.level.enemies.push(chicken);
+      this.world.level.enemies.push(chicken);
     }
 
     return checkThis;

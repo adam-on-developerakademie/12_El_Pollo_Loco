@@ -16,18 +16,33 @@ class MovableObject extends DrawableObject {
 
   isColliding(mo) {
     return (
-      this.x + this.distanceLeft + this.width - this.distanceRight - this.distanceLeft > mo.x + mo.distanceLeft &&
-      this.y + this.distanceTop + this.height - this.distanceBottom - this.distanceTop > mo.y + mo.distanceTop &&
-      this.x + this.distanceLeft < mo.x + mo.distanceLeft  + mo.width -mo.distanceRight-mo.distanceLeft &&
-      this.y + this.distanceTop < mo.y + mo.distanceTop  + mo.height - mo.distanceBottom - mo.distanceTop
+      this.x +
+        this.distanceLeft +
+        this.width -
+        this.distanceRight -
+        this.distanceLeft >
+        mo.x + mo.distanceLeft &&
+      this.y +
+        this.distanceTop +
+        this.height -
+        this.distanceBottom -
+        this.distanceTop >
+        mo.y + mo.distanceTop &&
+      this.x + this.distanceLeft <
+        mo.x +
+          mo.distanceLeft +
+          mo.width -
+          mo.distanceRight -
+          mo.distanceLeft &&
+      this.y + this.distanceTop <
+        mo.y + mo.distanceTop + mo.height - mo.distanceBottom - mo.distanceTop
     );
   }
-
 
   moveLeft() {
     setInterval(() => {
       this.width + this.x <= 0
-        ? (this.x = this.worldWidth)
+        ? (this.x = this.worldWidth * 5)
         : (this.x -= this.speed / 100);
     }, 1);
   }
@@ -79,11 +94,13 @@ class MovableObject extends DrawableObject {
     }
   }
   hit(x) {
-    this.energy -= x;
-    if (this.energy <= 0) {
-      this.energy = 0;
-    } else {
-      this.lastHit = new Date().getTime();
+    if (!(this.speedY < 0 && this.isAboveGround() == true)) {
+      this.energy -= x;
+      if (this.energy <= 0) {
+        this.energy = 0;
+      } else {
+        this.lastHit = new Date().getTime();
+      }
     }
   }
 

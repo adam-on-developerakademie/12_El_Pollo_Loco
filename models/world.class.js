@@ -5,15 +5,14 @@ class World {
   canvas;
   keyboard;
   camera_x = 0;
-  healthBar = new StatusBar('HEALTH_BAR');
-  bottlesBar = new StatusBar('BOTTLES_BAR');
-  coinsBar = new StatusBar('COINS_BAR');
-  bossBar = new StatusBar('BOSS_BAR');
+  healthBar = new StatusBar("HEALTH_BAR");
+  bottlesBar = new StatusBar("BOTTLES_BAR");
+  coinsBar = new StatusBar("COINS_BAR");
+  bossBar = new StatusBar("BOSS_BAR");
 
   throwableObjects = [new ThrowableObject()];
   bottles = [new Bottle()];
   coins = [];
-
 
   constructor(canvas) {
     this.ctx = canvas.getContext("2d");
@@ -22,11 +21,14 @@ class World {
     this.draw();
     this.setWorld();
     this.checkCollisions();
-    
   }
 
   setWorld() {
     this.character.world = this;
+  }
+
+  getLevel(){
+    return this.level;
   }
 
   checkCollisions() {
@@ -34,24 +36,21 @@ class World {
       this.level.enemies.forEach((enemy) => {
         this.character.killerJump(enemy);
         if (this.character.isColliding(enemy)) {
-          //console.log(this.character.energy,this.character.bottles,this.character.coins);
-          this.character.hit(0.0);
-          this.healthBar.setPercentage(this.character.energy);
-        }
-      if (this.character.isColliding(this.level.boss[0])) {
-          //console.log(this.character.energy,this.character.bottles,this.character.coins);
-          this.character.hit(0.5);
+          this.character.hit(0.3);
           this.healthBar.setPercentage(this.character.energy);
         }
       });
+      if (this.character.isColliding(this.level.boss[0])) {
+        this.character.hit(0.5);
+        this.healthBar.setPercentage(this.character.energy);
+      }
+
       this.bottles.forEach((bottle) => {
         if (this.character.isColliding(bottle)) {
-          //console.log(this.character.energy,this.character.bottlesNumber,this.character.coins);
-          this.character.takeBottle(this.bottles,this.bottles.indexOf(bottle)) 
-          this.bottlesBar.setPercentage(this.character.bottlesNumber)}
+          this.character.takeBottle(this.bottles, this.bottles.indexOf(bottle));
+          this.bottlesBar.setPercentage(this.character.bottlesNumber);
+        }
       });
-
-
 
       this.coinsBar.setPercentage(this.character.coins);
       this.bossBar.setPercentage(this.character.energy);
@@ -63,7 +62,6 @@ class World {
     this.ctx.translate(this.camera_x, 0);
 
     this.addObjectsToMap(this.level.backgroundObjects);
-
     this.addToMap(this.character);
     //this.addObjectsToMap(this.level.bottles);
     this.addObjectsToMap(this.bottles);
@@ -72,7 +70,7 @@ class World {
     this.addObjectsToMap(this.throwableObjects);
     this.addObjectsToMap(this.level.boss);
 
-     this.ctx.translate(-this.camera_x, 0);
+    this.ctx.translate(-this.camera_x, 0);
     this.addToMap(this.healthBar);
     this.addToMap(this.bottlesBar);
     this.addToMap(this.coinsBar);
@@ -115,7 +113,4 @@ class World {
   flipImageBack(mo) {
     this.ctx.restore();
   }
-
-
-
 }
