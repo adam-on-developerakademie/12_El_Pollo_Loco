@@ -6,8 +6,6 @@ function off() {
   document.getElementById("overlay").style.display = "none";
 }
 
-let elem = document.getElementById("canvas");
-let isFullscreen = false;
 
 function fullscreen() {
   if (!isFullscreen) {
@@ -18,21 +16,21 @@ function fullscreen() {
 }
 
 function openFullscreen() {
-  if (elem.requestFullscreen) {
-    elem.requestFullscreen();
-  } else if (elem.webkitRequestFullscreen) { /* Safari */
-    elem.webkitRequestFullscreen();
-  } else if (elem.msRequestFullscreen) { /* IE11 */
-    elem.msRequestFullscreen();
+  if (document.getElementById("canvas").requestFullscreen) {
+    document.getElementById("canvas").requestFullscreen();
+  } else if (document.getElementById("canvas").webkitRequestFullscreen) { /* Safari */
+    document.getElementById("canvas").webkitRequestFullscreen();
+  } else if (document.getElementById("canvas").msRequestFullscreen) { /* IE11 */
+    document.getElementById("canvas").msRequestFullscreen();
   }
 }
 
 function closeFullscreen() {
-  if (document.exitFullscreen) {
-    document.exitFullscreen();
-  } else if (document.webkitExitFullscreen) { /* Safari */
-    document.webkitExitFullscreen();
-  } else if (document.msExitFullscreen) { /* IE11 */
-    document.msExitFullscreen();
+  if (document.getElementById("canvas").exitFullscreen) {
+    document.getElementById("canvas").exitFullscreen();
+  } else if (document.getElementById("canvas").webkitExitFullscreen) { /* Safari */
+    document.getElementById("canvas").webkitExitFullscreen();
+  } else if (document.getElementById("canvas").msExitFullscreen) { /* IE11 */
+    document.getElementById("canvas").msExitFullscreen();
   }
 }
