@@ -5,7 +5,7 @@ function overlayOn() {
 function off() {
   document.getElementById("overlay").style.display = "none";
 }
-
+isFullscreen = false;
 
 function fullscreen() {
   if (!isFullscreen) {
