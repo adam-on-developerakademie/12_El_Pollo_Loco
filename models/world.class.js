@@ -33,6 +33,7 @@ class World {
 
   checkCollisions() {
     setInterval(() => {
+      
       this.level.enemies.forEach((enemy) => {
         this.character.killerJump(enemy);
         if (this.character.isColliding(enemy)) {

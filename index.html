@@ -7,7 +7,7 @@
     <title>Pollo Loco</title>
     <link rel="shortcut icon" href="./img/El-Pollo-Loco.ico" type="image/x-icon">
     <link rel="stylesheet" href="./style.css">
-
+    <script src="./script.js"></script>
     <script src="./models/drawable-object.class.js"></script>
     <script src="./models/movable-object.class.js"></script>
     <script src="./models/character.class.js"></script>
@@ -31,6 +31,20 @@
 
     <canvas id="canvas" width="720" height="480">
     </canvas>
+    <div id="overlay">
+        <div class="buttons">
+            <div class="side">
+            <div id="left" class="button">L</div>
+            <div id="right" class="button">R</div>
+            </div>
+            <div id="fullscreen" class="button" onclick="fullscreen()">V</div>
+            <div class="side">
+            <div id="jump" class="button">J</div>
+            <div id="throw" class="button">T</div>
+            </div>
+            
+        </div>
+    </div>
 
 
 </body>

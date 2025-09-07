@@ -54,6 +54,7 @@ class Character extends MovableObject {
   }
 
   run() {
+    this.buttonPressEvent();
     setInterval(() => {
       this.characterMove();
       this.playAnimations();
@@ -153,4 +154,49 @@ class Character extends MovableObject {
 
     return checkThis;
   }
+
+
+      buttonPressEvent() {
+        document.getElementById('left').addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            this.world.keyboard.LEFT = true;
+        });
+
+        document.getElementById('left').addEventListener('touchend', (e) => {
+            e.preventDefault();
+            this.world.keyboard.LEFT = false;
+        });
+
+        document.getElementById('right').addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            this.world.keyboard.RIGHT = true;
+        });
+
+        document.getElementById('right').addEventListener('touchend', (e) => {
+            e.preventDefault();
+            this.world.keyboard.RIGHT = false;
+        });
+
+        document.getElementById('jump').addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            this.world.keyboard.UP = true;
+        });
+
+        document.getElementById('jump').addEventListener('touchend', (e) => {
+            e.preventDefault();
+            this.world.keyboard.UP = false;
+        });
+
+        document.getElementById('throw').addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            this.world.keyboard.SPACE = true;
+        });
+
+        document.getElementById('throw').addEventListener('touchend', (e) => {
+            e.preventDefault();
+            this.world.keyboard.SPACE = false;
+        });
+    }
+
+
 }
