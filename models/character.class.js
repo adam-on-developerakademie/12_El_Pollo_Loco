@@ -155,48 +155,45 @@ class Character extends MovableObject {
     return checkThis;
   }
 
+  buttonPressEvent() {
+    document.getElementById("left").addEventListener("touchstart", (event) => {
+      event.preventDefault();
+      this.world.keyboard.LEFT = true;
+    });
 
-      buttonPressEvent() {
-        document.getElementById('left').addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            this.world.keyboard.LEFT = true;
-        });
+    document.getElementById("left").addEventListener("touchend", (event) => {
+      event.preventDefault();
+      this.world.keyboard.LEFT = false;
+    });
 
-        document.getElementById('left').addEventListener('touchend', (e) => {
-            e.preventDefault();
-            this.world.keyboard.LEFT = false;
-        });
+    document.getElementById("right").addEventListener("touchstart", (event) => {
+      event.preventDefault();
+      this.world.keyboard.RIGHT = true;
+    });
 
-        document.getElementById('right').addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            this.world.keyboard.RIGHT = true;
-        });
+    document.getElementById("right").addEventListener("touchend", (event) => {
+      event.preventDefault();
+      this.world.keyboard.RIGHT = false;
+    });
 
-        document.getElementById('right').addEventListener('touchend', (e) => {
-            e.preventDefault();
-            this.world.keyboard.RIGHT = false;
-        });
+    document.getElementById("jump").addEventListener("touchstart", (event) => {
+      event.preventDefault();
+      this.world.keyboard.UP = true;
+    });
 
-        document.getElementById('jump').addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            this.world.keyboard.UP = true;
-        });
+    document.getElementById("jump").addEventListener("touchend", (event) => {
+      event.preventDefault();
+      this.world.keyboard.UP = false;
+    });
 
-        document.getElementById('jump').addEventListener('touchend', (e) => {
-            e.preventDefault();
-            this.world.keyboard.UP = false;
-        });
+    document.getElementById("throw").addEventListener("touchstart", (event) => {
+      event.preventDefault();
+      this.world.keyboard.SPACE = true;
+    });
 
-        document.getElementById('throw').addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            this.world.keyboard.SPACE = true;
-        });
-
-        document.getElementById('throw').addEventListener('touchend', (e) => {
-            e.preventDefault();
-            this.world.keyboard.SPACE = false;
-        });
-    }
-
-
+    document.getElementById("throw").addEventListener("touchend", (event) => {
+      event.preventDefault();
+      this.world.keyboard.SPACE = false;
+    });
+  }
 }

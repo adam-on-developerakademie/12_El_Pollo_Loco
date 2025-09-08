@@ -68,8 +68,9 @@ class World {
     this.addObjectsToMap(this.bottles);
     this.addObjectsToMap(this.level.clouds);
     this.addObjectsToMap(this.level.enemies);
-    this.addObjectsToMap(this.throwableObjects);
     this.addObjectsToMap(this.level.boss);
+    this.addObjectsToMap(this.level.lifeCoins);
+    this.addObjectsToMap(this.throwableObjects);
 
     this.ctx.translate(-this.camera_x, 0);
     this.addToMap(this.healthBar);

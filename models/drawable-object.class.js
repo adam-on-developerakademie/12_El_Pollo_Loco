@@ -6,7 +6,7 @@ class DrawableObject {
   distanceLeft = 0;
   distanceRight = 0;
   lastMoveTime = 0
-  x = 100;
+  x = -200;
   y = 270;
   height = 200;
   width = 100;
