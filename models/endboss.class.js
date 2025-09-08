@@ -1,5 +1,11 @@
 class Endboss extends MovableObject {
   IMAGES_WALKING = [
+    "./img/4-enemie-boss-chicken/1-walk/g1.png",
+    "./img/4-enemie-boss-chicken/1-walk/g2.png",
+    "./img/4-enemie-boss-chicken/1-walk/g3.png",
+    "./img/4-enemie-boss-chicken/1-walk/g4.png",
+  ];
+  IMAGES_LOOKING = [
     // "./img/4-enemie-boss-chicken/1-walk/g1.png",
     "./img/4-enemie-boss-chicken/1-walk/g2.png",
     // "./img/4-enemie-boss-chicken/1-walk/g3.png",
@@ -20,6 +26,9 @@ class Endboss extends MovableObject {
   ];
 
   IMAGES = [];
+  waitForAttack = true;
+  animationSpeed = 200;
+  endbossIntervalId;
 
   constructor() {
     super().loadImage(this.IMAGES_WALKING[0]);
@@ -29,6 +38,7 @@ class Endboss extends MovableObject {
     this.height = 400;
     this.width = 400;
 
+    this.loadImages(this.IMAGES_LOOKING);
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_DEAD);
     this.animate();
@@ -36,17 +46,30 @@ class Endboss extends MovableObject {
 
   animate() {
     this.setImages();
-    let endbossIntervalId = setInterval(() => {
+    this.endbossIntervalId = setInterval(() => {
       this.playAnimation(this.IMAGES);
       this.setImages();
-    }, 300);
+    }, this.animationSpeed);
   }
 
   setImages() {
     if (this.isDead()) {
       this.IMAGES = this.IMAGES_DEAD;
     } else {
-      this.IMAGES = this.IMAGES_WALKING;
+      if (this.waitForAttack) {
+        this.IMAGES = this.IMAGES_LOOKING;
+      } else {
+        this.IMAGES = this.IMAGES_WALKING;
+        this.speed = 100;
+        this.moveLeftInterval ? null : this.moveLeft();
+        console.log(this.x, this.waitForAttack, this.moveLeftInterval);
+        setTimeout(() => {
+          this.waitForAttack = true;
+          console.log(this.moveLeftInterval);
+          clearInterval(this.moveLeftInterval);
+          this.moveLeftInterval = null;
+        }, 2000);
+      }
     }
   }
 }

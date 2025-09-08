@@ -13,6 +13,8 @@ class MovableObject extends DrawableObject {
   energy = 100;
   bottlesNumber = 100;
   coinsNumber = 0;
+  moveLeftInterval;
+  moveRightInterval;
 
   isColliding(mo) {
     return (
@@ -60,7 +62,7 @@ class MovableObject extends DrawableObject {
   }
 
   moveLeft() {
-    setInterval(() => {
+    this.moveLeftInterval = setInterval(() => {
       this.width + this.x <= 0
         ? (this.x = this.worldWidth * 5)
         : (this.x -= this.speed / 100);
