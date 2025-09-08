@@ -11,31 +11,51 @@ class MovableObject extends DrawableObject {
   speedY = 0;
   acceleration = 2;
   energy = 100;
-  bottlesNumber = 0;
+  bottlesNumber = 100;
   coinsNumber = 0;
 
   isColliding(mo) {
+    return (
+      this.leftSideCollision(mo) &&
+      this.topSideCollision(mo) &&
+      this.rightSideCollision(mo) &&
+      this.bottomSideCollision(mo)
+    );
+  }
+
+  leftSideCollision(mo) {
     return (
       this.x +
         this.distanceLeft +
         this.width -
         this.distanceRight -
         this.distanceLeft >
-        mo.x + mo.distanceLeft &&
+      mo.x + mo.distanceLeft
+    );
+  }
+
+  topSideCollision(mo) {
+    return (
       this.y +
         this.distanceTop +
         this.height -
         this.distanceBottom -
         this.distanceTop >
-        mo.y + mo.distanceTop &&
+      mo.y + mo.distanceTop
+    );
+  }
+
+  rightSideCollision(mo) {
+    return (
       this.x + this.distanceLeft <
-        mo.x +
-          mo.distanceLeft +
-          mo.width -
-          mo.distanceRight -
-          mo.distanceLeft &&
+      mo.x + mo.distanceLeft + mo.width - mo.distanceRight - mo.distanceLeft
+    );
+  }
+
+  bottomSideCollision(mo) {
+    return (
       this.y + this.distanceTop <
-        mo.y + mo.distanceTop + mo.height - mo.distanceBottom - mo.distanceTop
+      mo.y + mo.distanceTop + mo.height - mo.distanceBottom - mo.distanceTop
     );
   }
 
@@ -93,6 +113,7 @@ class MovableObject extends DrawableObject {
       return this.y < this.worldHight - this.height - 55;
     }
   }
+
   hit(x) {
     if (!(this.speedY < 0 && this.isAboveGround() == true)) {
       this.energy -= x;
@@ -107,12 +128,26 @@ class MovableObject extends DrawableObject {
   takeBottle(bottles, index) {
     if (this.bottlesNumber < 25) {
       this.bottlesNumber++;
-      console.log(bottles, index);
+      //console.log(bottles, index);
       bottles.splice(index, 1);
     } else {
       this.bottlesNumber = 25;
     }
   }
+
+  bottlesDamage(bottles, index) {
+    if (this.bottlesNumber > 0) {
+      this.bottlesNumber--;
+      bottles.splice(index, 1);
+      this.energy -= 4;
+      if (this.energy < 0) {
+        this.energy = 0;
+      }
+    }
+  }
+
+
+smashBottle(){}
 
   isHurt() {
     let timepassed = new Date().getTime() - this.lastHit;

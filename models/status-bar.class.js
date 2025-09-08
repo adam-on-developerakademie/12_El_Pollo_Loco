@@ -17,7 +17,7 @@ class StatusBar extends DrawableObject {
     "./img/7-statusbars/1-statusbar/3-statusbar-bottle/orange/100.png",
   ]};
 
-  COINS_BAR = {x: 10, y: 100 ,percentage: 0, multiplier: 1, img:[
+  LIFE_COINS_BAR = {x: 10, y: 100 ,percentage: 25, multiplier: 1, img:[
     "./img/7-statusbars/1-statusbar/1-statusbar-coin/blue/0.png",
     "./img/7-statusbars/1-statusbar/1-statusbar-coin/blue/20.png",
     "./img/7-statusbars/1-statusbar/1-statusbar-coin/blue/40.png",

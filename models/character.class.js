@@ -40,6 +40,7 @@ class Character extends MovableObject {
   world;
   y = 50;
   speed = 25;
+  isThrowing = false;
 
   constructor() {
     super().loadImage("./img/2-character-pepe/3-jump/j-31.png");
@@ -58,8 +59,10 @@ class Character extends MovableObject {
     setInterval(() => {
       this.characterMove();
       this.playAnimations();
-      this.throwBottle();
       this.spawnBottle();
+      this.throwBottle();
+      this.bottleReloaded();
+
       this.world.camera_x = -this.x + 100;
     }, 1);
   }
@@ -79,23 +82,31 @@ class Character extends MovableObject {
   }
 
   throwBottle() {
+    if (this.isReadyToThrow()) {
+      this.isThrowing = true;
+      let throwableBottle = new ThrowableObject(
+        this.world.character.x,
+        this.world.character.y,
+        this.otherDirection
+      );
+      this.world.throwableObjects.push(throwableBottle);
+      this.world.character.bottlesNumber--;
+      this.world.bottlesBar.setPercentage(this.world.character.bottlesNumber);
+    }
+  }
+
+  isReadyToThrow() {
     if (this.world.character.bottlesNumber > 0) {
-      if (this.world.keyboard.SPACE) {
-        let nowTime = new Date().getTime();
-        if (this.animationBusy < nowTime) {
-          this.animationBusy = nowTime + 150;
-          let throwableBottle = new ThrowableObject(
-            this.world.character.x,
-            this.world.character.y,
-            this.otherDirection
-          );
-          this.world.throwableObjects.push(throwableBottle);
-          this.world.character.bottlesNumber--;
-          this.world.bottlesBar.setPercentage(
-            this.world.character.bottlesNumber
-          );
-        }
+      if (this.world.keyboard.SPACE && !this.isThrowing) {
+        return true;
       }
+    }
+    return false;
+  }
+
+  bottleReloaded() {
+    if (!this.world.keyboard.SPACE) {
+      this.isThrowing = false;
     }
   }
 
@@ -104,7 +115,6 @@ class Character extends MovableObject {
       this.lastMoveTime = new Date().getTime();
       let bottle = new Bottle(this.x);
       this.world.bottles.push(bottle);
-      //console.log("bottle spawned:", bottle);
     }
   }
 

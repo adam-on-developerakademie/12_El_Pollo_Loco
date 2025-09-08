@@ -7,7 +7,7 @@ class World {
   camera_x = 0;
   healthBar = new StatusBar("HEALTH_BAR");
   bottlesBar = new StatusBar("BOTTLES_BAR");
-  coinsBar = new StatusBar("COINS_BAR");
+  coinsBar = new StatusBar("LIFE_COINS_BAR");
   bossBar = new StatusBar("BOSS_BAR");
 
   throwableObjects = [new ThrowableObject()];
@@ -27,13 +27,12 @@ class World {
     this.character.world = this;
   }
 
-  getLevel(){
+  getLevel() {
     return this.level;
   }
 
   checkCollisions() {
     setInterval(() => {
-      
       this.level.enemies.forEach((enemy) => {
         this.character.killerJump(enemy);
         if (this.character.isColliding(enemy)) {
@@ -53,8 +52,17 @@ class World {
         }
       });
 
+      this.throwableObjects.forEach((bottle) => {
+        if (this.level.boss[0].isColliding(bottle)) {
+          this.level.boss[0].bottlesDamage(this.throwableObjects, this.throwableObjects.indexOf(bottle));
+          this.bossBar.setPercentage(this.level.boss[0].energy);
+          console.log(this.level.boss[0].energy);
+          
+        }
+      });
+
       this.coinsBar.setPercentage(this.character.coins);
-      this.bossBar.setPercentage(this.character.energy);
+      this.bossBar.setPercentage(this.level.boss[0].energy);
     }, 1000 / 60);
   }
 

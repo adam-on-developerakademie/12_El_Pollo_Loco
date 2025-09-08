@@ -31,9 +31,9 @@ class Endboss extends MovableObject {
 
 
   animate() {
+  this.playAnimation(this.IMAGES_WALKING,300);
       let endbossIntervalId = setInterval(() => {
       this.playAnimation(this.IMAGES_WALKING);
     }, 300);
-
   }
 }
