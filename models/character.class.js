@@ -151,17 +151,14 @@ class Character extends MovableObject {
     let checkThis =
       this.isColliding(mo) && this.speedY < 0 && this.isAboveGround() == true;
     if (checkThis) {
-      console.log(this.isColliding(mo), this.speedY);
+      if (mo instanceof Chicken) {
+        let chicken = new Chicken(this.x);
+        for (let i = 0; i < 5; i++) {
+          this.world.level.enemies.push(chicken);
+        }
+      }
       this.world.level.enemies.splice(this.world.level.enemies.indexOf(mo), 1);
-
-      let chicken = new Chicken(this.x);
-      this.world.level.enemies.push(chicken);
-      this.world.level.enemies.push(chicken);
-      this.world.level.enemies.push(chicken);
-      this.world.level.enemies.push(chicken);
-      this.world.level.enemies.push(chicken);
     }
-
     return checkThis;
   }
 

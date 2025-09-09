@@ -83,13 +83,17 @@ class World {
 
       this.throwableObjects.forEach((bottle) => {
         if (this.level.boss[0].isColliding(bottle)) {
+          for (let i = 0; i < 5; i++) {
+            let chick = new Chick(bottle.x);
+            this.level.enemies.push(chick);
+          }
           this.level.boss[0].bottlesDamage(
             this.throwableObjects,
             this.throwableObjects.indexOf(bottle)
           );
           this.bossBar.setPercentage(this.level.boss[0].energy);
           this.level.boss[0].waitForAttack = false;
-           }
+        }
       });
 
       this.coinsBar.setPercentage(this.character.coins);

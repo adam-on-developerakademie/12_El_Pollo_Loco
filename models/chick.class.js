@@ -6,12 +6,12 @@ class Chick extends MovableObject {
   ];
 
   constructor(x) {
-    super().loadImage("./img/3-enemies-chicken/chicken-normal/1-walk/1-w.png");
-    this.actionDistance(15, 5, 5, 5);
-    this.height = this.height / 4;
-    this.width = this.width / 2;
+    super().loadImage("./img/3-enemies-chicken/chicken-small/1-walk/2-w.png");
+    this.actionDistance(0, 0, 0, 0);
+    this.height = 30;
+    this.width = 30;
     this.y = this.worldHight - this.height - 55;
-    this.x = x + 1000 + Math.random() * 1000;
+    this.x = x + Math.random() * 100;
     this.speed = 10 + Math.random() * 30;
     this.loadImages(this.IMAGES_WALKING);
     this.animate();
