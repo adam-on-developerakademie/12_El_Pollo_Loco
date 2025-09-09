@@ -1,5 +1,14 @@
 class StatusBar extends DrawableObject {
-  HEALTH_BAR = {x: 10, y: 0 ,percentage: 100, multiplier: 1, img:[
+  LIFE_COINS_BAR = {x: 10, y: 0 ,percentage: 0, multiplier: 1, img:[
+    "./img/7-statusbars/1-statusbar/1-statusbar-coin/blue/0.png",
+    "./img/7-statusbars/1-statusbar/1-statusbar-coin/blue/20.png",
+    "./img/7-statusbars/1-statusbar/1-statusbar-coin/blue/40.png",
+    "./img/7-statusbars/1-statusbar/1-statusbar-coin/blue/60.png",
+    "./img/7-statusbars/1-statusbar/1-statusbar-coin/blue/80.png",
+    "./img/7-statusbars/1-statusbar/1-statusbar-coin/blue/100.png",
+  ]};
+
+  HEALTH_BAR = {x: 10, y: 50 ,percentage: 100, multiplier: 1, img:[
     "./img/7-statusbars/1-statusbar/2-statusbar-health/green/0.png",
     "./img/7-statusbars/1-statusbar/2-statusbar-health/green/20.png",
     "./img/7-statusbars/1-statusbar/2-statusbar-health/green/40.png",
@@ -8,22 +17,13 @@ class StatusBar extends DrawableObject {
     "./img/7-statusbars/1-statusbar/2-statusbar-health/green/100.png",
   ]};
 
-  BOTTLES_BAR = {x: 10, y: 50 ,percentage: 0, multiplier: 4, img:[
+  BOTTLES_BAR = {x: 10, y: 100 ,percentage: 0, multiplier: 4, img:[
     "./img/7-statusbars/1-statusbar/3-statusbar-bottle/orange/0.png",
     "./img/7-statusbars/1-statusbar/3-statusbar-bottle/orange/20.png",
     "./img/7-statusbars/1-statusbar/3-statusbar-bottle/orange/40.png",
     "./img/7-statusbars/1-statusbar/3-statusbar-bottle/orange/60.png",
     "./img/7-statusbars/1-statusbar/3-statusbar-bottle/orange/80.png",
     "./img/7-statusbars/1-statusbar/3-statusbar-bottle/orange/100.png",
-  ]};
-
-  LIFE_COINS_BAR = {x: 10, y: 100 ,percentage: 25, multiplier: 1, img:[
-    "./img/7-statusbars/1-statusbar/1-statusbar-coin/blue/0.png",
-    "./img/7-statusbars/1-statusbar/1-statusbar-coin/blue/20.png",
-    "./img/7-statusbars/1-statusbar/1-statusbar-coin/blue/40.png",
-    "./img/7-statusbars/1-statusbar/1-statusbar-coin/blue/60.png",
-    "./img/7-statusbars/1-statusbar/1-statusbar-coin/blue/80.png",
-    "./img/7-statusbars/1-statusbar/1-statusbar-coin/blue/100.png",
   ]};
 
   BOSS_BAR = {x: 10, y: 150 ,percentage: 100, multiplier: 1, img:[

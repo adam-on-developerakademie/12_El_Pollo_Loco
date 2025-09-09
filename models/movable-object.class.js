@@ -11,7 +11,7 @@ class MovableObject extends DrawableObject {
   speedY = 0;
   acceleration = 2;
   energy = 100;
-  bottlesNumber = 100;
+  bottlesNumber = 0;
   coinsNumber = 0;
   moveLeftInterval;
   moveRightInterval;
@@ -135,6 +135,11 @@ class MovableObject extends DrawableObject {
     } else {
       this.bottlesNumber = 25;
     }
+  }
+
+  takeLifeCoin(lifeCoins, index) {
+    this.coinsNumber += 25;
+    lifeCoins.splice(index, 1);
   }
 
   bottlesDamage(bottles, index) {

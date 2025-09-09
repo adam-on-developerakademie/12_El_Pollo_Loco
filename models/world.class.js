@@ -5,14 +5,14 @@ class World {
   canvas;
   keyboard;
   camera_x = 0;
+  coinsBar = new StatusBar("LIFE_COINS_BAR");
   healthBar = new StatusBar("HEALTH_BAR");
   bottlesBar = new StatusBar("BOTTLES_BAR");
-  coinsBar = new StatusBar("LIFE_COINS_BAR");
   bossBar = new StatusBar("BOSS_BAR");
 
-  throwableObjects = [new ThrowableObject()];
-  bottles = [new Bottle()];
-  coins = [];
+  throwableObjects = [];
+  bottles = [];
+
 
   constructor(canvas) {
     this.ctx = canvas.getContext("2d");
@@ -46,9 +46,9 @@ class World {
     this.addObjectsToMap(this.throwableObjects);
 
     this.ctx.translate(-this.camera_x, 0);
+    this.addToMap(this.coinsBar);
     this.addToMap(this.healthBar);
     this.addToMap(this.bottlesBar);
-    this.addToMap(this.coinsBar);
     this.addToMap(this.bossBar);
     this.ctx.translate(this.camera_x, 0);
 
@@ -74,6 +74,15 @@ class World {
         this.healthBar.setPercentage(this.character.energy);
       }
 
+      this.level.lifeCoins.forEach((lifeCoins) => {
+        if (this.character.isColliding(lifeCoins)) {
+          this.character.takeLifeCoin(this.level.lifeCoins, this.level.lifeCoins.indexOf(lifeCoins));
+          console.log(this.character.coinsNumber);
+          
+          this.coinsBar.setPercentage(this.character.coinsNumber);
+        }
+      });
+
       this.bottles.forEach((bottle) => {
         if (this.character.isColliding(bottle)) {
           this.character.takeBottle(this.bottles, this.bottles.indexOf(bottle));
@@ -96,7 +105,7 @@ class World {
         }
       });
 
-      this.coinsBar.setPercentage(this.character.coins);
+     
       this.bossBar.setPercentage(this.level.boss[0].energy);
     }, 1000 / 60);
   }
