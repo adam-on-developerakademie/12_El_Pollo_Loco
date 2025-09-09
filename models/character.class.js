@@ -87,11 +87,13 @@ class Character extends MovableObject {
       let throwableBottle = new ThrowableObject(
         this.world.character.x,
         this.world.character.y,
-        this.otherDirection
+        this.otherDirection,
       );
-      this.world.throwableObjects.push(throwableBottle);
+      this.world.level.throwableObjects.push(throwableBottle);
+      this.world.pushIntervallIDs("throwableObjects",throwableBottle.intervallID)
       this.world.character.bottlesNumber--;
       this.world.bottlesBar.setPercentage(this.world.character.bottlesNumber);
+      console.log(this.world.level,throwableBottle);
     }
   }
 
@@ -111,10 +113,10 @@ class Character extends MovableObject {
   }
 
   spawnBottle() {
-    if (Math.random() > 0.998 && this.world.bottles.length < 50) {
+    if (Math.random() > 0.998 && this.world.level.bottles.length < 50) {
       this.lastMoveTime = new Date().getTime();
       let bottle = new Bottle(this.x);
-      this.world.bottles.push(bottle);
+      this.world.level.bottles.push(bottle);
     }
   }
 

@@ -9,15 +9,16 @@ class ThrowableObject extends MovableObject {
     this.speed = 10;
     this.gravity = 2;
     this.throwing = false;
-    this.throw(otherDirection);
+    this.intervallID=this.throw(otherDirection);
   }
 
   throw(otherDirection) {
     let intervalId = setInterval(() => {
-      this.y < 1000 ? (otherDirection?this.x-=5:this.x += 5) : clearInterval(intervalId);
+     otherDirection?this.x-=5:this.x += 5
     }, 1);
     this.y=this.y+120;
     this.speedY = 20;
     this.applyGravity();
+    return intervalId;
   }
 }

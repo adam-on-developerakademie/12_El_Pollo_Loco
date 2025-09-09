@@ -4,14 +4,12 @@ class MovableObject extends DrawableObject {
   frameTime = 0;
   currentFrame = 0;
   element;
-  intervallID;
   random = Math.random();
   speed = 4;
   otherDirection = false;
   speedY = 0;
   acceleration = 2;
   energy = 100;
-  lifeCoins = 0;
   bottlesNumber = 0;
   coinsNumber = 0;
   moveLeftInterval;
