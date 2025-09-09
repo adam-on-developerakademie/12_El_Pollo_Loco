@@ -1,6 +1,4 @@
 class Level {
-  lifeCoins;
-  bottles;
   enemies;
   boss;
   clouds;

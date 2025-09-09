@@ -78,7 +78,6 @@ class World {
         if (this.character.isColliding(lifeCoins)) {
           this.character.takeLifeCoin(this.level.lifeCoins, this.level.lifeCoins.indexOf(lifeCoins));
           console.log(this.character.coinsNumber);
-          
           this.coinsBar.setPercentage(this.character.coinsNumber);
         }
       });
@@ -96,9 +95,7 @@ class World {
             let chick = new Chick(bottle.x);
             this.level.enemies.push(chick);
           }
-          this.level.boss[0].bottlesDamage(
-            this.throwableObjects,
-            this.throwableObjects.indexOf(bottle)
+          this.level.boss[0].bottlesDamage(this.throwableObjects, this.throwableObjects.indexOf(bottle)
           );
           this.bossBar.setPercentage(this.level.boss[0].energy);
           this.level.boss[0].waitForAttack = false;

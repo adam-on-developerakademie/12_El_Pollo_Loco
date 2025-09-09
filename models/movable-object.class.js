@@ -11,6 +11,7 @@ class MovableObject extends DrawableObject {
   speedY = 0;
   acceleration = 2;
   energy = 100;
+  lifeCoins = 0;
   bottlesNumber = 0;
   coinsNumber = 0;
   moveLeftInterval;
@@ -130,7 +131,6 @@ class MovableObject extends DrawableObject {
   takeBottle(bottles, index) {
     if (this.bottlesNumber < 25) {
       this.bottlesNumber++;
-      //console.log(bottles, index);
       bottles.splice(index, 1);
     } else {
       this.bottlesNumber = 25;
@@ -143,18 +143,14 @@ class MovableObject extends DrawableObject {
   }
 
   bottlesDamage(bottles, index) {
-    if (this.bottlesNumber > 0) {
-      this.bottlesNumber--;
-      bottles.splice(index, 1);
-      this.energy -= 8;
-      if (this.energy < 0) {
-        this.energy = 0;
-      }
+    bottles.splice(index, 1);
+    this.energy -= 8;
+    if (this.energy < 0) {
+      this.energy = 0;
     }
   }
 
-
-smashBottle(){}
+  smashBottle() {}
 
   isHurt() {
     let timepassed = new Date().getTime() - this.lastHit;

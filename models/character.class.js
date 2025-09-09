@@ -68,7 +68,7 @@ class Character extends MovableObject {
   }
 
   playAnimations() {
-    if (this.isDead()) {
+    if (this.isCharacterDead()) {
       this.playAnimation(this.IMAGES_DEAD, 0);
     } else if (this.isHurt()) {
       this.playAnimation(this.IMAGES_HURT, 0);
@@ -202,5 +202,18 @@ class Character extends MovableObject {
       event.preventDefault();
       this.world.keyboard.SPACE = false;
     });
+  }
+
+  isCharacterDead() {
+    if (this.isDead()) {
+      if (this.coinsNumber !== 0) {
+        this.coinsNumber -= 25;
+        this.world.coinsBar.setPercentage(this.coinsNumber);
+        this.energy = 100;
+        return false;
+      } else {
+        return true;
+      }
+    }
   }
 }
