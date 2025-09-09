@@ -19,6 +19,16 @@ class Endboss extends MovableObject {
     "./img/4-enemie-boss-chicken/2-alert/g11.png",
     "./img/4-enemie-boss-chicken/2-alert/g12.png",
   ];
+  IMAGES_ATTACK = [
+    "./img/4-enemie-boss-chicken/3-attack/g13.png",
+    "./img/4-enemie-boss-chicken/3-attack/g14.png",
+    "./img/4-enemie-boss-chicken/3-attack/g15.png",
+    "./img/4-enemie-boss-chicken/3-attack/g16.png",
+    "./img/4-enemie-boss-chicken/3-attack/g17.png",
+    "./img/4-enemie-boss-chicken/3-attack/g18.png",
+    "./img/4-enemie-boss-chicken/3-attack/g19.png",
+    "./img/4-enemie-boss-chicken/3-attack/g20.png",
+  ];
   IMAGES_DEAD = [
     "./img/4-enemie-boss-chicken/5-dead/g24.png",
     "./img/4-enemie-boss-chicken/5-dead/g25.png",
@@ -40,6 +50,7 @@ class Endboss extends MovableObject {
 
     this.loadImages(this.IMAGES_LOOKING);
     this.loadImages(this.IMAGES_WALKING);
+    this.loadImages(this.IMAGES_ATTACK);
     this.loadImages(this.IMAGES_DEAD);
     this.animate();
   }
@@ -61,14 +72,16 @@ class Endboss extends MovableObject {
       } else {
         this.IMAGES = this.IMAGES_WALKING;
         this.speed = 100;
-        this.moveLeftInterval ? null : this.moveLeft();
-        console.log(this.x, this.waitForAttack, this.moveLeftInterval);
         setTimeout(() => {
-          this.waitForAttack = true;
-          console.log(this.moveLeftInterval);
+        this.moveLeftInterval ? null : this.moveLeft();}, 400);
+        setTimeout(() => {
           clearInterval(this.moveLeftInterval);
           this.moveLeftInterval = null;
-        }, 2000);
+          this.IMAGES = this.IMAGES_ATTACK;
+        }, 1500);
+        setTimeout(() => {
+          this.waitForAttack = true;
+        }, 1200);
       }
     }
   }

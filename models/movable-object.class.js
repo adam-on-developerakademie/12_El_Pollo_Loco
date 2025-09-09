@@ -141,7 +141,7 @@ class MovableObject extends DrawableObject {
     if (this.bottlesNumber > 0) {
       this.bottlesNumber--;
       bottles.splice(index, 1);
-      this.energy -= 4;
+      this.energy -= 8;
       if (this.energy < 0) {
         this.energy = 0;
       }
