@@ -16,7 +16,7 @@ class ThrowableObject extends MovableObject {
   ];
 
   constructor(x, y, otherDirection) {
-    super().loadImage(this.animatedImage(this.IMAGES_BOTTLE_THROWN, 60, 5));
+    super().loadImage(this.animatedImage(this.IMAGES_BOTTLE_THROWN, 60, 5,this.IMAGES_BOTTLE_SPLASH, 100, 1));
     this.loadImages(this.IMAGES_BOTTLE);
     this.loadImages(this.IMAGES_BOTTLE_THROWN);
     this.loadImages(this.IMAGES_BOTTLE_SPLASH);
@@ -33,9 +33,9 @@ class ThrowableObject extends MovableObject {
 
   throw(otherDirection) {
     let intervalId = setInterval(() => {
-      otherDirection ? (this.x -= 5) : (this.x += 5);
+      otherDirection ? (this.isDamaged ? this.x -= 1 : this.x -= 4) : (this.isDamaged ? this.x += 1 : this.x += 4);
     }, 1);
-    this.y = this.y + 120;
+    this.y = 120 +  this.y--;
     this.speedY = 20;
     this.applyGravity();
     return intervalId;

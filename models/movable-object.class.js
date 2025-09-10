@@ -12,8 +12,8 @@ class MovableObject extends DrawableObject {
   energy = 100;
   bottlesNumber = 100;
   coinsNumber = 0;
-  moveLeftInterval;
-  moveRightInterval;
+  isDamaged=false;
+
 
   isColliding(mo) {
     return (
@@ -75,22 +75,24 @@ class MovableObject extends DrawableObject {
     this.curentImage++;
   }
 
-    animatedImage(IMAGES, animationSpeed, repeatAnimation) {
+    animatedImage(IMAGES, animationSpeed, repeatAnimation, isDamagedIMAGES, isDamagedAnimationSpeed, isDamagedRepeatAnimation) {
+    let condition = this.isDamaged;
     let n = IMAGES.length;
     let currentImage = IMAGES[0];
     for (let j = 0; j < repeatAnimation; j++) {
       let i = 0;
       setTimeout(() => {
-        this.currentImage(IMAGES, animationSpeed, i, n, currentImage);
+        this.currentImage(IMAGES, animationSpeed, i, n, currentImage, condition, isDamagedIMAGES, isDamagedAnimationSpeed, isDamagedRepeatAnimation );
       }, (j * 1000) / IMAGES.length);
     }
     return currentImage;
   }
 
-  currentImage(IMAGES, animationSpeed, i, n, currentImage) {
+  currentImage(IMAGES, animationSpeed, i, n, currentImage, condition, isDamagedIMAGES, isDamagedAnimationSpeed, isDamagedRepeatAnimation) {
     let intervalId = setInterval(() => {
       if (i < n) {
         currentImage = this.loadImage(IMAGES[i]);
+        if (condition != this.isDamaged) {clearInterval(intervalId),this.animatedImage(isDamagedIMAGES, isDamagedAnimationSpeed, isDamagedRepeatAnimation)}
         i++;
       } else {
         clearInterval(intervalId);

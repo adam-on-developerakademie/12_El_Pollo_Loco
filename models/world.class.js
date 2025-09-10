@@ -101,14 +101,16 @@ class World {
       });
 
       this.level.throwableObjects.forEach((throwableBottle) => {
-        if (this.level.boss[0].isColliding(throwableBottle)) {
+        if (this.level.boss[0].isColliding(throwableBottle) && !throwableBottle.isDamaged) {
           for (let i = 0; i < 5; i++) {
             let chick = new Chick(throwableBottle.x);
             this.level.enemies.push(chick);
           }
-          this.level.boss[0].bottlesDamage(this.level.throwableObjects, this.level.throwableObjects.indexOf(throwableBottle)
-          );
-          this.bossBar.setPercentage(this.level.boss[0].energy);
+          throwableBottle.isDamaged = true;
+          setTimeout(() => {
+            this.level.boss[0].bottlesDamage(this.level.throwableObjects, this.level.throwableObjects.indexOf(throwableBottle));
+          }, 2000);  
+           this.bossBar.setPercentage(this.level.boss[0].energy);
           this.level.boss[0].waitForAttack = false;
         }
       });

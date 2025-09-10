@@ -93,7 +93,6 @@ class Character extends MovableObject {
       this.world.pushIntervallIDs("throwableObjects",throwableBottle.intervallID)
       this.world.character.bottlesNumber--;
       this.world.bottlesBar.setPercentage(this.world.character.bottlesNumber);
-      console.log(this.world.level,throwableBottle);
     }
   }
 
