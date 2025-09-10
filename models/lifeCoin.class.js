@@ -5,11 +5,11 @@ class LifeCoin extends MovableObject {
 
   constructor(positionX) {
     super().loadImage(this.IMAGES_LIFECOINS[0]);
-    console.log("LifeCoin loaded positionX: " + positionX);
+    this.actionDistance(55, 55, 55, 55);
     this.loadImages(this.IMAGES_LIFECOINS);
     this.height = 150;
     this.width = 150;
-    this.y = 150;
+    this.y = 120;
     this.x = positionX;
     this.animate();
   }

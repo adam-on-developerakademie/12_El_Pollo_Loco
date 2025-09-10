@@ -5,6 +5,10 @@ class Chick extends MovableObject {
     "./img/3-enemies-chicken/chicken-small/1-walk/3-w.png",
   ];
 
+    IMAGE_DEAD = [
+    "./img/3-enemies-chicken/chicken-normal/2-dead/dead.png",
+  ];
+
   constructor(x) {
     super().loadImage("./img/3-enemies-chicken/chicken-small/1-walk/2-w.png");
     this.actionDistance(0, 0, 0, 0);

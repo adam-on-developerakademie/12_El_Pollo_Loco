@@ -10,7 +10,7 @@ class MovableObject extends DrawableObject {
   speedY = 0;
   acceleration = 2;
   energy = 100;
-  bottlesNumber = 0;
+  bottlesNumber = 100;
   coinsNumber = 0;
   moveLeftInterval;
   moveRightInterval;
@@ -74,6 +74,31 @@ class MovableObject extends DrawableObject {
     this.img = this.imageCache[path];
     this.curentImage++;
   }
+
+    animatedImage(IMAGES, animationSpeed, repeatAnimation) {
+    let n = IMAGES.length;
+    let currentImage = IMAGES[0];
+    for (let j = 0; j < repeatAnimation; j++) {
+      let i = 0;
+      setTimeout(() => {
+        this.currentImage(IMAGES, animationSpeed, i, n, currentImage);
+      }, (j * 1000) / IMAGES.length);
+    }
+    return currentImage;
+  }
+
+  currentImage(IMAGES, animationSpeed, i, n, currentImage) {
+    let intervalId = setInterval(() => {
+      if (i < n) {
+        currentImage = this.loadImage(IMAGES[i]);
+        i++;
+      } else {
+        clearInterval(intervalId);
+      }
+    }, animationSpeed);
+    return i, currentImage;
+  }
+
 
   playSequenceAnimation(images, duration) {
     let nowTime = new Date().getTime();
