@@ -62,7 +62,6 @@ class Character extends MovableObject {
       this.spawnBottle();
       this.throwBottle();
       this.bottleReloaded();
-
       this.world.camera_x = -this.x + 150;
     }, 1);
   }
@@ -87,10 +86,13 @@ class Character extends MovableObject {
       let throwableBottle = new ThrowableObject(
         this.world.character.x,
         this.world.character.y,
-        this.otherDirection,
+        this.otherDirection
       );
       this.world.level.throwableObjects.push(throwableBottle);
-      this.world.pushIntervallIDs("throwableObjects",throwableBottle.intervallID)
+      this.world.pushIntervallIDs(
+        "throwableObjects",
+        throwableBottle.intervallID
+      );
       this.world.character.bottlesNumber--;
       this.world.bottlesBar.setPercentage(this.world.character.bottlesNumber);
     }
@@ -149,20 +151,11 @@ class Character extends MovableObject {
   }
 
   killerJump(mo) {
-   
     let checkThis =
-      this.isColliding(mo) && this.speedY < 0 && this.isAboveGround() == true;
+    this.isColliding(mo) && this.speedY < 0 && this.isAboveGround() == true;
     if (checkThis) {
-      if (mo instanceof Chicken) {
-        let chicken = new Chicken(this.x);
-        for (let i = 0; i < 5; i++) {
-          this.world.level.enemies.push(chicken);
-        }
-      }
-      mo.energy = 0;      
-      setTimeout(() => {
-       this.world.level.enemies.splice(this.world.level.enemies.indexOf(mo), 1);
-      }, 500);
+      mo.energy = 0;
+      mo.dethTime = new Date().getTime();
     }
     return checkThis;
   }

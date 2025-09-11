@@ -33,4 +33,6 @@ function closeFullscreen() {
   } else if (document.getElementById("canvas").msExitFullscreen) { /* IE11 */
     document.getElementById("canvas").msExitFullscreen();
   }
+
+
 }

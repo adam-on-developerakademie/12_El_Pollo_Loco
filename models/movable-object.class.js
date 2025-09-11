@@ -10,6 +10,7 @@ class MovableObject extends DrawableObject {
   speedY = 0;
   acceleration = 2;
   energy = 100;
+  dethTime = 0;
   bottlesNumber = 0;
   coinsNumber = 0;
   isDamaged = false;

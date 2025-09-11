@@ -38,9 +38,11 @@ class World {
     });
   }
 
-  pushIntervallIDs(intervalName,intervalId) {
-    if(!this.level.intervallIDs[intervalName]){this.level.intervallIDs[intervalName] = []}
-    this.level.intervallIDs[intervalName].push(intervalId)
+  pushIntervallIDs(intervalName, intervalId) {
+    if (!this.level.intervallIDs[intervalName]) {
+      this.level.intervallIDs[intervalName] = [];
+    }
+    this.level.intervallIDs[intervalName].push(intervalId);
   }
 
   draw() {
@@ -48,13 +50,14 @@ class World {
     this.ctx.translate(this.camera_x, 0);
 
     this.addObjectsToMap(this.level.backgroundObjects);
-    this.addToMap(this.character);
+
     this.addObjectsToMap(this.level.bottles);
     this.addObjectsToMap(this.level.clouds);
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.level.boss);
     this.addObjectsToMap(this.level.lifeCoins);
     this.addObjectsToMap(this.level.throwableObjects);
+    this.addToMap(this.character);
 
     this.ctx.translate(-this.camera_x, 0);
     this.addToMap(this.coinsBar);
@@ -72,50 +75,63 @@ class World {
   }
 
   checkCollisions() {
-   // setInterval(() => {
-      this.level.enemies.forEach((enemy) => {
-        this.character.killerJump(enemy);
-        if (this.character.isColliding(enemy)) {
-          this.character.hit(0.3);
-          this.healthBar.setPercentage(this.character.energy);
-        }
-      });
-      if (this.character.isColliding(this.level.boss[0])) {
-        this.character.hit(0.5);
+    // setInterval(() => {
+    this.level.enemies.forEach((enemy) => {
+      this.character.killerJump(enemy);
+      if (this.character.isColliding(enemy)) {
+        this.character.hit(0.3);
         this.healthBar.setPercentage(this.character.energy);
       }
+    });
+    if (this.character.isColliding(this.level.boss[0])) {
+      this.character.hit(0.5);
+      this.healthBar.setPercentage(this.character.energy);
+    }
 
-      this.level.lifeCoins.forEach((lifeCoins) => {
-        if (this.character.isColliding(lifeCoins)) {
-          this.character.takeLifeCoin(this.level.lifeCoins, this.level.lifeCoins.indexOf(lifeCoins));
-          this.coinsBar.setPercentage(this.character.coinsNumber);
-        }
-      });
+    this.level.lifeCoins.forEach((lifeCoins) => {
+      if (this.character.isColliding(lifeCoins)) {
+        this.character.takeLifeCoin(
+          this.level.lifeCoins,
+          this.level.lifeCoins.indexOf(lifeCoins)
+        );
+        this.coinsBar.setPercentage(this.character.coinsNumber);
+      }
+    });
 
-      this.level.bottles.forEach((bottle) => {
-        if (this.character.isColliding(bottle)) {
-          this.character.takeBottle(this.level.bottles, this.level.bottles.indexOf(bottle));
-          this.bottlesBar.setPercentage(this.character.bottlesNumber);
-        }
-      });
+    this.level.bottles.forEach((bottle) => {
+      if (this.character.isColliding(bottle)) {
+        this.character.takeBottle(
+          this.level.bottles,
+          this.level.bottles.indexOf(bottle)
+        );
+        this.bottlesBar.setPercentage(this.character.bottlesNumber);
+      }
+    });
 
-      this.level.throwableObjects.forEach((throwableBottle) => {
-        if (this.level.boss[0].isColliding(throwableBottle) && !throwableBottle.isDamaged) {
-          for (let i = 0; i < 5; i++) {
-            let chick = new Chick(throwableBottle.x);
-            this.level.enemies.push(chick);
-          }
-          throwableBottle.isDamaged = true;
-          setTimeout(() => {
-            this.level.boss[0].bottlesDamage(this.level.throwableObjects, this.level.throwableObjects.indexOf(throwableBottle));
-          }, 2000);  
-           this.bossBar.setPercentage(this.level.boss[0].energy);
-          this.level.boss[0].waitForAttack = false;
+    this.level.throwableObjects.forEach((throwableBottle) => {
+      if (
+        this.level.boss[0].isColliding(throwableBottle) &&
+        !throwableBottle.isDamaged
+      ) {
+        for (let i = 0; i < 5; i++) {
+          let chick = new Chick(throwableBottle.x);
+          this.level.enemies.push(chick);
         }
-      });
-     
-      this.bossBar.setPercentage(this.level.boss[0].energy);
-   //}, 1000 / 60);
+        throwableBottle.isDamaged = true;
+        setTimeout(() => {
+          this.level.boss[0].bottlesDamage(
+            this.level.throwableObjects,
+            this.level.throwableObjects.indexOf(throwableBottle)
+          );
+        }, 2000);
+        this.bossBar.setPercentage(this.level.boss[0].energy);
+        this.level.boss[0].waitForAttack = false;
+      }
+    });
+
+    this.bossBar.setPercentage(this.level.boss[0].energy);
+    this.cleanDeathEnemies();
+    //}, 1000 / 60);
   }
 
   addObjectsToMap(objects) {
@@ -146,4 +162,23 @@ class World {
   flipImageBack(mo) {
     this.ctx.restore();
   }
+
+  cleanDeathEnemies() {
+    this.level.enemies.forEach((enemy) => {
+      if (0 < enemy.dethTime && enemy.dethTime < new Date().getTime() - 1000) {
+        document.getElementById("chickens").innerHTML = this.level.enemies.length;
+        document.getElementById("chicks").innerHTML = this.level.enemies.length;
+        this.level.enemies.splice(this.level.enemies.indexOf(enemy), 1);
+        this.addNewChicken(3, enemy.x);
+      }
+    });
+  }
+
+    addNewChicken(n,x) {
+      let chicken = new Chicken(x);
+      for (let i = 0; i < n; i++) {
+        this.level.enemies.push(chicken);
+      }
+  }
+
 }

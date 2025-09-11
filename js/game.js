@@ -5,8 +5,9 @@ let keyboard = new Keyboard();
 function init() {
   canvas = document.getElementById("canvas");
   world = new World(canvas);
-
-  //console.log(`My character is:`, world);
+  document.getElementById("chickens").innerHTML = world.level.enemies.length;
+  document.getElementById("chicks").innerHTML = world.level.enemies.length;
+  console.log(`My character is:`, world);
 }
 
 window.addEventListener("keydown", (e) => {
@@ -26,3 +27,4 @@ e.code=="ArrowLeft" && keyboard.LEFT==true ? keyboard.LEFT=false : null;
 e.code=="ArrowRight" && keyboard.RIGHT==true ? keyboard.RIGHT=false : null;
 //console.log(`Button is listen:`,e, keyboard);
 });
+
