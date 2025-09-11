@@ -17,11 +17,11 @@ class DrawableObject {
   curentImage = 0;
 
   drawFrameBorder(ctx) {
-    if (this instanceof Character || this instanceof Chicken || this instanceof Bottle || this instanceof Endboss || this instanceof ThrowableObject || this instanceof LifeCoin) {
+    if (this instanceof Character || this instanceof Chicken || this instanceof Chick || this instanceof Bottle || this instanceof Endboss || this instanceof ThrowableObject || this instanceof LifeCoin) {
       ctx.beginPath();
       ctx.lineWidth = "1";
-      //ctx.strokeStyle = "transparent";
-      ctx.strokeStyle = "black";
+      ctx.strokeStyle = "transparent";
+      //ctx.strokeStyle = "black";
       ctx.rect(
         this.x + this.distanceLeft,
         this.y + this.distanceTop,

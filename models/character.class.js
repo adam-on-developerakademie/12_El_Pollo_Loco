@@ -63,7 +63,7 @@ class Character extends MovableObject {
       this.throwBottle();
       this.bottleReloaded();
 
-      this.world.camera_x = -this.x + 100;
+      this.world.camera_x = -this.x + 150;
     }, 1);
   }
 
@@ -149,6 +149,7 @@ class Character extends MovableObject {
   }
 
   killerJump(mo) {
+   
     let checkThis =
       this.isColliding(mo) && this.speedY < 0 && this.isAboveGround() == true;
     if (checkThis) {
@@ -158,7 +159,10 @@ class Character extends MovableObject {
           this.world.level.enemies.push(chicken);
         }
       }
-      this.world.level.enemies.splice(this.world.level.enemies.indexOf(mo), 1);
+      mo.energy = 0;      
+      setTimeout(() => {
+       this.world.level.enemies.splice(this.world.level.enemies.indexOf(mo), 1);
+      }, 500);
     }
     return checkThis;
   }
@@ -213,6 +217,7 @@ class Character extends MovableObject {
         this.energy = 100;
         return false;
       } else {
+        this.speedY = 20;
         return true;
       }
     }

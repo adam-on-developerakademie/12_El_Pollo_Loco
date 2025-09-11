@@ -88,7 +88,6 @@ class World {
       this.level.lifeCoins.forEach((lifeCoins) => {
         if (this.character.isColliding(lifeCoins)) {
           this.character.takeLifeCoin(this.level.lifeCoins, this.level.lifeCoins.indexOf(lifeCoins));
-          console.log(this.character.coinsNumber);
           this.coinsBar.setPercentage(this.character.coinsNumber);
         }
       });

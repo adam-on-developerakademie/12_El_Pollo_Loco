@@ -10,10 +10,9 @@ class MovableObject extends DrawableObject {
   speedY = 0;
   acceleration = 2;
   energy = 100;
-  bottlesNumber = 100;
+  bottlesNumber = 0;
   coinsNumber = 0;
-  isDamaged=false;
-
+  isDamaged = false;
 
   isColliding(mo) {
     return (
@@ -62,9 +61,11 @@ class MovableObject extends DrawableObject {
 
   moveLeft() {
     this.moveLeftInterval = setInterval(() => {
-      this.width + this.x <= 0
-        ? (this.x = this.worldWidth * 5)
-        : (this.x -= this.speed / 100);
+      if (this.energy != 0) {
+        this.width + this.x <= 0
+          ? (this.x = this.worldWidth * 5)
+          : (this.x -= this.speed / 100);
+      }
     }, 1);
   }
 
@@ -75,24 +76,58 @@ class MovableObject extends DrawableObject {
     this.curentImage++;
   }
 
-    animatedImage(IMAGES, animationSpeed, repeatAnimation, isDamagedIMAGES, isDamagedAnimationSpeed, isDamagedRepeatAnimation) {
+  animatedImage(
+    IMAGES,
+    animationSpeed,
+    repeatAnimation,
+    isDamagedIMAGES,
+    isDamagedAnimationSpeed,
+    isDamagedRepeatAnimation
+  ) {
     let condition = this.isDamaged;
     let n = IMAGES.length;
     let currentImage = IMAGES[0];
     for (let j = 0; j < repeatAnimation; j++) {
       let i = 0;
       setTimeout(() => {
-        this.currentImage(IMAGES, animationSpeed, i, n, currentImage, condition, isDamagedIMAGES, isDamagedAnimationSpeed, isDamagedRepeatAnimation );
+        this.currentImage(
+          IMAGES,
+          animationSpeed,
+          i,
+          n,
+          currentImage,
+          condition,
+          isDamagedIMAGES,
+          isDamagedAnimationSpeed,
+          isDamagedRepeatAnimation
+        );
       }, (j * 1000) / IMAGES.length);
     }
     return currentImage;
   }
 
-  currentImage(IMAGES, animationSpeed, i, n, currentImage, condition, isDamagedIMAGES, isDamagedAnimationSpeed, isDamagedRepeatAnimation) {
+  currentImage(
+    IMAGES,
+    animationSpeed,
+    i,
+    n,
+    currentImage,
+    condition,
+    isDamagedIMAGES,
+    isDamagedAnimationSpeed,
+    isDamagedRepeatAnimation
+  ) {
     let intervalId = setInterval(() => {
       if (i < n) {
         currentImage = this.loadImage(IMAGES[i]);
-        if (condition != this.isDamaged) {clearInterval(intervalId),this.animatedImage(isDamagedIMAGES, isDamagedAnimationSpeed, isDamagedRepeatAnimation)}
+        if (condition != this.isDamaged) {
+          clearInterval(intervalId),
+            this.animatedImage(
+              isDamagedIMAGES,
+              isDamagedAnimationSpeed,
+              isDamagedRepeatAnimation
+            );
+        }
         i++;
       } else {
         clearInterval(intervalId);
@@ -100,7 +135,6 @@ class MovableObject extends DrawableObject {
     }, animationSpeed);
     return i, currentImage;
   }
-
 
   playSequenceAnimation(images, duration) {
     let nowTime = new Date().getTime();
@@ -128,8 +162,12 @@ class MovableObject extends DrawableObject {
   applyGravity() {
     setInterval(() => {
       if (this.isAboveGround() || this.speedY > 0) {
-        this.y -= this.speedY;
-        this.speedY -= this.acceleration;
+        if (!this.energy == 0) {
+          this.y -= this.speedY;
+          this.speedY -= this.acceleration;
+        } else {
+          (this.y -= 10);
+        }
       }
     }, 1000 / 25);
   }
@@ -169,7 +207,7 @@ class MovableObject extends DrawableObject {
 
   bottlesDamage(bottles, index) {
     bottles.splice(index, 1);
-    this.energy -= 8;
+    this.energy -= 10;
     if (this.energy < 0) {
       this.energy = 0;
     }
