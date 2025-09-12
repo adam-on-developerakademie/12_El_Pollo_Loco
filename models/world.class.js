@@ -166,8 +166,8 @@ class World {
   cleanDeathEnemies() {
     this.level.enemies.forEach((enemy) => {
       if (0 < enemy.dethTime && enemy.dethTime < new Date().getTime() - 1000) {
-        document.getElementById("chickens").innerHTML = this.level.enemies.length;
-        document.getElementById("chicks").innerHTML = this.level.enemies.length;
+        document.getElementById("chickens").innerHTML = this.level.enemies.filter(e => e instanceof Chicken).length;
+        document.getElementById("chicks").innerHTML = this.level.enemies.filter(e => e instanceof Chick).length;
         this.level.enemies.splice(this.level.enemies.indexOf(enemy), 1);
         this.addNewChicken(2, enemy.x);
       }
@@ -180,5 +180,6 @@ class World {
         this.level.enemies.push(chicken);
       }
   }
+
 
 }

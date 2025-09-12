@@ -5,8 +5,8 @@ let keyboard = new Keyboard();
 function init() {
   canvas = document.getElementById("canvas");
   world = new World(canvas);
-  document.getElementById("chickens").innerHTML = world.level.enemies.length;
-  document.getElementById("chicks").innerHTML = world.level.enemies.length;
+        document.getElementById("chickens").innerHTML = world.level.enemies.filter(e => e instanceof Chicken).length;
+        document.getElementById("chicks").innerHTML = world.level.enemies.filter(e => e instanceof Chick).length;
   console.log(`My character is:`, world);
 }
 
@@ -28,3 +28,18 @@ e.code=="ArrowRight" && keyboard.RIGHT==true ? keyboard.RIGHT=false : null;
 //console.log(`Button is listen:`,e, keyboard);
 });
 
+function stopGame() {
+ 
+     for (let key in world.level.intervalIds) {
+      console.log(key);
+      let value = world.level.intervalIds[key];
+      clearInterval(value);
+    }
+    cancelAnimationFrame(world.level.intervalIds["draw"]);
+/*    world.level.intervalIds = [];
+  //  document.getElementById("game-over").classList.remove("d-none");
+  //  document.getElementById("restart").classList.remove("d-none");
+    document.getElementById("restart").onclick = function () {
+      location.reload();
+      };       */
+  }
