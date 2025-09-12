@@ -29,20 +29,20 @@ class World {
   }
 
   startIntervallIDs() {
-    this.level.intervallIDs["checkCollisions"] = setInterval(() => {
+    this.level.intervalIds["checkCollisions"] = setInterval(() => {
       this.checkCollisions();
     }, 1);
 
-    this.level.intervallIDs["draw"] = requestAnimationFrame(() => {
+    this.level.intervalIds["draw"] = requestAnimationFrame(() => {
       this.draw();
     });
   }
 
   pushIntervallIDs(intervalName, intervalId) {
-    if (!this.level.intervallIDs[intervalName]) {
-      this.level.intervallIDs[intervalName] = [];
+    if (!this.level.intervalIds[intervalName]) {
+      this.level.intervalIds[intervalName] = [];
     }
-    this.level.intervallIDs[intervalName].push(intervalId);
+    this.level.intervalIds[intervalName].push(intervalId);
   }
 
   draw() {
@@ -169,7 +169,7 @@ class World {
         document.getElementById("chickens").innerHTML = this.level.enemies.length;
         document.getElementById("chicks").innerHTML = this.level.enemies.length;
         this.level.enemies.splice(this.level.enemies.indexOf(enemy), 1);
-        this.addNewChicken(3, enemy.x);
+        this.addNewChicken(2, enemy.x);
       }
     });
   }

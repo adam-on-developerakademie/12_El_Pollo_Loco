@@ -91,7 +91,7 @@ class Character extends MovableObject {
       this.world.level.throwableObjects.push(throwableBottle);
       this.world.pushIntervallIDs(
         "throwableObjects",
-        throwableBottle.intervallID
+        throwableBottle.intervalId
       );
       this.world.character.bottlesNumber--;
       this.world.bottlesBar.setPercentage(this.world.character.bottlesNumber);
@@ -130,7 +130,7 @@ class Character extends MovableObject {
   }
 
   characterGoLeft() {
-    if (this.world.keyboard.LEFT && this.x > -500) {
+    if (this.world.keyboard.LEFT && this.x > 150) {
       this.lastMoveTime = new Date().getTime();
       this.x -= this.speed / 10;
       this.otherDirection = true;

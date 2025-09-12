@@ -7,12 +7,12 @@ const level1 = new Level(
     new Chicken(2000), new Chicken(2000), new Chicken(2000), new Chicken(2000),
   ],
   [new Endboss()],
-  [new Cloud(), new Cloud()],
+  [new Cloud(0), new Cloud(500), new Cloud(1000), new Cloud(1500), new Cloud(2000), new Cloud(2500)],
   [
-    new BackgroundObject("./img/5-background/layers/air.png",720    * -1),
-    new BackgroundObject("./img/5-background/layers/3-third-layer/2.png",720   * -1),
-    new BackgroundObject("./img/5-background/layers/2-second-layer/2.png",720 * -1),
-    new BackgroundObject("./img/5-background/layers/1-first-layer/2.png",720 * -1),
+   // new BackgroundObject("./img/5-background/layers/air.png",720    * -1),
+   // new BackgroundObject("./img/5-background/layers/3-third-layer/2.png",720   * -1),
+   // new BackgroundObject("./img/5-background/layers/2-second-layer/2.png",720 * -1),
+   // new BackgroundObject("./img/5-background/layers/1-first-layer/2.png",720 * -1),
 
     new BackgroundObject("./img/5-background/layers/air.png",0),
     new BackgroundObject("./img/5-background/layers/3-third-layer/1.png",0),

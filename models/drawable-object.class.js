@@ -6,8 +6,8 @@ class DrawableObject {
   distanceLeft = 0;
   distanceRight = 0;
   lastMoveTime = 0
-  intervallID
-  x = -200;
+  intervalId
+  x = 200;
   y = 270;
   height = 200;
   width = 100;

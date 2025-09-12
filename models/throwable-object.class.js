@@ -28,7 +28,7 @@ class ThrowableObject extends MovableObject {
     //this.speed =10;
     this.gravity = 2;
     this.throwing = false;
-    this.intervallID = this.throw(otherDirection);
+    this.intervalId = this.throw(otherDirection);
   }
 
   throw(otherDirection) {
