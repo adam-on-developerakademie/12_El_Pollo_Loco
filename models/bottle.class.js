@@ -36,9 +36,9 @@ class Bottle extends MovableObject {
   }
 
   newBottlePlacement(characterPosition) {
-    let position = -1;
+    let position = 200;
     do{ position= (characterPosition + (Math.random() - 0.5) * this.worldWidth * 2)
-    }while (position < 0 || position > this.worldWidth * 4);
+    }while (position < 200 || position > this.worldWidth * 4);
     return position;
   }
 

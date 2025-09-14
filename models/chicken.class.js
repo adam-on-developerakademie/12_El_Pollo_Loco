@@ -17,7 +17,7 @@ class Chicken extends MovableObject {
     this.speed = 10 + Math.random() * 30;
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGE_DEAD);
-    this.animate();
+    this.intervalId = this.animate();
   }
 
   animate() {
@@ -34,6 +34,7 @@ class Chicken extends MovableObject {
         this.playAnimation(this.IMAGES_WALKING);
       }
     }, 60);
+    return intervalId;
   }
 
 

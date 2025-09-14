@@ -1,4 +1,4 @@
-const level1 = new Level(
+let level1 = new Level(
   [ new LifeCoin(500), new LifeCoin(1500), new LifeCoin(2000), new LifeCoin(2500)],
   [new Bottle(100), new Bottle(200), new Bottle(300)],
   [],

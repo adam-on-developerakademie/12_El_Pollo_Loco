@@ -76,6 +76,8 @@ class World {
 
   checkCollisions() {
     // setInterval(() => {
+    this.checkCollisionsBottleAndEnemies();
+
     this.level.enemies.forEach((enemy) => {
       this.character.killerJump(enemy);
       if (this.character.isColliding(enemy)) {
@@ -117,6 +119,9 @@ class World {
           let chick = new Chick(throwableBottle.x);
           this.level.enemies.push(chick);
         }
+        document.getElementById("chicks").innerHTML = this.level.enemies.filter(
+          (e) => e instanceof Chick
+        ).length;
         throwableBottle.isDamaged = true;
         setTimeout(() => {
           this.level.boss[0].bottlesDamage(
@@ -133,6 +138,18 @@ class World {
     this.cleanDeathEnemies();
     //}, 1000 / 60);
   }
+
+  checkCollisionsBottleAndEnemies() {
+        this.level.enemies.forEach((enemy) => {
+      this.level.throwableObjects.forEach((throwableBottle) => {
+        if (enemy.isColliding(throwableBottle)) {
+          enemy.energy = 0;
+          enemy.dethTime = new Date().getTime();
+        }
+      });
+    });
+  }
+
 
   addObjectsToMap(objects) {
     objects.forEach((obj) => {
@@ -166,20 +183,21 @@ class World {
   cleanDeathEnemies() {
     this.level.enemies.forEach((enemy) => {
       if (0 < enemy.dethTime && enemy.dethTime < new Date().getTime() - 1000) {
-        document.getElementById("chickens").innerHTML = this.level.enemies.filter(e => e instanceof Chicken).length;
-        document.getElementById("chicks").innerHTML = this.level.enemies.filter(e => e instanceof Chick).length;
+        document.getElementById("chickens").innerHTML =
+          this.level.enemies.filter((e) => e instanceof Chicken).length;
+        document.getElementById("chicks").innerHTML = this.level.enemies.filter(
+          (e) => e instanceof Chick
+        ).length;
         this.level.enemies.splice(this.level.enemies.indexOf(enemy), 1);
         this.addNewChicken(2, enemy.x);
       }
     });
   }
 
-    addNewChicken(n,x) {
-      let chicken = new Chicken(x);
-      for (let i = 0; i < n; i++) {
-        this.level.enemies.push(chicken);
-      }
+  addNewChicken(chickensNumber, position) {
+    let chicken = new Chicken(position);
+    for (let i = 0; i < chickensNumber; i++) {
+      this.level.enemies.push(chicken);
+    }
   }
-
-
 }
