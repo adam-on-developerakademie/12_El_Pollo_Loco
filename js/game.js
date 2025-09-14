@@ -44,7 +44,7 @@ window.addEventListener("keyup", (e) => {
   //console.log(`Button is listen:`,e, keyboard);
 });
 
-function startButton() {
+function run() {
 
   loadLevel()
   init();

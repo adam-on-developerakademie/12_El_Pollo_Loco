@@ -17,7 +17,7 @@ body {
 
 header {
   height: 5svh;
-  margin-bottom: 3svh;
+  margin-bottom: 10svh;
   color: #ffcd17;
   text-shadow: 2px 2px 4px #000000;
   text-transform: uppercase;
@@ -28,10 +28,11 @@ header {
 
 main {
   max-width: 1920px;
-  height: 70svh;
+  height: 60svh;
   width: auto;
-  margin-left: 20px;
-  margin-right: 20px;
+  margin-left: 60px;
+  margin-right: 60px;
+  margin-bottom: 10svh;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -40,7 +41,7 @@ main {
   gap: 20px;
 
   img {
-    max-height: 70svh;
+    max-height: 60svh;
     max-width: 100%;
     height: auto;
   }
@@ -48,12 +49,15 @@ main {
 
 footer {
   height: 10svh;
-  margin-bottom: 3svh;
   color: white;
   text-shadow: 2px 2px 4px #000000;
   letter-spacing: 0.3em;
   font-size: 14px;
+  display: flex;
   text-align: center;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .menuButtons {
@@ -82,10 +86,48 @@ footer {
   align-items: center;
   cursor: pointer;
 }
+@media screen and (max-width: 900px) {
+  main {
+  height: 40svh;
+  margin-left: 40px;
+  margin-right: 40px;
+  }
 
-.overlay {
-  background-color: rgba(0, 0, 0, 0.5);
+  footer {
+    font-size: 10px;
+    height: auto;    
+  }
+  .menuButtons {
+    flex-direction: column;
+    height: auto;
+    gap: 10px;
+  }
 }
+
+@media screen and (max-width: 500px) {
+
+  header {
+    font-size: 20px;
+    margin-top: 10px;
+  }
+
+  main {
+  height: 30svh;
+  margin-left: 20px;
+  margin-right: 20px;
+  }
+
+  footer {
+    font-size: 10px;
+    height: auto;    
+  }
+  .menuButtons {
+    flex-direction: column;
+    height: auto;
+    gap: 10px;
+  }
+}
+
 .overlay {
   position: absolute;
   top: 50%;
@@ -102,11 +144,11 @@ footer {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+
+
 }
 
-.displayNone {
-  display: none;
-}
+
 
 .scor {
   width: 100%;
@@ -166,3 +208,14 @@ canvas {
   -ms-transform: translate(-50%, -50%);
   background-color: #000000;
 }
+
+
+.displayNone {
+  display: none !important;
+}
+
+.center {
+
+  align-items: center !important;
+
+} 

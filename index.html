@@ -30,15 +30,15 @@
 
 <body>
 
-    <header>
+    <header id="header">
         <H1>El Pollo Loco</H1>
     </header>
 
-    <main>
+    <main id="main">
         <img src="./img/9-intro-outro-screens/start/startscreen-2.png" alt="Start Screen">
     </main>
 
-    <footer>
+    <footer id="footer">
     <div class="menuButtons">
         <button class="menuButton" id="startBtn" onclick="startButton()">START</button>
         <button class="menuButton" id="infoBtn" onclick="infoButton()">INFO</button>
@@ -61,13 +61,13 @@
                 <img src="./img/3-enemies-chicken/chicken-small/1-walk/3-w.png" alt="Chicks">
             </div>
         </div>
-        <div id="mobileButtons">
-            <div class="side">
+        <div id="mobileButtons" >
+            <div id="sideButtons" class="side displayNone">
                 <div id="left" class="button">L</div>
                 <div id="right" class="button">R</div>
             </div>
-            <div id="fullscreen" class="button" onclick="startButton()">START</div>
-            <div class="side">
+            <div id="fullscreen" class="button" onclick="run()">START</div>
+            <div id="sideButtons" class="side displayNone">
                 <div id="jump" class="button">J</div>
                 <div id="throw" class="button">T</div>
             </div>

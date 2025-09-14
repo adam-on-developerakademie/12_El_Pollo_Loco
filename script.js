@@ -1,3 +1,20 @@
+function startButton(){
+  document.getElementById("header").classList.add("displayNone");
+  document.getElementById("main").classList.add("displayNone");
+  document.getElementById("footer").classList.add("displayNone");
+  document.getElementById("canvas").classList.remove("displayNone");
+  document.getElementById("overlay").classList.remove("displayNone");
+  document.getElementById("mobileButtons").classList.add("center");
+
+ run();
+}
+
+
+
+
+
+
+
 function overlayOn() {
   document.getElementById("overlay").style.display = "block";
 }
