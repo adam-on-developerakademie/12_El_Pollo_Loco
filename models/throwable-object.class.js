@@ -15,7 +15,7 @@ class ThrowableObject extends MovableObject {
     "./img/6-salsa-bottle/bottle-rotation/bottle-splash/6-bottle-splash.png",
   ];
 
-  constructor(x, y, otherDirection) {
+  constructor(x, y, otherDirection, onMove) {
     super().loadImage(this.animatedImage(this.IMAGES_BOTTLE_THROWN, 60, 5,this.IMAGES_BOTTLE_SPLASH, 100, 1));
     this.loadImages(this.IMAGES_BOTTLE);
     this.loadImages(this.IMAGES_BOTTLE_THROWN);
@@ -28,14 +28,14 @@ class ThrowableObject extends MovableObject {
     //this.speed =10;
     this.gravity = 2;
     this.throwing = false;
-    this.intervalId = this.throw(otherDirection);
+    this.intervalId = this.throw(otherDirection,onMove);
   }
 
-  throw(otherDirection) {
+  throw(otherDirection, onMove) {
     let intervalId = setInterval(() => {
-      otherDirection ? (this.isDamaged ? this.x -= 1 : this.x -= 2.5) : (this.isDamaged ? this.x += 1 : this.x += 2.5);
+      otherDirection ? (this.isDamaged ? this.x -= 1 : this.x -= 2 + onMove * 1) : (this.isDamaged ? this.x += 1 : this.x += 2 + onMove * 1);
     }, 1);
-    this.y = 120 +  this.y--;
+    this.y = 120 +  this.y--; 
     this.speedY = 20;
     this.applyGravity();
     return intervalId;

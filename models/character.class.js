@@ -86,7 +86,8 @@ class Character extends MovableObject {
       let throwableBottle = new ThrowableObject(
         this.world.character.x,
         this.world.character.y,
-        this.otherDirection
+        this.otherDirection,
+        this.world.keyboard.RIGHT || this.world.keyboard.LEFT ? 1 : 0
       );
       this.world.level.throwableObjects.push(throwableBottle);
       this.world.pushIntervallIDs(
