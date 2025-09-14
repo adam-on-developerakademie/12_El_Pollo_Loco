@@ -44,6 +44,12 @@ window.addEventListener("keyup", (e) => {
   //console.log(`Button is listen:`,e, keyboard);
 });
 
-function restartGame() {
-  location.reload();
-} 
+function startButton() {
+
+  loadLevel()
+  init();
+  world.clearAllIntervalIds();
+  loadLevel()
+  init();
+
+}

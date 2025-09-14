@@ -200,4 +200,11 @@ class World {
       this.level.enemies.push(chicken);
     }
   }
+
+    clearAllIntervalIds() {
+        for (let i = 0; i < 999999; i++) {
+            window.clearInterval(i);
+        }
+    }
+
 }
