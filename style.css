@@ -17,8 +17,8 @@ body {
 
 header {
   height: 5svh;
-  margin: 20px;
-  color:  #FFCD17;
+  margin-bottom: 3svh;
+  color: #ffcd17;
   text-shadow: 2px 2px 4px #000000;
   text-transform: uppercase;
   letter-spacing: 0.3em;
@@ -28,17 +28,22 @@ header {
 
 main {
   max-width: 1920px;
-  height: 85svh;
-  width: 100%;
-  background-image: url("./img/9-intro-outro-screens/start/startscreen-2.png");
-  background-repeat: no-repeat;
-  margin: 0;
+  height: 70svh;
+  width: auto;
+  margin-left: 20px;
+  margin-right: 20px;
   padding: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: end;
+  justify-content: center;
   gap: 20px;
+
+  img {
+    max-height: 70svh;
+    max-width: 100%;
+    height: auto;
+  }
 }
 
 footer {
@@ -52,8 +57,8 @@ footer {
 }
 
 .menuButtons {
- height: 9svh;
- width: 100%;
+  height: 9svh;
+  width: 100%;
   display: flex;
   gap: 20px;
   margin-bottom: 1svh;
@@ -63,7 +68,9 @@ footer {
 .menuButton {
   font-family: "Zabars", sans-serif;
   background-color: rgba(0, 0, 0, 0.2);
-  color: #FFCD17;
+  color: #ffcd17;
+  text-shadow: 2px 2px 4px #000000;
+  text-transform: uppercase;
   font-size: 32px;
   letter-spacing: 0.2em;
   border-radius: 10px;
