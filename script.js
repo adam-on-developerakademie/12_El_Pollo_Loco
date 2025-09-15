@@ -1,6 +1,7 @@
 function startButton(){
   document.getElementById("header").classList.add("displayNone");
-  document.getElementById("main").classList.add("displayNone");
+  document.getElementById("gameOver").classList.add("displayNone");
+  document.getElementById("startScreen").classList.add("displayNone");
   document.getElementById("footer").classList.add("displayNone");
   document.getElementById("canvas").classList.remove("displayNone");
   document.getElementById("overlay").classList.remove("displayNone");
@@ -9,20 +10,14 @@ function startButton(){
  run();
 }
 
-
-
-
-
-
+function overlayOff() {
+  document.getElementById("overlay").style.display = "none";
+}
 
 function overlayOn() {
   document.getElementById("overlay").style.display = "block";
 }
-
-function off() {
-  document.getElementById("overlay").style.display = "none";
-}
-isFullscreen = false;
+let isFullscreen = false;
 
 function fullscreen() {
   if (!isFullscreen) {

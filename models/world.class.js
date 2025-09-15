@@ -140,7 +140,7 @@ class World {
   }
 
   checkCollisionsBottleAndEnemies() {
-        this.level.enemies.forEach((enemy) => {
+    this.level.enemies.forEach((enemy) => {
       this.level.throwableObjects.forEach((throwableBottle) => {
         if (enemy.isColliding(throwableBottle)) {
           enemy.energy = 0;
@@ -149,7 +149,6 @@ class World {
       });
     });
   }
-
 
   addObjectsToMap(objects) {
     objects.forEach((obj) => {
@@ -201,10 +200,22 @@ class World {
     }
   }
 
-    clearAllIntervalIds() {
-        for (let i = 0; i < 999999; i++) {
-            window.clearInterval(i);
-        }
+  clearAllIntervalIds() {
+    for (let i = 0; i < 999999; i++) {
+      window.clearInterval(i);
     }
+  }
 
+  gameOver() {
+    this.clearAllIntervalIds();
+    document.getElementById("canvas").classList.add("displayNone");
+    document.getElementById("startScreen").classList.add("displayNone");
+    document.getElementById("gameOver").classList.remove("displayNone");
+    document.getElementById("header").classList.remove("displayNone");
+    document.getElementById("mobileButtons").classList.remove("center");  
+    document.getElementById("footer").classList.remove("displayNone");
+    document.getElementById("overlay").classList.add("displayNone");
+  
+    
+  }
 }

@@ -63,6 +63,7 @@ class Character extends MovableObject {
       this.throwBottle();
       this.bottleReloaded();
       this.world.camera_x = -this.x + 150;
+      this.youLose();
     }, 1);
   }
 
@@ -216,4 +217,13 @@ class Character extends MovableObject {
       }
     }
   }
+
+  youLose() {
+    if (this.isCharacterDead()) {
+      setTimeout(() => {
+        this.world.gameOver();
+      }, 2000);
+    }
+
+}
 }

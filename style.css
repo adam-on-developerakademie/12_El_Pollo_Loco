@@ -40,11 +40,17 @@ main {
   justify-content: center;
   gap: 20px;
 
-  img {
+  #startScreen {
     max-height: 60svh;
     max-width: 100%;
     height: auto;
   }
+  #gameOver {
+    max-height: 60svh;
+    max-width: 100%;
+    height: auto;
+  }
+  
 }
 
 footer {
