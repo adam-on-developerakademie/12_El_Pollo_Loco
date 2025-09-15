@@ -5,7 +5,8 @@ function startButton(){
   document.getElementById("footer").classList.add("displayNone");
   document.getElementById("canvas").classList.remove("displayNone");
   document.getElementById("overlay").classList.remove("displayNone");
-  document.getElementById("mobileButtons").classList.add("center");
+  //document.getElementById("mobileButtons").classList.add("center");
+  //document.getElementById("sideButtons").classList.add("displayNone");
 
  run();
 }

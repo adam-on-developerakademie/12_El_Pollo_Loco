@@ -20,6 +20,7 @@
     <script src="./models/status-bar.class.js"></script>
     <script src="./models/world.class.js"></script>
     <script src="./models/background-object.class.js"></script>
+    <script src="./models/endscreen.js"></script>
     <script src="./models/keyboard.class.js"></script>
     <script src="./models/level.class.js"></script>
     <script src="./models/throwable-object.class.js"></script>
@@ -35,7 +36,7 @@
     </header>
 
     <main id="main">
-        <img id="gameOver" class="displayNone" src="./img/You-won-you-lost/game-over.png" alt="Game Over Screen">
+        <img id="gameOver" class="displayNone" src="./img/You-won-you-lost/game-over-a.png" alt="Game Over Screen">
         <img id="startScreen" src="./img/9-intro-outro-screens/start/startscreen-2.png" alt="Start Screen">
         
     </main>
@@ -64,12 +65,12 @@
             </div>
         </div>
         <div id="mobileButtons" >
-            <div id="sideButtons" class="side displayNone">
+            <div id="sideButtons" class="side">
                 <div id="left" class="button">L</div>
                 <div id="right" class="button">R</div>
             </div>
             <div id="fullscreen" class="button" onclick="run()">START</div>
-            <div id="sideButtons" class="side displayNone">
+            <div id="sideButtons" class="side">
                 <div id="jump" class="button">J</div>
                 <div id="throw" class="button">T</div>
             </div>

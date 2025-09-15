@@ -8,6 +8,7 @@ class Level {
   backgroundObjects;
   levelEndX;
   intervalIds = {};
+  endScreens;
 
   constructor(
     lifeCoins,
@@ -18,7 +19,8 @@ class Level {
     clouds,
     backgroundObjects,
     levelEndX,
-    intervalIds
+    intervalIds,
+    endScreens,
   ) {
     this.lifeCoins = lifeCoins;
     this.bottles = bottles;
@@ -29,5 +31,6 @@ class Level {
     this.backgroundObjects = backgroundObjects;
     this.levelEndX = levelEndX;
     this.intervalIds = intervalIds;
+    this.endScreens = endScreens;
   }
 }

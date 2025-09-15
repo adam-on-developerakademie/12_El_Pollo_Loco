@@ -36,6 +36,7 @@ class Character extends MovableObject {
     "img/2-character-pepe/4-hurt/h-43.png",
   ];
   IMAGE_STAY = ["./img/2-character-pepe/3-jump/j-31.png"];
+  IMAGE_LOST = ["./img/You-won-you-lost/you-lost.png"];
 
   world;
   y = 50;
@@ -51,6 +52,7 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_DEAD);
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGE_STAY);
+    this.loadImages(this.IMAGE_LOST);
     this.run();
   }
 
@@ -154,7 +156,7 @@ class Character extends MovableObject {
 
   killerJump(mo) {
     let checkThis =
-    this.isColliding(mo) && this.speedY < 0 && this.isAboveGround() == true;
+      this.isColliding(mo) && this.speedY < 0 && this.isAboveGround() == true;
     if (checkThis) {
       mo.energy = 0;
       mo.dethTime = new Date().getTime();
@@ -221,9 +223,15 @@ class Character extends MovableObject {
   youLose() {
     if (this.isCharacterDead()) {
       setTimeout(() => {
-        this.world.gameOver();
+        this.world.level.endScreens[0].zoomIn(400, 200);
+        setTimeout(() => {
+          this.world.level.endScreens[0].newPosition(-720, 0, 0);
+          this.world.level.endScreens[1].zoomIn(300, 200);
+          setTimeout(() => this.world.gameOver(), 3000);
+        }, 3000);
       }, 2000);
-    }
 
-}
+      
+    }
+  }
 }

@@ -43,7 +43,17 @@ function loadLevel() {
 [
      720 * 4
 ],
-{}
+{},
+[
+  new EndScreen("./img/You-won-you-lost/you-lost.png",-720),
+  new EndScreen("./img/You-won-you-lost/game-over-a.png",-720),
+  new EndScreen("./img/You-won-you-lost/game-over.png",-720),
+  new EndScreen("./img/You-won-you-lost/you-lost-b.png",-720),
+  new EndScreen("./img/You-won-you-lost/you-win-a.png",-720),
+  new EndScreen("./img/You-won-you-lost/you-win-b.png",-720),
+  new EndScreen("./img/You-won-you-lost/you-won-a.png",-720),
+]
+
 
 
 

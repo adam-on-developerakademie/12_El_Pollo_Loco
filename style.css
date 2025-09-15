@@ -5,6 +5,7 @@
 
 body {
   font-family: "Zabars", sans-serif;
+  user-select: none;
   margin: 0;
   padding: 0;
   display: flex;
@@ -27,7 +28,7 @@ header {
 }
 
 main {
-  max-width: 1920px;
+  max-width: 720px;
   height: 60svh;
   width: auto;
   margin-left: 60px;
@@ -39,19 +40,18 @@ main {
   align-items: center;
   justify-content: center;
   gap: 20px;
-
+}
   #startScreen {
     max-height: 60svh;
     max-width: 100%;
     height: auto;
   }
+  
   #gameOver {
     max-height: 60svh;
     max-width: 100%;
     height: auto;
   }
-  
-}
 
 footer {
   height: 10svh;
@@ -85,14 +85,14 @@ footer {
   letter-spacing: 0.2em;
   border-radius: 10px;
   min-width: max-content;
-  width: 200px;
+  width: 250px;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
 }
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 1100px) {
   main {
   height: 40svh;
   margin-left: 40px;
@@ -135,6 +135,7 @@ footer {
 }
 
 .overlay {
+  padding: 100px;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -143,7 +144,8 @@ footer {
   /* background-color: rgba(0, 0, 0, 0.5); */
   color: white;
   font-size: 2em;
-  border: 5px solid white;
+  /* border: 5px solid white; */
+  border: 5px solid transparent;
   transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
   display: flex;

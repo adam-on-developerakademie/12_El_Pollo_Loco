@@ -10,6 +10,8 @@ class World {
   bottlesBar = new StatusBar("BOTTLES_BAR");
   bossBar = new StatusBar("BOSS_BAR");
 
+
+
   constructor(canvas) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
@@ -50,6 +52,7 @@ class World {
     this.ctx.translate(this.camera_x, 0);
 
     this.addObjectsToMap(this.level.backgroundObjects);
+   
 
     this.addObjectsToMap(this.level.bottles);
     this.addObjectsToMap(this.level.clouds);
@@ -64,8 +67,10 @@ class World {
     this.addToMap(this.healthBar);
     this.addToMap(this.bottlesBar);
     this.addToMap(this.bossBar);
+    this.addObjectsToMap(this.level.endScreens);
     this.ctx.translate(this.camera_x, 0);
 
+    
     this.ctx.translate(-this.camera_x, 0);
 
     let self = this;
@@ -91,7 +96,7 @@ class World {
     }
 
     this.level.lifeCoins.forEach((lifeCoins) => {
-      if (this.character.isColliding(lifeCoins)) {
+      if (this.character.isColliding(lifeCoins) && !this.character.isCharacterDead() ) {
         this.character.takeLifeCoin(
           this.level.lifeCoins,
           this.level.lifeCoins.indexOf(lifeCoins)
@@ -209,8 +214,7 @@ class World {
   gameOver() {
     this.clearAllIntervalIds();
     document.getElementById("canvas").classList.add("displayNone");
-    document.getElementById("startScreen").classList.add("displayNone");
-    document.getElementById("gameOver").classList.remove("displayNone");
+    document.getElementById("startScreen").classList.remove("displayNone");
     document.getElementById("header").classList.remove("displayNone");
     document.getElementById("mobileButtons").classList.remove("center");  
     document.getElementById("footer").classList.remove("displayNone");
