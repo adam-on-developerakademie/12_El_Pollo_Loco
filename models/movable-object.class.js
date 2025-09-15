@@ -66,9 +66,19 @@ class MovableObject extends DrawableObject {
         this.width + this.x <= 0
           ? (this.x = this.worldWidth * 5)
           : (this.x -= this.speed / 100);
-      }
+      }else{clearInterval(this.moveLeftInterval);}
     }, 1);
   }
+
+  moveRight() {
+    this.moveRightInterval = setInterval(() => {
+      if (this.energy != 0) {
+        this.width + this.x >= this.worldWidth * 5
+          ? (this.x = 0)
+          : (this.x += this.speed / 100);
+      }else{clearInterval(this.moveRightInterval);}
+    }, 1);
+    }
 
   playAnimation(images) {
     let i = this.curentImage % images.length;
@@ -208,7 +218,7 @@ class MovableObject extends DrawableObject {
 
   bottlesDamage(bottles, index) {
     bottles.splice(index, 1);
-    this.energy -= 10;
+    this.energy -= 15;
     if (this.energy < 0) {
       this.energy = 0;
     }

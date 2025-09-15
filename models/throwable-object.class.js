@@ -33,7 +33,7 @@ class ThrowableObject extends MovableObject {
 
   throw(otherDirection, onMove) {
     let intervalId = setInterval(() => {
-      otherDirection ? (this.isDamaged ? this.x -= 1 : this.x -= 2 + onMove * 1) : (this.isDamaged ? this.x += 1 : this.x += 2 + onMove * 1);
+      otherDirection ? (this.isDamaged ? this.x -= 1 : this.x -= 2 + onMove * 1.5) : (this.isDamaged ? this.x += 1 : this.x += 2 + onMove * 1.5);
     }, 1);
     this.y = 120 +  this.y--; 
     this.speedY = 20;

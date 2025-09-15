@@ -40,7 +40,7 @@ class Character extends MovableObject {
 
   world;
   y = 50;
-  speed = 25;
+  speed = 3
   isThrowing = false;
 
   constructor() {
@@ -126,9 +126,9 @@ class Character extends MovableObject {
   }
 
   characterGoRight() {
-    if (this.world.keyboard.RIGHT && this.x < this.world.level.levelEndX) {
+    if (this.world.keyboard.RIGHT && this.x < this.world.level.boss[0].x + 50 && this.x < this.world.level.levelEndX) {
       this.lastMoveTime = new Date().getTime();
-      this.x += this.speed / 10;
+      this.x += this.speed;
       this.otherDirection = false;
     }
   }
@@ -136,7 +136,7 @@ class Character extends MovableObject {
   characterGoLeft() {
     if (this.world.keyboard.LEFT && this.x > 150) {
       this.lastMoveTime = new Date().getTime();
-      this.x -= this.speed / 10;
+      this.x -= this.speed;
       this.otherDirection = true;
     }
   }

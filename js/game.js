@@ -3,6 +3,7 @@ let world;
 let keyboard = new Keyboard();
 
 function init() {
+  loadLevel()
   canvas = document.getElementById("canvas");
   world = new World(canvas);
   document.getElementById("chickens").innerHTML = world.level.enemies.filter(
@@ -45,11 +46,8 @@ window.addEventListener("keyup", (e) => {
 });
 
 function run() {
-
-  loadLevel()
   init();
   world.clearAllIntervalIds();
-  loadLevel()
   init();
 
 }
