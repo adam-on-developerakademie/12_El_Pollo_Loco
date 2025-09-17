@@ -87,21 +87,26 @@ class MovableObject extends DrawableObject {
     }, 1);
   }
 
-  playAnimation(images) {
+  playAnimation(images, sound) {
     let i = this.curentImage % images.length;
     let path = images[i];
     this.img = this.imageCache[path];
     this.curentImage++;
+    if (this.alive && this.action != "dead") {
+    sound ? sound.play() : null;
+    } else if (this.alive && this.action == "dead") {
+      sound ? sound.play() : null;
+    this.alive=false;}
   }
 
-    playAnimationSlower(images,sound, slower) {
+  playAnimationSlower(images, sound, slower) {
     let i = this.curentImage % images.length;
     let path = images[i];
     this.img = this.imageCache[path];
     this.slowMotion++;
-    if(this.slowMotion==slower){
+    if (this.slowMotion == slower) {
       sound ? sound.play() : null;
-      this.slowMotion=0;
+      this.slowMotion = 0;
       this.curentImage++;
     }
   }
@@ -140,7 +145,6 @@ class MovableObject extends DrawableObject {
         sound ? sound.play() : null;
         this.playSound = true;
       }
-      console.log(this.speedY, this.acceleration, this.action);
       if (new Date().getTime() < this.jumpTime + 300) {
         this.img = this.imageCache[images[0]];
       } else if (new Date().getTime() < this.jumpTime + 500) {
@@ -218,12 +222,14 @@ class MovableObject extends DrawableObject {
     if (this.bottlesNumber < 25) {
       this.bottlesNumber++;
       bottles.splice(index, 1);
+      this.soundBottle.play();
     } else {
       this.bottlesNumber = 25;
     }
   }
 
   takeLifeCoin(lifeCoins, index) {
+    this.soundCoin ? this.soundCoin.play() : null;
     this.coinsNumber += 25;
     lifeCoins.splice(index, 1);
   }

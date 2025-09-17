@@ -10,6 +10,8 @@ class World {
   healthBar = new StatusBar("HEALTH_BAR");
   bottlesBar = new StatusBar("BOTTLES_BAR");
   bossBar = new StatusBar("BOSS_BAR");
+   soundChick= new Audio("./audio/chick.wav");
+
 
   constructor(canvas, startTime) {
     this.ctx = canvas.getContext("2d");
@@ -155,6 +157,7 @@ class World {
         if (enemy.isColliding(throwableBottle)) {
           enemy.energy = 0;
           enemy.dethTime = new Date().getTime();
+          this.soundChick ? this.soundChick.play() : null;
         }
       });
     });

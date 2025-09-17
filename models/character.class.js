@@ -65,14 +65,19 @@ class Character extends MovableObject {
 
   soundWalk = new Audio("./audio/walk.wav");
   soundJump = new Audio("./audio/jump.wav");
-  // soundHurt = new Audio("./audio/hurt.wav");
-  // soundDead = new Audio("./audio/dead.wav");
+  soundThrow = new Audio("./audio/throw.wav");
+  soundHurt = new Audio("./audio/hurt.wav");
+  soundDead = new Audio("./audio/dead.wav");
+  soundCoin = new Audio("./audio/coin.wav");
+  soundBottle = new Audio("./audio/bottle.ogg");
+  soundChick= new Audio("./audio/chick.wav");
 
   world;
   y = 50;
   speed = 3;
   isThrowing = false;
   startGameTime = new Date().getTime();
+  alive=true;
 
   constructor() {
     super().loadImage("./img/2-character-pepe/3-jump/j-31.png");
@@ -107,11 +112,11 @@ class Character extends MovableObject {
   playAnimations(waitingTime) {
     if (this.isCharacterDead() && !this.world.level.boss[0].isDead()) {
       this.action = "dead";
-      this.playAnimation(this.IMAGES_DEAD, 0);
+      this.playAnimation(this.IMAGES_DEAD, this.soundDead);
     } else if (this.isHurt()) {
       this.action = "hurt";
       this.lastMoveTime = new Date().getTime();
-      this.playAnimation(this.IMAGES_HURT, 0);
+      this.playAnimation(this.IMAGES_HURT, this.soundHurt);
     } else if (waitingTime > 1000) {
       this.playWaitingAnimation(waitingTime);
     } else this.playReadyAnimation();
@@ -149,6 +154,7 @@ class Character extends MovableObject {
         "throwableObjects",
         throwableBottle.intervalId
       );
+      this.soundThrow ? this.soundThrow.play() : null;
       this.world.character.bottlesNumber--;
       this.world.bottlesBar.setPercentage(this.world.character.bottlesNumber);
     }
@@ -224,6 +230,7 @@ class Character extends MovableObject {
     if (checkThis) {
       mo.energy = 0;
       mo.dethTime = new Date().getTime();
+      this.soundChick ? this.soundChick.play() : null;
     }
     return checkThis;
   }
