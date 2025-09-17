@@ -1,5 +1,7 @@
 class MovableObject extends DrawableObject {
   animationBusy = 0;
+  action = false;
+  playSound = false;
   jumpTime = 0;
   frameTime = 0;
   currentFrame = 0;
@@ -66,7 +68,9 @@ class MovableObject extends DrawableObject {
         this.width + this.x <= 0
           ? (this.x = this.worldWidth * 5)
           : (this.x -= this.speed / 100);
-      }else{clearInterval(this.moveLeftInterval);}
+      } else {
+        clearInterval(this.moveLeftInterval);
+      }
     }, 1);
   }
 
@@ -76,9 +80,11 @@ class MovableObject extends DrawableObject {
         this.width + this.x >= this.worldWidth * 5
           ? (this.x = 0)
           : (this.x += this.speed / 100);
-      }else{clearInterval(this.moveRightInterval);}
+      } else {
+        clearInterval(this.moveRightInterval);
+      }
     }, 1);
-    }
+  }
 
   playAnimation(images) {
     let i = this.curentImage % images.length;
@@ -87,57 +93,25 @@ class MovableObject extends DrawableObject {
     this.curentImage++;
   }
 
-  animatedImage(
-    IMAGES,
-    animationSpeed,
-    repeatAnimation,
-    isDamagedIMAGES,
-    isDamagedAnimationSpeed,
-    isDamagedRepeatAnimation
-  ) {
+  animatedImage(IMAGES, animationSpeed, repeatAnimation, isDamagedIMAGES, isDamagedAnimationSpeed, isDamagedRepeatAnimation) {
     let condition = this.isDamaged;
     let n = IMAGES.length;
     let currentImage = IMAGES[0];
     for (let j = 0; j < repeatAnimation; j++) {
       let i = 0;
       setTimeout(() => {
-        this.currentImage(
-          IMAGES,
-          animationSpeed,
-          i,
-          n,
-          currentImage,
-          condition,
-          isDamagedIMAGES,
-          isDamagedAnimationSpeed,
-          isDamagedRepeatAnimation
-        );
+        this.currentImage(IMAGES, animationSpeed, i, n, currentImage, condition, isDamagedIMAGES, isDamagedAnimationSpeed, isDamagedRepeatAnimation);
       }, (j * 1000) / IMAGES.length);
     }
     return currentImage;
   }
 
-  currentImage(
-    IMAGES,
-    animationSpeed,
-    i,
-    n,
-    currentImage,
-    condition,
-    isDamagedIMAGES,
-    isDamagedAnimationSpeed,
-    isDamagedRepeatAnimation
-  ) {
+  currentImage(IMAGES, animationSpeed, i, n, currentImage, condition, isDamagedIMAGES, isDamagedAnimationSpeed, isDamagedRepeatAnimation) {
     let intervalId = setInterval(() => {
       if (i < n) {
         currentImage = this.loadImage(IMAGES[i]);
         if (condition != this.isDamaged) {
-          clearInterval(intervalId),
-            this.animatedImage(
-              isDamagedIMAGES,
-              isDamagedAnimationSpeed,
-              isDamagedRepeatAnimation
-            );
+          clearInterval(intervalId), this.animatedImage(isDamagedIMAGES, isDamagedAnimationSpeed, isDamagedRepeatAnimation);
         }
         i++;
       } else {
@@ -147,7 +121,32 @@ class MovableObject extends DrawableObject {
     return i, currentImage;
   }
 
-  playSequenceAnimation(images, duration) {
+  playAnimationJump(images, duration, sound) {
+    if (this.action == "jump") {
+      if (this.playSound == false) {
+        sound ? sound.play() : null;
+        this.playSound = true;
+      }
+      console.log(this.speedY, this.acceleration, this.action);
+      if (new Date().getTime() < this.jumpTime + 300) {
+        this.img = this.imageCache[images[0]];
+      } else if (new Date().getTime() < this.jumpTime + 500) {
+        this.img = this.imageCache[images[1]];
+      } else if (new Date().getTime() < this.jumpTime + 800) {
+        this.img = this.imageCache[images[2]];
+      } else if (new Date().getTime() < this.jumpTime + 900) {
+        this.img = this.imageCache[images[3]];
+      } else if (new Date().getTime() < this.jumpTime + 1000) {
+        this.img = this.imageCache[images[4]];
+      } else if (new Date().getTime() < this.jumpTime + 1100) {
+        this.img = this.imageCache[images[5]];
+        this.action = false;
+        this.playSound = false;
+      }
+    }
+  }
+
+  playSequenceAnimation(images, duration, sound) {
     let nowTime = new Date().getTime();
     if (this.jumpTime < nowTime) {
       this.jumpTime = nowTime + duration * 1000;
@@ -177,7 +176,7 @@ class MovableObject extends DrawableObject {
           this.y -= this.speedY;
           this.speedY -= this.acceleration;
         } else {
-          (this.y -= 10);
+          this.y -= 10;
         }
       }
     }, 1000 / 25);
@@ -218,7 +217,6 @@ class MovableObject extends DrawableObject {
 
   bottlesDamage(bottles, index) {
     bottles.splice(index, 1);
-    }
   }
 
   smashBottle() {}
