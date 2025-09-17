@@ -37,6 +37,31 @@ class Character extends MovableObject {
   ];
   IMAGE_STAY = ["./img/2-character-pepe/3-jump/j-31.png"];
   IMAGE_LOST = ["./img/You-won-you-lost/you-lost.png"];
+  IMAGE_IDLE = [
+    "./img/2-character-pepe/1-idle/idle/i-1.png"
+    ,"./img/2-character-pepe/1-idle/idle/i-2.png"
+    ,"./img/2-character-pepe/1-idle/idle/i-3.png"
+    ,"./img/2-character-pepe/1-idle/idle/i-4.png"
+    ,"./img/2-character-pepe/1-idle/idle/i-5.png"
+    ,"./img/2-character-pepe/1-idle/idle/i-6.png"
+    ,"./img/2-character-pepe/1-idle/idle/i-7.png"
+    ,"./img/2-character-pepe/1-idle/idle/i-8.png"
+    ,"./img/2-character-pepe/1-idle/idle/i-9.png"
+    ,"./img/2-character-pepe/1-idle/idle/i-10.png"
+  ];
+
+  IMAGE_SLEEP = [
+    "./img/2-character-pepe/1-idle/long-idle/i-11.png"
+    ,"./img/2-character-pepe/1-idle/long-idle/i-12.png"
+    ,"./img/2-character-pepe/1-idle/long-idle/i-13.png"
+    ,"./img/2-character-pepe/1-idle/long-idle/i-14.png"
+    ,"./img/2-character-pepe/1-idle/long-idle/i-15.png"
+    ,"./img/2-character-pepe/1-idle/long-idle/i-16.png"
+    ,"./img/2-character-pepe/1-idle/long-idle/i-17.png"
+    ,"./img/2-character-pepe/1-idle/long-idle/i-18.png"
+    ,"./img/2-character-pepe/1-idle/long-idle/i-19.png"
+    ,"./img/2-character-pepe/1-idle/long-idle/i-20.png"
+  ];
 
   world;
   y = 50;
@@ -53,7 +78,11 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGE_STAY);
     this.loadImages(this.IMAGE_LOST);
+    this.loadImages(this.IMAGE_IDLE);
+    this.loadImages(this.IMAGE_SLEEP);
+    this.lastMoveTime = new Date().getTime(); 
     this.run();
+    
   }
 
   run() {
@@ -70,10 +99,16 @@ class Character extends MovableObject {
   }
 
   playAnimations() {
+    let waitingTime = new Date().getTime() - this.lastMoveTime 
     if (this.isCharacterDead()) {
       this.playAnimation(this.IMAGES_DEAD, 0);
     } else if (this.isHurt()) {
+      this.lastMoveTime = new Date().getTime(); 
       this.playAnimation(this.IMAGES_HURT, 0);
+    } else if (1000 < waitingTime && waitingTime < 5000) {
+      this.playSequenceAnimation(this.IMAGE_IDLE, 2); 
+    } else if (waitingTime > 5000) {      
+      this.playSequenceAnimation(this.IMAGE_SLEEP, 3);  
     } else if (this.isAboveGround()) {
       this.playSequenceAnimation(this.IMAGES_JUMPING, 0.9);
     } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
@@ -119,7 +154,6 @@ class Character extends MovableObject {
 
   spawnBottle() {
     if (Math.random() > 0.998 && this.world.level.bottles.length < 50) {
-      this.lastMoveTime = new Date().getTime();
       let bottle = new Bottle(this.x);
       this.world.level.bottles.push(bottle);
     }

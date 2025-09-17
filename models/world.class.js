@@ -3,6 +3,7 @@ class World {
   level = level1;
   ctx;
   canvas;
+  startTime;
   keyboard;
   camera_x = 0;
   coinsBar = new StatusBar("LIFE_COINS_BAR");
@@ -12,10 +13,11 @@ class World {
 
 
 
-  constructor(canvas) {
+  constructor(canvas,startTime) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
+    this.startTime = startTime;
     //this.draw();
     this.setWorld();
     //this.checkCollisions();
