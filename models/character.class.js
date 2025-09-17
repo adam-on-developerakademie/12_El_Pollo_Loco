@@ -127,9 +127,9 @@ class Character extends MovableObject {
 
   playReadyAnimation() {
     if (this.action == "jump") {
-      this.playAnimationJump(this.IMAGES_JUMPING, 3, this.soundJump);
+      this.playAnimationJump(this.IMAGES_JUMPING, this.soundJump);
     } else if ((this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && !this.isAboveGround()) {
-      this.playAnimation(this.IMAGES_WALKING, 0.4, this.soundWalk);
+      this.playAnimationSlower(this.IMAGES_WALKING, this.soundWalk, 12);
     } else {
       this.img = this.imageCache["./img/2-character-pepe/3-jump/j-31.png"];
     }

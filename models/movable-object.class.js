@@ -16,6 +16,7 @@ class MovableObject extends DrawableObject {
   bottlesNumber = 0;
   coinsNumber = 0;
   isDamaged = false;
+  slowMotion = 0
 
   isColliding(mo) {
     return (
@@ -93,6 +94,18 @@ class MovableObject extends DrawableObject {
     this.curentImage++;
   }
 
+    playAnimationSlower(images,sound, slower) {
+    let i = this.curentImage % images.length;
+    let path = images[i];
+    this.img = this.imageCache[path];
+    this.slowMotion++;
+    if(this.slowMotion==slower){
+      sound ? sound.play() : null;
+      this.slowMotion=0;
+      this.curentImage++;
+    }
+  }
+
   animatedImage(IMAGES, animationSpeed, repeatAnimation, isDamagedIMAGES, isDamagedAnimationSpeed, isDamagedRepeatAnimation) {
     let condition = this.isDamaged;
     let n = IMAGES.length;
@@ -121,7 +134,7 @@ class MovableObject extends DrawableObject {
     return i, currentImage;
   }
 
-  playAnimationJump(images, duration, sound) {
+  playAnimationJump(images, sound) {
     if (this.action == "jump") {
       if (this.playSound == false) {
         sound ? sound.play() : null;
