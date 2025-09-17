@@ -218,9 +218,6 @@ class MovableObject extends DrawableObject {
 
   bottlesDamage(bottles, index) {
     bottles.splice(index, 1);
-    this.energy -= 15;
-    if (this.energy < 0) {
-      this.energy = 0;
     }
   }
 

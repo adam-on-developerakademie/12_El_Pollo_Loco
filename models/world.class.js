@@ -11,9 +11,7 @@ class World {
   bottlesBar = new StatusBar("BOTTLES_BAR");
   bossBar = new StatusBar("BOSS_BAR");
 
-
-
-  constructor(canvas,startTime) {
+  constructor(canvas, startTime) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
@@ -54,7 +52,6 @@ class World {
     this.ctx.translate(this.camera_x, 0);
 
     this.addObjectsToMap(this.level.backgroundObjects);
-   
 
     this.addObjectsToMap(this.level.bottles);
     this.addObjectsToMap(this.level.clouds);
@@ -72,7 +69,6 @@ class World {
     this.addObjectsToMap(this.level.endScreens);
     this.ctx.translate(this.camera_x, 0);
 
-    
     this.ctx.translate(-this.camera_x, 0);
 
     let self = this;
@@ -98,7 +94,10 @@ class World {
     }
 
     this.level.lifeCoins.forEach((lifeCoins) => {
-      if (this.character.isColliding(lifeCoins) && !this.character.isCharacterDead() ) {
+      if (
+        this.character.isColliding(lifeCoins) &&
+        !this.character.isCharacterDead()
+      ) {
         this.character.takeLifeCoin(
           this.level.lifeCoins,
           this.level.lifeCoins.indexOf(lifeCoins)
@@ -122,6 +121,13 @@ class World {
         this.level.boss[0].isColliding(throwableBottle) &&
         !throwableBottle.isDamaged
       ) {
+        throwableBottle.isDamaged = true;
+        this.level.boss[0].energy -= 15;
+        if (this.level.boss[0].energy < 0) {
+          this.level.boss[0].energy = 0;
+        }
+        this.bossBar.setPercentage(this.level.boss[0].energy);
+        this.level.boss[0].waitForAttack = false;
         for (let i = 0; i < 5; i++) {
           let chick = new Chick(throwableBottle.x);
           this.level.enemies.push(chick);
@@ -129,15 +135,12 @@ class World {
         document.getElementById("chicks").innerHTML = this.level.enemies.filter(
           (e) => e instanceof Chick
         ).length;
-        throwableBottle.isDamaged = true;
         setTimeout(() => {
           this.level.boss[0].bottlesDamage(
             this.level.throwableObjects,
             this.level.throwableObjects.indexOf(throwableBottle)
           );
         }, 2000);
-        this.bossBar.setPercentage(this.level.boss[0].energy);
-        this.level.boss[0].waitForAttack = false;
       }
     });
 
@@ -218,10 +221,8 @@ class World {
     document.getElementById("canvas").classList.add("displayNone");
     document.getElementById("startScreen").classList.remove("displayNone");
     document.getElementById("header").classList.remove("displayNone");
-    document.getElementById("mobileButtons").classList.remove("center");  
+    document.getElementById("mobileButtons").classList.remove("center");
     document.getElementById("footer").classList.remove("displayNone");
     document.getElementById("overlay").classList.add("displayNone");
-  
-    
   }
 }

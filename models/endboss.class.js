@@ -73,7 +73,8 @@ class Endboss extends MovableObject {
         this.IMAGES = this.IMAGES_WALKING;
         this.speed = 100;
         setTimeout(() => {
-        this.moveLeftInterval ? null : this.moveLeft();}, 400);
+          this.moveLeftInterval ? null : this.moveLeft();
+        }, 400);
         setTimeout(() => {
           clearInterval(this.moveLeftInterval);
           this.moveLeftInterval = null;

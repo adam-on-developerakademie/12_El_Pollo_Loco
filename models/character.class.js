@@ -38,35 +38,36 @@ class Character extends MovableObject {
   IMAGE_STAY = ["./img/2-character-pepe/3-jump/j-31.png"];
   IMAGE_LOST = ["./img/You-won-you-lost/you-lost.png"];
   IMAGE_IDLE = [
-    "./img/2-character-pepe/1-idle/idle/i-1.png"
-    ,"./img/2-character-pepe/1-idle/idle/i-2.png"
-    ,"./img/2-character-pepe/1-idle/idle/i-3.png"
-    ,"./img/2-character-pepe/1-idle/idle/i-4.png"
-    ,"./img/2-character-pepe/1-idle/idle/i-5.png"
-    ,"./img/2-character-pepe/1-idle/idle/i-6.png"
-    ,"./img/2-character-pepe/1-idle/idle/i-7.png"
-    ,"./img/2-character-pepe/1-idle/idle/i-8.png"
-    ,"./img/2-character-pepe/1-idle/idle/i-9.png"
-    ,"./img/2-character-pepe/1-idle/idle/i-10.png"
+    "./img/2-character-pepe/1-idle/idle/i-1.png",
+    "./img/2-character-pepe/1-idle/idle/i-2.png",
+    "./img/2-character-pepe/1-idle/idle/i-3.png",
+    "./img/2-character-pepe/1-idle/idle/i-4.png",
+    "./img/2-character-pepe/1-idle/idle/i-5.png",
+    "./img/2-character-pepe/1-idle/idle/i-6.png",
+    "./img/2-character-pepe/1-idle/idle/i-7.png",
+    "./img/2-character-pepe/1-idle/idle/i-8.png",
+    "./img/2-character-pepe/1-idle/idle/i-9.png",
+    "./img/2-character-pepe/1-idle/idle/i-10.png",
   ];
 
   IMAGE_SLEEP = [
-    "./img/2-character-pepe/1-idle/long-idle/i-11.png"
-    ,"./img/2-character-pepe/1-idle/long-idle/i-12.png"
-    ,"./img/2-character-pepe/1-idle/long-idle/i-13.png"
-    ,"./img/2-character-pepe/1-idle/long-idle/i-14.png"
-    ,"./img/2-character-pepe/1-idle/long-idle/i-15.png"
-    ,"./img/2-character-pepe/1-idle/long-idle/i-16.png"
-    ,"./img/2-character-pepe/1-idle/long-idle/i-17.png"
-    ,"./img/2-character-pepe/1-idle/long-idle/i-18.png"
-    ,"./img/2-character-pepe/1-idle/long-idle/i-19.png"
-    ,"./img/2-character-pepe/1-idle/long-idle/i-20.png"
+    "./img/2-character-pepe/1-idle/long-idle/i-11.png",
+    "./img/2-character-pepe/1-idle/long-idle/i-12.png",
+    "./img/2-character-pepe/1-idle/long-idle/i-13.png",
+    "./img/2-character-pepe/1-idle/long-idle/i-14.png",
+    "./img/2-character-pepe/1-idle/long-idle/i-15.png",
+    "./img/2-character-pepe/1-idle/long-idle/i-16.png",
+    "./img/2-character-pepe/1-idle/long-idle/i-17.png",
+    "./img/2-character-pepe/1-idle/long-idle/i-18.png",
+    "./img/2-character-pepe/1-idle/long-idle/i-19.png",
+    "./img/2-character-pepe/1-idle/long-idle/i-20.png",
   ];
 
   world;
   y = 50;
-  speed = 3
+  speed = 3;
   isThrowing = false;
+  startGameTime = new Date().getTime();
 
   constructor() {
     super().loadImage("./img/2-character-pepe/3-jump/j-31.png");
@@ -80,36 +81,46 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGE_LOST);
     this.loadImages(this.IMAGE_IDLE);
     this.loadImages(this.IMAGE_SLEEP);
-    this.lastMoveTime = new Date().getTime(); 
+    this.lastMoveTime = new Date().getTime();
     this.run();
-    
   }
 
   run() {
     this.buttonPressEvent();
     setInterval(() => {
       this.characterMove();
-      this.playAnimations();
+      this.playAnimations(new Date().getTime() - this.lastMoveTime);
       this.spawnBottle();
       this.throwBottle();
       this.bottleReloaded();
       this.world.camera_x = -this.x + 150;
       this.youLose();
+      this.youWon();
     }, 1);
   }
 
-  playAnimations() {
-    let waitingTime = new Date().getTime() - this.lastMoveTime 
-    if (this.isCharacterDead()) {
+  playAnimations(waitingTime) {
+      console.log(this.isCharacterDead()  , this.world.level.boss[0].isDead());
+    if (this.isCharacterDead() && !this.world.level.boss[0].isDead()) {
       this.playAnimation(this.IMAGES_DEAD, 0);
     } else if (this.isHurt()) {
-      this.lastMoveTime = new Date().getTime(); 
+      this.lastMoveTime = new Date().getTime();
       this.playAnimation(this.IMAGES_HURT, 0);
-    } else if (1000 < waitingTime && waitingTime < 5000) {
-      this.playSequenceAnimation(this.IMAGE_IDLE, 2); 
-    } else if (waitingTime > 5000) {      
-      this.playSequenceAnimation(this.IMAGE_SLEEP, 3);  
-    } else if (this.isAboveGround()) {
+    } else if (waitingTime > 1000) {
+      this.playWaitingAnimation(waitingTime);
+    } else this.playReadyAnimation();
+  }
+
+  playWaitingAnimation(waitingTime) {
+    if (waitingTime < 5000) {
+      this.playSequenceAnimation(this.IMAGE_IDLE, 2);
+    } else if (waitingTime > 5000) {
+      this.playSequenceAnimation(this.IMAGE_SLEEP, 3);
+    }
+  }
+
+  playReadyAnimation() {
+    if (this.isAboveGround()) {
       this.playSequenceAnimation(this.IMAGES_JUMPING, 0.9);
     } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
       this.playSequenceAnimation(this.IMAGES_WALKING, 0.4);
@@ -160,7 +171,11 @@ class Character extends MovableObject {
   }
 
   characterGoRight() {
-    if (this.world.keyboard.RIGHT && this.x < this.world.level.boss[0].x + 50 && this.x < this.world.level.levelEndX) {
+    if (
+      this.world.keyboard.RIGHT &&
+      this.x < this.world.level.boss[0].x + 50 &&
+      this.x < this.world.level.levelEndX
+    ) {
       this.lastMoveTime = new Date().getTime();
       this.x += this.speed;
       this.otherDirection = false;
@@ -248,14 +263,16 @@ class Character extends MovableObject {
         this.energy = 100;
         return false;
       } else {
-        this.speedY = 20;
+        if (!this.world.level.boss[0].isDead()) {
+          this.speedY = 20;
+        }
         return true;
       }
     }
   }
 
   youLose() {
-    if (this.isCharacterDead()) {
+    if (this.isCharacterDead() && !this.world.level.boss[0].isDead()) {
       setTimeout(() => {
         this.world.level.endScreens[0].zoomIn(400, 200);
         setTimeout(() => {
@@ -264,8 +281,20 @@ class Character extends MovableObject {
           setTimeout(() => this.world.gameOver(), 3000);
         }, 3000);
       }, 2000);
+    }
+  }
 
-      
+  youWon() {
+    if (this.world.level.boss[0].isDead() && !this.isCharacterDead()) {
+      setTimeout(() => {
+        this.world.level.endScreens[2].zoomIn(600, 400);
+        setTimeout(() => {
+          this.world.level.endScreens[2].newPosition(-720, 0, 0);
+          this.world.level.endScreens[1].zoomIn(300, 200);
+          setTimeout(() => this.world.clearAllIntervalIds(), 1000);
+          setTimeout(() => this.world.gameOver(), 3000);
+        }, 3000);
+      }, 2000);
     }
   }
 }
