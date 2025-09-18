@@ -46,6 +46,14 @@ function closeFullscreen() {
   } else if (document.getElementById("canvas").msExitFullscreen) { /* IE11 */
     document.getElementById("canvas").msExitFullscreen();
   }
-
-
 }
+
+function soundVolumeLouder() {
+  soundVolume = Math.min(soundVolume + 0.1, 1);
+  document.getElementById("soundVolume").innerHTML = Math.round(soundVolume * 10);
+}
+
+function soundVolumeQuieter() {
+  soundVolume = Math.max(soundVolume - 0.1, 0);
+  document.getElementById("soundVolume").innerHTML = Math.round(soundVolume * 10);
+} 

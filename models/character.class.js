@@ -63,6 +63,7 @@ class Character extends MovableObject {
     "./img/2-character-pepe/1-idle/long-idle/i-20.png",
   ];
 
+
   soundWalk = new Audio("./audio/walk.wav");
   soundJump = new Audio("./audio/jump.wav");
   soundThrow = new Audio("./audio/throw.wav");
@@ -71,6 +72,7 @@ class Character extends MovableObject {
   soundCoin = new Audio("./audio/coin.wav");
   soundBottle = new Audio("./audio/bottle.ogg");
   soundChick= new Audio("./audio/chick.wav");
+  soundHen= new Audio("./audio/hen.wav");
 
   world;
   y = 50;
@@ -99,7 +101,7 @@ class Character extends MovableObject {
     this.buttonPressEvent();
     setInterval(() => {
       this.characterMove();
-      this.playAnimations(new Date().getTime() - this.lastMoveTime);
+      this.playAnimations(new Date().getTime() - this.lastMoveTime, this.world.soundVolume);
       this.spawnBottle();
       this.throwBottle();
       this.bottleReloaded();
@@ -112,11 +114,11 @@ class Character extends MovableObject {
   playAnimations(waitingTime) {
     if (this.isCharacterDead() && !this.world.level.boss[0].isDead()) {
       this.action = "dead";
-      this.playAnimation(this.IMAGES_DEAD, this.soundDead);
+      this.playAnimation(this.IMAGES_DEAD, this.soundDead, this.world.soundVolume);
     } else if (this.isHurt()) {
       this.action = "hurt";
       this.lastMoveTime = new Date().getTime();
-      this.playAnimation(this.IMAGES_HURT, this.soundHurt);
+      this.playAnimation(this.IMAGES_HURT, this.soundHurt, this.world.soundVolume);
     } else if (waitingTime > 1000) {
       this.playWaitingAnimation(waitingTime);
     } else this.playReadyAnimation();
@@ -124,17 +126,17 @@ class Character extends MovableObject {
 
   playWaitingAnimation(waitingTime) {
     if (waitingTime < 5000 && this.action == !"jump") {
-      this.playSequenceAnimation(this.IMAGE_IDLE, 2);
+      this.playSequenceAnimation(this.IMAGE_IDLE, 2, this.world.soundVolume);
     } else if (waitingTime > 5000 && this.action == !"jump") {
-      this.playSequenceAnimation(this.IMAGE_SLEEP, 3);
+      this.playSequenceAnimation(this.IMAGE_SLEEP, 3, this.world.soundVolume);
     }
   }
 
   playReadyAnimation() {
     if (this.action == "jump") {
-      this.playAnimationJump(this.IMAGES_JUMPING, this.soundJump);
+      this.playAnimationJump(this.IMAGES_JUMPING, this.soundJump, this.world.soundVolume);
     } else if ((this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && !this.isAboveGround()) {
-      this.playAnimationSlower(this.IMAGES_WALKING, this.soundWalk, 12);
+      this.playAnimationSlower(this.IMAGES_WALKING, this.soundWalk, 12, this.world.soundVolume);
     } else {
       this.img = this.imageCache["./img/2-character-pepe/3-jump/j-31.png"];
     }
@@ -154,7 +156,7 @@ class Character extends MovableObject {
         "throwableObjects",
         throwableBottle.intervalId
       );
-      this.soundThrow ? this.soundThrow.play() : null;
+      this.soundThrow ? (this.soundThrow.play(),this.soundThrow.volume = this.world.soundVolume) : null;
       this.world.character.bottlesNumber--;
       this.world.bottlesBar.setPercentage(this.world.character.bottlesNumber);
     }
@@ -230,7 +232,7 @@ class Character extends MovableObject {
     if (checkThis) {
       mo.energy = 0;
       mo.dethTime = new Date().getTime();
-      this.soundChick ? this.soundChick.play() : null;
+      this.soundChick ? (this.soundChick.play(), this.soundChick.volume = this.world.soundVolume) : null;
     }
     return checkThis;
   }

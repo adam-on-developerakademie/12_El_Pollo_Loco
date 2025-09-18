@@ -1,17 +1,22 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
+let soundGame = new Audio("./audio/game.wav");
+let soundMenu = new Audio("./audio/menu.mp3");
+let soundVolume = 0.1;
 
 function init() {
+  playGameMusic()
   loadLevel()
   canvas = document.getElementById("canvas");
-  world = new World(canvas);
+  world = new World(canvas, soundVolume);
   document.getElementById("chickens").innerHTML = world.level.enemies.filter(
     (e) => e instanceof Chicken
   ).length;
   document.getElementById("chicks").innerHTML = world.level.enemies.filter(
     (e) => e instanceof Chick
   ).length;
+
   console.log(`My character is:`, world);
 }
 
@@ -50,4 +55,41 @@ function run() {
   world.clearAllIntervalIds();
   init();
 
+}
+
+function playMenuMusic() {
+  if (soundMenu) {
+  soundMenu = new Audio("./audio/menu.mp3");
+  soundMenu.play();
+  soundMenu.volume = soundVolume;
+  soundMenu.loop = true;
+}
+
+}
+
+  function playGameMusic() {  
+    soundMenu.pause();
+     soundGame.play();
+     soundGame.volume = soundVolume;
+     soundGame.loop = true;
+     soundGame.musicOn = true;
+    }
+  
+
+function toggleMute() {
+  if (soundGame) {
+    soundGame.muted = !soundGame.muted;
+  }
+}
+
+function stopGameMusic() {
+  if (soundGame) {
+    soundGame.loop = false;
+    soundGame.pause();
+    soundGame.currentTime = 0; 
+    soundGame.musicOn = false;
+    soundMenu.play();
+    soundMenu.volume = soundVolume;
+    soundMenu.loop = true;
+  }
 }

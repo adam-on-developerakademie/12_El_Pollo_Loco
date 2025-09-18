@@ -10,14 +10,19 @@ class World {
   healthBar = new StatusBar("HEALTH_BAR");
   bottlesBar = new StatusBar("BOTTLES_BAR");
   bossBar = new StatusBar("BOSS_BAR");
-   soundChick= new Audio("./audio/chick.wav");
+  soundChick = new Audio("./audio/chick.wav");
+  soundHen = new Audio("./audio/hen.wav");
+  soundVolume = 0.1;
+  musicOn = false
+ 
 
 
-  constructor(canvas, startTime) {
+
+  constructor(canvas, soundVolume) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
-    this.startTime = startTime;
+    this.soundVolume = soundVolume;
     //this.draw();
     this.setWorld();
     //this.checkCollisions();
@@ -112,7 +117,8 @@ class World {
       if (this.character.isColliding(bottle)) {
         this.character.takeBottle(
           this.level.bottles,
-          this.level.bottles.indexOf(bottle)
+          this.level.bottles.indexOf(bottle),
+          this.soundVolume
         );
         this.bottlesBar.setPercentage(this.character.bottlesNumber);
       }
@@ -124,6 +130,8 @@ class World {
         !throwableBottle.isDamaged
       ) {
         throwableBottle.isDamaged = true;
+        this.soundHen ? this.soundHen.play() : null;
+        this.soundHen ? (this.soundHen.volume = this.soundVolume) : null;
         this.level.boss[0].energy -= 15;
         if (this.level.boss[0].energy < 0) {
           this.level.boss[0].energy = 0;
@@ -148,7 +156,7 @@ class World {
 
     this.bossBar.setPercentage(this.level.boss[0].energy);
     this.cleanDeathEnemies();
-    //}, 1000 / 60);
+    //}, 1000 / 60);   
   }
 
   checkCollisionsBottleAndEnemies() {
@@ -158,6 +166,7 @@ class World {
           enemy.energy = 0;
           enemy.dethTime = new Date().getTime();
           this.soundChick ? this.soundChick.play() : null;
+          this.soundChick ? (this.soundChick.volume = this.soundVolume) : null;
         }
       });
     });
@@ -220,6 +229,7 @@ class World {
   }
 
   gameOver() {
+    stopGameMusic() 
     this.clearAllIntervalIds();
     document.getElementById("canvas").classList.add("displayNone");
     document.getElementById("startScreen").classList.remove("displayNone");
@@ -227,5 +237,10 @@ class World {
     document.getElementById("mobileButtons").classList.remove("center");
     document.getElementById("footer").classList.remove("displayNone");
     document.getElementById("overlay").classList.add("displayNone");
+    
+    
   }
+
+
+
 }

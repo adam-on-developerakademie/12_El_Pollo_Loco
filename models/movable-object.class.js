@@ -87,25 +87,25 @@ class MovableObject extends DrawableObject {
     }, 1);
   }
 
-  playAnimation(images, sound) {
+  playAnimation(images, sound, soundVolume) {
     let i = this.curentImage % images.length;
     let path = images[i];
     this.img = this.imageCache[path];
     this.curentImage++;
     if (this.alive && this.action != "dead") {
-    sound ? sound.play() : null;
+      sound ? (sound.play(), sound.volume = soundVolume) : null;
     } else if (this.alive && this.action == "dead") {
-      sound ? sound.play() : null;
+      sound ? (sound.play(), sound.volume = soundVolume) : null;
     this.alive=false;}
   }
 
-  playAnimationSlower(images, sound, slower) {
+  playAnimationSlower(images, sound, slower, soundVolume) {
     let i = this.curentImage % images.length;
     let path = images[i];
     this.img = this.imageCache[path];
     this.slowMotion++;
     if (this.slowMotion == slower) {
-      sound ? sound.play() : null;
+      sound ? (sound.play(), sound.volume = soundVolume): null;
       this.slowMotion = 0;
       this.curentImage++;
     }
@@ -139,10 +139,10 @@ class MovableObject extends DrawableObject {
     return i, currentImage;
   }
 
-  playAnimationJump(images, sound) {
+  playAnimationJump(images, sound, soundVolume) {
     if (this.action == "jump") {
       if (this.playSound == false) {
-        sound ? sound.play() : null;
+        sound ? (sound.play(), sound.volume = soundVolume) : null;
         this.playSound = true;
       }
       if (new Date().getTime() < this.jumpTime + 300) {
@@ -218,18 +218,18 @@ class MovableObject extends DrawableObject {
     }
   }
 
-  takeBottle(bottles, index) {
+  takeBottle(bottles, index, soundVolume) {
     if (this.bottlesNumber < 25) {
       this.bottlesNumber++;
       bottles.splice(index, 1);
-      this.soundBottle.play();
+      this.soundBottle ? (this.soundBottle.play(), this.soundBottle.volume = soundVolume) : null;
     } else {
       this.bottlesNumber = 25;
     }
   }
 
-  takeLifeCoin(lifeCoins, index) {
-    this.soundCoin ? this.soundCoin.play() : null;
+  takeLifeCoin(lifeCoins, index, soundVolume) {
+    this.soundCoin ? (this.soundCoin.play(), this.soundCoin.volume = this.world.soundVolume) : null;
     this.coinsNumber += 25;
     lifeCoins.splice(index, 1);
   }
