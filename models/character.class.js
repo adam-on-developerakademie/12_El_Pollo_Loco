@@ -238,45 +238,35 @@ class Character extends MovableObject {
   }
 
   buttonPressEvent() {
-    document.getElementById("left").addEventListener("touchstart", (event) => {
-      event.preventDefault();
-      this.world.keyboard.LEFT = true;
-    });
+    this.bindControlButton("left", "LEFT");
+    this.bindControlButton("right", "RIGHT");
+    this.bindControlButton("jump", "UP");
+    this.bindControlButton("throw", "SPACE");
+  }
 
-    document.getElementById("left").addEventListener("touchend", (event) => {
-      event.preventDefault();
-      this.world.keyboard.LEFT = false;
-    });
+  bindControlButton(buttonId, key) {
+    let button = document.getElementById(buttonId);
 
-    document.getElementById("right").addEventListener("touchstart", (event) => {
-      event.preventDefault();
-      this.world.keyboard.RIGHT = true;
-    });
+    if (!button) {
+      return;
+    }
 
-    document.getElementById("right").addEventListener("touchend", (event) => {
+    let pressButton = (event) => {
       event.preventDefault();
-      this.world.keyboard.RIGHT = false;
-    });
+      this.world.keyboard[key] = true;
+    };
 
-    document.getElementById("jump").addEventListener("touchstart", (event) => {
+    let releaseButton = (event) => {
       event.preventDefault();
-      this.world.keyboard.UP = true;
-    });
+      this.world.keyboard[key] = false;
+    };
 
-    document.getElementById("jump").addEventListener("touchend", (event) => {
-      event.preventDefault();
-      this.world.keyboard.UP = false;
-    });
-
-    document.getElementById("throw").addEventListener("touchstart", (event) => {
-      event.preventDefault();
-      this.world.keyboard.SPACE = true;
-    });
-
-    document.getElementById("throw").addEventListener("touchend", (event) => {
-      event.preventDefault();
-      this.world.keyboard.SPACE = false;
-    });
+    button.ontouchstart = pressButton;
+    button.ontouchend = releaseButton;
+    button.ontouchcancel = releaseButton;
+    button.onmousedown = pressButton;
+    button.onmouseup = releaseButton;
+    button.onmouseleave = releaseButton;
   }
 
   isCharacterDead() {
