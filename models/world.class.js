@@ -104,9 +104,19 @@ class World {
 
     if (bossIsVisible) {
       this.bossBarUnlocked = true;
+      this.spawnInitialChicks(boss.x);
     }
 
     return bossIsVisible;
+  }
+
+  spawnInitialChicks(bossX) {
+    for (let i = 0; i < 5; i++) {
+      this.level.enemies.push(new Chick(bossX));
+    }
+    document.getElementById("chicks").innerHTML = this.level.enemies.filter(
+      (e) => e instanceof Chick
+    ).length;
   }
 
   checkCollisions() {
@@ -115,12 +125,12 @@ class World {
 
     this.level.enemies.forEach((enemy) => {
       this.character.killerJump(enemy);
-      if (this.character.isColliding(enemy)) {
+      if (this.character.isColliding(enemy) && !this.level.boss[0].isDead()) {
         this.character.hit(0.3);
         this.healthBar.setPercentage(this.character.energy);
       }
     });
-    if (this.character.isColliding(this.level.boss[0])) {
+    if (this.character.isColliding(this.level.boss[0]) && !this.level.boss[0].isDead()) {
       this.character.hit(0.5);
       this.healthBar.setPercentage(this.character.energy);
     }
