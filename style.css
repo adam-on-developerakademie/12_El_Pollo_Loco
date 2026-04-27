@@ -256,3 +256,55 @@ canvas {
     padding: 40px;
   }
 }
+
+@media (hover: none) and (pointer: coarse) and (orientation: landscape) {
+  canvas,
+  .overlay {
+    width: min(100vw, calc(100vh * 1.5));
+    width: min(100vw, calc(100dvh * 1.5));
+    height: min(calc(100vw / 1.5), 100vh);
+    height: min(calc(100vw / 1.5), 100dvh);
+  }
+
+  .overlay {
+    box-sizing: border-box;
+    padding: clamp(14px, 3.2vh, 100px);
+    font-size: clamp(1em, 2.4vh, 2em);
+  }
+
+  .scor {
+    margin-top: 0;
+  }
+
+  .enemies {
+    height: clamp(22px, 6vh, 40px);
+  }
+
+  .enemies img {
+    width: clamp(22px, 6vh, 40px);
+    height: clamp(22px, 6vh, 40px);
+    margin-right: clamp(8px, 2.2vw, 20px);
+  }
+
+  #mobileButtons {
+    gap: clamp(8px, 2vw, 30px);
+    margin-bottom: 0;
+  }
+
+  .side {
+    width: min(38vw, 300px);
+    height: clamp(30px, 8vh, 40px);
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .button {
+    width: clamp(58px, 14vw, 100px);
+    font-size: clamp(1em, 3.4vh, 2em);
+  }
+
+  .volume {
+    width: clamp(18px, 5.5vh, 30px) !important;
+    height: clamp(18px, 5.5vh, 30px) !important;
+  }
+}
