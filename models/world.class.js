@@ -14,6 +14,7 @@ class World {
   soundHen = new Audio("./audio/hen.wav");
   soundVolume = 0.1;
   musicOn = false
+  bossBarUnlocked = false;
  
 
 
@@ -72,7 +73,9 @@ class World {
     this.addToMap(this.coinsBar);
     this.addToMap(this.healthBar);
     this.addToMap(this.bottlesBar);
-    this.addToMap(this.bossBar);
+    if (this.shouldShowBossBar()) {
+      this.addToMap(this.bossBar);
+    }
     this.addObjectsToMap(this.level.endScreens);
     this.ctx.translate(this.camera_x, 0);
 
@@ -82,6 +85,28 @@ class World {
     requestAnimationFrame(() => {
       self.draw();
     });
+  }
+
+  shouldShowBossBar() {
+    if (this.bossBarUnlocked) {
+      return true;
+    }
+
+    let boss = this.level.boss[0];
+
+    if (!boss) {
+      return false;
+    }
+
+    let bossScreenLeft = boss.x + this.camera_x;
+    let bossScreenRight = bossScreenLeft + boss.width;
+    let bossIsVisible = bossScreenRight > 0 && bossScreenLeft < this.canvas.width;
+
+    if (bossIsVisible) {
+      this.bossBarUnlocked = true;
+    }
+
+    return bossIsVisible;
   }
 
   checkCollisions() {
