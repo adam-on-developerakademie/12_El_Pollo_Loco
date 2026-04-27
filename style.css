@@ -208,6 +208,10 @@ footer {
   cursor: pointer;
 }
 
+#mobileButtons .button {
+  touch-action: none;
+}
+
 canvas {
   position: absolute;
   top: 50%;

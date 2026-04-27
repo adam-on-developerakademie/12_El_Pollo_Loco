@@ -252,18 +252,32 @@ class Character extends MovableObject {
     }
 
     let pressButton = (event) => {
-      event.preventDefault();
+      if (event.cancelable) {
+        event.preventDefault();
+      }
+      if (!this.world || !this.world.keyboard) {
+        return;
+      }
       this.world.keyboard[key] = true;
     };
 
     let releaseButton = (event) => {
-      event.preventDefault();
+      if (event.cancelable) {
+        event.preventDefault();
+      }
+      if (!this.world || !this.world.keyboard) {
+        return;
+      }
       this.world.keyboard[key] = false;
     };
 
     button.ontouchstart = pressButton;
     button.ontouchend = releaseButton;
     button.ontouchcancel = releaseButton;
+    button.onpointerdown = pressButton;
+    button.onpointerup = releaseButton;
+    button.onpointercancel = releaseButton;
+    button.onpointerleave = releaseButton;
     button.onmousedown = pressButton;
     button.onmouseup = releaseButton;
     button.onmouseleave = releaseButton;
