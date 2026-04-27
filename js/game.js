@@ -5,11 +5,39 @@ let soundGame = new Audio("./audio/game.wav");
 let soundMenu = new Audio("./audio/menu.mp3");
 let soundVolume = 0.1;
 
+function setAudioVolume(target) {
+  if (!target) {
+    return;
+  }
+
+  Object.values(target).forEach((value) => {
+    if (value instanceof HTMLAudioElement) {
+      value.volume = soundVolume;
+    }
+  });
+}
+
+function applySoundVolume() {
+  soundGame.volume = soundVolume;
+  soundMenu.volume = soundVolume;
+
+  if (!world) {
+    return;
+  }
+
+  world.soundVolume = soundVolume;
+  setAudioVolume(world);
+  setAudioVolume(world.character);
+  world.level.enemies.forEach((enemy) => setAudioVolume(enemy));
+  world.level.throwableObjects.forEach((object) => setAudioVolume(object));
+}
+
 function init() {
   playGameMusic()
   loadLevel()
   canvas = document.getElementById("canvas");
   world = new World(canvas, soundVolume);
+  applySoundVolume();
   document.getElementById("chickens").innerHTML = world.level.enemies.filter(
     (e) => e instanceof Chicken
   ).length;
