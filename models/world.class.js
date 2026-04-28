@@ -26,6 +26,7 @@ class World {
     this.soundVolume = soundVolume;
     //this.draw();
     this.setWorld();
+    this.character.run();
     //this.checkCollisions();
     this.startIntervallIDs();
   }

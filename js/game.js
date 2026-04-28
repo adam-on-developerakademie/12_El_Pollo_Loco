@@ -79,8 +79,9 @@ window.addEventListener("keyup", (e) => {
 });
 
 function run() {
-  init();
-  world.clearAllIntervalIds();
+  if (world) {
+    world.clearAllIntervalIds();
+  }
   init();
 
 }
