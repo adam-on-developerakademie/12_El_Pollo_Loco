@@ -26,7 +26,6 @@ class World {
     this.soundVolume = soundVolume;
     //this.draw();
     this.setWorld();
-    this.character.run();
     //this.checkCollisions();
     this.startIntervallIDs();
   }
@@ -176,6 +175,7 @@ class World {
         this.level.boss[0].waitForAttack = false;
         for (let i = 0; i < 5; i++) {
           let chick = new Chick(throwableBottle.x);
+          chick.isSpawned = true;
           this.level.enemies.push(chick);
         }
         document.getElementById("chicks").innerHTML = this.level.enemies.filter(

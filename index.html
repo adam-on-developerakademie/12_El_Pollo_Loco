@@ -48,7 +48,7 @@
         <button class="menuButton" id="highscoreBtn" onclick="highscoreButton()">HIGHSCORE</button>
         <button class="menuButton" id="creditsBtn" onclick="creditsButton()">CREDITS</button>
     </div>
-    <p>2025 El Pollo Loco by Adam Piskorek.</p>
+    <p>2026 El Pollo Loco by Adam Piskorek.</p>
     </footer>
 
     <canvas id="canvas" width="720" height="480" class="displayNone">
@@ -87,6 +87,41 @@
 
     <div id="rotateHint">
         <p>Bitte drehe dein Gerät,<br>um zu spielen.</p>
+    </div>
+
+    <div id="infoModal" class="modal displayNone">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('infoModal')">✕</button>
+            <h2>Steuerung</h2>
+            <p>← → &nbsp; Laufen</p>
+            <p>↑ / Leertaste &nbsp; Springen</p>
+            <p>Q &nbsp; Flasche werfen</p>
+            <h2>Ziel</h2>
+            <p>Besiege den Endboss mit Salsa-Flaschen!</p>
+            <p>Springe auf kleine Feinde, um sie zu eliminieren.</p>
+            <p>Sammle Münzen als Extra-Leben und Flaschen als Munition.</p>
+        </div>
+    </div>
+
+    <div id="highscoreModal" class="modal displayNone">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('highscoreModal')">✕</button>
+            <h2>Highscore</h2>
+            <p>Gewonnen: <span id="highscoreWins">0</span></p>
+            <p>Verloren: <span id="highscoreLosses">0</span></p>
+            <button class="modal-reset" onclick="resetHighscore()">Zurücksetzen</button>
+        </div>
+    </div>
+
+    <div id="creditsModal" class="modal displayNone">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('creditsModal')">✕</button>
+            <h2>Credits</h2>
+            <p>El Pollo Loco</p>
+            <p>Entwickelt von Adam Piskorek</p>
+            <p>2026</p>
+            <p>Grafiken: Developer Akademie</p>
+        </div>
     </div>
 
 </body>

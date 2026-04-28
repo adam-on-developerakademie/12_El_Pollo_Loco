@@ -48,6 +48,31 @@ function closeFullscreen() {
   }
 }
 
+function infoButton() {
+  document.getElementById("infoModal").classList.remove("displayNone");
+}
+
+function highscoreButton() {
+  document.getElementById("highscoreWins").textContent = localStorage.getItem("highscoreWins") || 0;
+  document.getElementById("highscoreLosses").textContent = localStorage.getItem("highscoreLosses") || 0;
+  document.getElementById("highscoreModal").classList.remove("displayNone");
+}
+
+function creditsButton() {
+  document.getElementById("creditsModal").classList.remove("displayNone");
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.add("displayNone");
+}
+
+function resetHighscore() {
+  localStorage.removeItem("highscoreWins");
+  localStorage.removeItem("highscoreLosses");
+  document.getElementById("highscoreWins").textContent = 0;
+  document.getElementById("highscoreLosses").textContent = 0;
+}
+
 function soundVolumeLouder() {
   soundVolume = Math.min(soundVolume + 0.1, 1);
   document.getElementById("soundVolume").innerHTML = Math.round(soundVolume * 10);

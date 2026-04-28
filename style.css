@@ -397,3 +397,66 @@ body.game-mode .overlay {
     height: var(--gm-volume-size) !important;
   }
 }
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #30a7d7;
+  color: #ffcd17;
+  font-family: "Zabars", sans-serif;
+  text-shadow: 2px 2px 4px #000000;
+  border-radius: 16px;
+  padding: 40px 60px;
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+  letter-spacing: 0.1em;
+}
+
+.modal-content h2 {
+  margin-top: 10px;
+  margin-bottom: 6px;
+  font-size: 1.6em;
+  text-transform: uppercase;
+}
+
+.modal-content p {
+  margin: 6px 0;
+  font-size: 1.1em;
+}
+
+.modal-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: #ffcd17;
+  font-size: 1.6em;
+  cursor: pointer;
+  text-shadow: 2px 2px 4px #000000;
+}
+
+.modal-reset {
+  margin-top: 20px;
+  font-family: "Zabars", sans-serif;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: #ffcd17;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 30px;
+  font-size: 1em;
+  letter-spacing: 0.2em;
+  cursor: pointer;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 4px #000000;
+}

@@ -94,14 +94,12 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGE_IDLE);
     this.loadImages(this.IMAGE_SLEEP);
     this.lastMoveTime = new Date().getTime();
+    this.run();
   }
 
   run() {
     this.buttonPressEvent();
     setInterval(() => {
-      if (!this.world || !this.world.level) {
-        return;
-      }
       this.characterMove();
       this.playAnimations(new Date().getTime() - this.lastMoveTime, this.world.soundVolume);
       this.spawnBottle();
