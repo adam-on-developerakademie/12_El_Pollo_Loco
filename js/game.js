@@ -44,8 +44,6 @@ function init() {
   document.getElementById("chicks").innerHTML = world.level.enemies.filter(
     (e) => e instanceof Chick
   ).length;
-
-  console.log(`My character is:`, world);
 }
 
 window.addEventListener("keydown", (e) => {
@@ -77,8 +75,9 @@ window.addEventListener("keyup", (e) => {
 });
 
 function run() {
-  init();
-  world.clearAllIntervalIds();
+  if (world) {
+    world.clearAllIntervalIds();
+  }
   init();
 
 }

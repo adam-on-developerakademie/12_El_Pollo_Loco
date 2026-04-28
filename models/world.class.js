@@ -26,9 +26,8 @@ class World {
     this.canvas = canvas;
     this.keyboard = keyboard;
     this.soundVolume = soundVolume;
-    //this.draw();
     this.setWorld();
-    //this.checkCollisions();
+    this.character.run();
     this.startIntervallIDs();
   }
 
@@ -122,7 +121,6 @@ class World {
   }
 
   checkCollisions() {
-    // setInterval(() => {
     this.checkCollisionsBottleAndEnemies();
 
     this.level.enemies.forEach((enemy) => {
@@ -194,7 +192,6 @@ class World {
 
     this.bossBar.setPercentage(this.level.boss[0].energy);
     this.cleanDeathEnemies();
-    //}, 1000 / 60);   
   }
 
   checkCollisionsBottleAndEnemies() {
@@ -254,7 +251,6 @@ class World {
           this.killedChicks++;
           document.getElementById("killedChicks").innerHTML = this.killedChicks;
         }
-        console.log(this.killedChickens, this.killedChicks);        
         this.level.enemies.splice(this.level.enemies.indexOf(enemy), 1);
         this.addNewChicken(2, enemy.x);
       }
