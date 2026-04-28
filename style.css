@@ -206,6 +206,7 @@ footer {
   justify-content: center;
   align-items: center;
   cursor: pointer;
+
 }
 
 #mobileButtons .button {
@@ -219,6 +220,64 @@ canvas {
   transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
   background-color: #000000;
+}
+
+body.game-mode canvas,
+body.game-mode .overlay {
+  width: min(100vw, calc(100vh * 1.5));
+  width: min(100vw, calc(100dvh * 1.5));
+  height: min(calc(100vw / 1.5), 100vh);
+  height: min(calc(100vw / 1.5), 100dvh);
+}
+
+body.game-mode .overlay {
+  box-sizing: border-box;
+  padding: min(3.2dvh, 2.13vw);
+  font-size: clamp(1em, min(2.4dvh, 1.6vw), 2em);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  body.game-mode .scor {
+    height: min(4.67dvh, 3.11vw);
+    margin-top: 0;
+  }
+
+  body.game-mode .enemies {
+    height: min(4.67dvh, 3.11vw);
+  }
+
+  body.game-mode .enemies > div {
+    font-size: min(4.67dvh, 3.11vw);
+    line-height: 1;
+  }
+
+  body.game-mode .enemies img {
+    width: min(4.67dvh, 3.11vw);
+    height: min(4.67dvh, 3.11vw);
+    margin-right: min(2.33dvh, 1.55vw);
+  }
+
+  body.game-mode .volume {
+    width: min(3.47dvh, 2.31vw) !important;
+    height: min(3.47dvh, 2.31vw) !important;
+  }
+
+  body.game-mode #mobileButtons {
+    gap: clamp(8px, min(2vw, 3dvh), 30px);
+    margin-bottom: 0;
+  }
+
+  body.game-mode .side {
+    width: min(300px, 38vw, 57dvh);
+    height: clamp(30px, min(5.3vw, 8dvh), 40px);
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  body.game-mode .button {
+    width: min(100px, 14vw, 21dvh);
+    font-size: clamp(0.6em, min(3.4vw, 5.1dvh), 2em);
+  }
 }
 
 

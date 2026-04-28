@@ -1,4 +1,5 @@
 function startButton(){
+  document.body.classList.add("game-mode");
   document.getElementById("header").classList.add("displayNone");
   document.getElementById("gameOver").classList.add("displayNone");
   document.getElementById("startScreen").classList.add("displayNone");
