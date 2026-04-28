@@ -15,6 +15,8 @@ class World {
   soundVolume = 0.1;
   musicOn = false
   bossBarUnlocked = false;
+  killedChicks = 0;
+  killedChickens = 0;
  
 
 
@@ -245,6 +247,14 @@ class World {
         document.getElementById("chicks").innerHTML = this.level.enemies.filter(
           (e) => e instanceof Chick
         ).length;
+        if (enemy instanceof Chicken) {
+          this.killedChickens++;
+          document.getElementById("killedChickens").innerHTML = this.killedChickens;
+        } else if (enemy instanceof Chick) {
+          this.killedChicks++;
+          document.getElementById("killedChicks").innerHTML = this.killedChicks;
+        }
+        console.log(this.killedChickens, this.killedChicks);        
         this.level.enemies.splice(this.level.enemies.indexOf(enemy), 1);
         this.addNewChicken(2, enemy.x);
       }

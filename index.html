@@ -56,11 +56,11 @@
     <div id="overlay" class="overlay displayNone">
         <div class="scor">
             <div class="enemies">
-                <div id="chickens">0</div><span>&nbsp;</span>
+                <div id="killedChickens">0</div><span>&nbsp;/&nbsp;</span><div id="chickens">0</div><span>&nbsp;</span>
                 <img src="./img/3-enemies-chicken/chicken-normal/1-walk/3-w.png" alt="Chickens">
             </div>
             <div class="enemies">
-                <div id="chicks">0</div><span>&nbsp;</span>
+                <div id="killedChicks">0</div><span>&nbsp;/&nbsp;</span><div id="chicks">0</div><span>&nbsp;</span>
                 <img src="./img/3-enemies-chicken/chicken-small/1-walk/3-w.png" alt="Chicks">
             </div>
             <div class="enemies">
@@ -100,6 +100,11 @@
             <p>Besiege den Endboss mit Salsa-Flaschen!</p>
             <p>Springe auf kleine Feinde, um sie zu eliminieren.</p>
             <p>Sammle Münzen als Extra-Leben und Flaschen als Munition.</p>
+            <h2>Punkteregel</h2>
+            <p>Chicken besiegt = 1 Punkt</p>
+            <p>Kleines Chick besiegt = 2 Punkte</p>
+            <p>Endboss besiegt = +10 Punkte</p>
+            <p>Achtung: Fuer jedes besiegte Chicken spawnen 2 neue.</p>
         </div>
     </div>
 
@@ -107,8 +112,8 @@
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal('highscoreModal')">✕</button>
             <h2>Highscore</h2>
-            <p>Gewonnen: <span id="highscoreWins">0</span></p>
-            <p>Verloren: <span id="highscoreLosses">0</span></p>
+            <p>Rekord: <span id="highscoreBest">0</span></p>
+            <p>Letztes Spiel: <span id="highscoreLast">0</span></p>
             <button class="modal-reset" onclick="resetHighscore()">Zurücksetzen</button>
         </div>
     </div>

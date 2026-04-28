@@ -53,8 +53,8 @@ function infoButton() {
 }
 
 function highscoreButton() {
-  document.getElementById("highscoreWins").textContent = localStorage.getItem("highscoreWins") || 0;
-  document.getElementById("highscoreLosses").textContent = localStorage.getItem("highscoreLosses") || 0;
+  document.getElementById("highscoreBest").textContent = localStorage.getItem("highscoreBest") || 0;
+  document.getElementById("highscoreLast").textContent = localStorage.getItem("highscoreLast") || 0;
   document.getElementById("highscoreModal").classList.remove("displayNone");
 }
 
@@ -67,10 +67,10 @@ function closeModal(id) {
 }
 
 function resetHighscore() {
-  localStorage.removeItem("highscoreWins");
-  localStorage.removeItem("highscoreLosses");
-  document.getElementById("highscoreWins").textContent = 0;
-  document.getElementById("highscoreLosses").textContent = 0;
+  localStorage.removeItem("highscoreBest");
+  localStorage.removeItem("highscoreLast");
+  document.getElementById("highscoreBest").textContent = 0;
+  document.getElementById("highscoreLast").textContent = 0;
 }
 
 function soundVolumeLouder() {

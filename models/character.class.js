@@ -301,6 +301,12 @@ class Character extends MovableObject {
 
   youLose() {
     if (this.isCharacterDead() && !this.world.level.boss[0].isDead()) {
+      const score = this.world.killedChickens + this.world.killedChicks * 2;
+      localStorage.setItem("highscoreLast", score);
+      const best = parseInt(localStorage.getItem("highscoreBest") || 0);
+      if (score > best) {
+        localStorage.setItem("highscoreBest", score);
+      }
       setTimeout(() => {
         this.world.level.endScreens[0].zoomIn(400, 200);
         setTimeout(() => {
@@ -314,6 +320,12 @@ class Character extends MovableObject {
 
   youWon() {
     if (this.world.level.boss[0].isDead() && !this.isCharacterDead()) {
+      const score = this.world.killedChickens + this.world.killedChicks * 2 + 10;
+      localStorage.setItem("highscoreLast", score);
+      const best = parseInt(localStorage.getItem("highscoreBest") || 0);
+      if (score > best) {
+        localStorage.setItem("highscoreBest", score);
+      }
       setTimeout(() => {
         this.world.level.endScreens[2].zoomIn(600, 400);
         setTimeout(() => {
