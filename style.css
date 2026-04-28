@@ -403,6 +403,7 @@ body.game-mode .overlay {
   inset: 0;
   z-index: 1000;
   background-color: rgba(0, 0, 0, 0.7);
+  padding: 0 20px;
   display: flex;
   justify-content: center;
   align-items: center;
