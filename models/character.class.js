@@ -76,11 +76,12 @@ class Character extends MovableObject {
 
   world;
   y = 50;
-  speed = 3;
+  speed = 3.6;
   isThrowing = false;
   startGameTime = new Date().getTime();
   alive=true;
   gameEnded = false;
+  hurtInAir = false;
 
   constructor() {
     super().loadImage("./img/2-character-pepe/3-jump/j-31.png");
@@ -111,14 +112,17 @@ class Character extends MovableObject {
       this.world.camera_x = -this.x + 150;
       this.youLose();
       this.youWon();
-    }, 1);
+    }, 1000 / 60);
   }
 
   playAnimations(waitingTime) {
     if (this.isCharacterDead() && !this.world.level.boss[0].isDead()) {
       this.action = "dead";
       this.playAnimation(this.IMAGES_DEAD, this.soundDead, this.world.soundVolume);
-    } else if (this.isHurt()) {
+    } else if (this.isHurt() || this.isAirHurtActive()) {
+      if (this.isAboveGround()) {
+        this.hurtInAir = true;
+      }
       this.action = "hurt";
       this.lastMoveTime = new Date().getTime();
       this.playAnimation(this.IMAGES_HURT, this.soundHurt, this.world.soundVolume);
@@ -128,9 +132,9 @@ class Character extends MovableObject {
   }
 
   playWaitingAnimation(waitingTime) {
-    if (waitingTime < 5000 && this.action == !"jump") {
+    if (waitingTime < 2500 && this.action != "jump") {
       this.playSequenceAnimation(this.IMAGE_IDLE, 2, this.world.soundVolume);
-    } else if (waitingTime > 5000 && this.action == !"jump") {
+    } else if (waitingTime > 2500 && this.action != "jump") {
       this.playSequenceAnimation(this.IMAGE_SLEEP, 3, this.world.soundVolume);
     }
   }
@@ -139,10 +143,25 @@ class Character extends MovableObject {
     if (this.action == "jump") {
       this.playAnimationJump(this.IMAGES_JUMPING, this.soundJump, this.world.soundVolume);
     } else if ((this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && !this.isAboveGround()) {
-      this.playAnimationSlower(this.IMAGES_WALKING, this.soundWalk, 12, this.world.soundVolume);
+      this.playAnimationSlower(this.IMAGES_WALKING, this.soundWalk, 2.6, this.world.soundVolume);
+    } else if (this.isAboveGround()) {
+      this.img = this.imageCache["./img/2-character-pepe/3-jump/j-39.png"];
     } else {
       this.img = this.imageCache["./img/2-character-pepe/3-jump/j-31.png"];
     }
+  }
+
+  isAirHurtActive() {
+    if (!this.hurtInAir) {
+      return false;
+    }
+
+    if (!this.isAboveGround()) {
+      this.hurtInAir = false;
+      return false;
+    }
+
+    return true;
   }
 
   throwBottle() {
@@ -181,7 +200,7 @@ class Character extends MovableObject {
   }
 
   spawnBottle() {
-    if (Math.random() > 0.998 && this.world.level.bottles.length < 50) {
+    if (Math.random() > 0.995 && this.world.level.bottles.length < 50) {
       let bottle = new Bottle(this.x);
       this.world.level.bottles.push(bottle);
     }
@@ -220,6 +239,18 @@ class Character extends MovableObject {
         this.jumpTime = new Date().getTime();
       }
       this.lastMoveTime = new Date().getTime();
+    }
+  }
+
+  hit(x) {
+    let energyBeforeHit = this.energy;
+    let lastHitBeforeHit = this.lastHit;
+
+    super.hit(x);
+
+    let tookDamage = this.energy < energyBeforeHit || this.lastHit !== lastHitBeforeHit;
+    if (tookDamage && this.isAboveGround()) {
+      this.hurtInAir = true;
     }
   }
 

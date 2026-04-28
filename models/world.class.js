@@ -42,7 +42,7 @@ class World {
   startIntervallIDs() {
     this.level.intervalIds["checkCollisions"] = setInterval(() => {
       this.checkCollisions();
-    }, 1);
+    }, 1000 / 60);
 
     this.level.intervalIds["draw"] = requestAnimationFrame(() => {
       this.draw();
@@ -126,12 +126,12 @@ class World {
     this.level.enemies.forEach((enemy) => {
       this.character.killerJump(enemy);
       if (this.character.isColliding(enemy) && !this.level.boss[0].isDead()) {
-        this.character.hit(0.3);
+        this.character.hit(0.45);
         this.healthBar.setPercentage(this.character.energy);
       }
     });
     if (this.character.isColliding(this.level.boss[0]) && !this.level.boss[0].isDead()) {
-      this.character.hit(0.5);
+      this.character.hit(0.7);
       this.healthBar.setPercentage(this.character.energy);
     }
 

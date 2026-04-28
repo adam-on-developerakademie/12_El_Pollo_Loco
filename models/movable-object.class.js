@@ -104,9 +104,9 @@ class MovableObject extends DrawableObject {
     let path = images[i];
     this.img = this.imageCache[path];
     this.slowMotion++;
-    if (this.slowMotion == slower) {
+    if (this.slowMotion >= slower) {
       sound ? (sound.play(), sound.volume = soundVolume): null;
-      this.slowMotion = 0;
+      this.slowMotion -= slower;
       this.curentImage++;
     }
   }
@@ -157,6 +157,9 @@ class MovableObject extends DrawableObject {
         this.img = this.imageCache[images[4]];
       } else if (new Date().getTime() < this.jumpTime + 1100) {
         this.img = this.imageCache[images[5]];
+        this.action = false;
+        this.playSound = false;
+      } else {
         this.action = false;
         this.playSound = false;
       }
