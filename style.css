@@ -230,53 +230,66 @@ body.game-mode .overlay {
   height: min(calc(100vw / 1.5), 100dvh);
 }
 
+body.game-mode {
+  --gm-overlay-padding: min(3.2dvh, 2.13vw);
+  --gm-overlay-font: clamp(1em, min(2.4dvh, 1.6vw), 1.7em);
+  --gm-score-size: min(4.67dvh, 3.11vw);
+  --gm-score-icon-gap: min(2.33dvh, 1.55vw);
+  --gm-volume-size: min(3.47dvh, 2.31vw);
+  --gm-controls-gap: clamp(8px, min(2vw, 3dvh), 22px);
+  --gm-side-width: min(300px, 38vw, 57dvh);
+  --gm-side-height: clamp(30px, min(5.3vw, 8dvh), 40px);
+  --gm-button-width: min(100px, 14vw, 21dvh);
+  --gm-button-font: clamp(0.6em, min(3.4vw, 5.1dvh), 1.6em);
+}
+
 body.game-mode .overlay {
   box-sizing: border-box;
-  padding: min(3.2dvh, 2.13vw);
-  font-size: clamp(1em, min(2.4dvh, 1.6vw), 2em);
+  padding: var(--gm-overlay-padding);
+  font-size: var(--gm-overlay-font);
 }
 
 @media (hover: hover) and (pointer: fine) {
   body.game-mode .scor {
-    height: min(4.67dvh, 3.11vw);
+    height: var(--gm-score-size);
     margin-top: 0;
   }
 
   body.game-mode .enemies {
-    height: min(4.67dvh, 3.11vw);
+    height: var(--gm-score-size);
   }
 
   body.game-mode .enemies > div {
-    font-size: min(4.67dvh, 3.11vw);
+    font-size: var(--gm-score-size);
     line-height: 1;
   }
 
   body.game-mode .enemies img {
-    width: min(4.67dvh, 3.11vw);
-    height: min(4.67dvh, 3.11vw);
-    margin-right: min(2.33dvh, 1.55vw);
+    width: var(--gm-score-size);
+    height: var(--gm-score-size);
+    margin-right: var(--gm-score-icon-gap);
   }
 
   body.game-mode .volume {
-    width: min(3.47dvh, 2.31vw) !important;
-    height: min(3.47dvh, 2.31vw) !important;
+    width: var(--gm-volume-size) !important;
+    height: var(--gm-volume-size) !important;
   }
 
   body.game-mode #mobileButtons {
-    gap: clamp(8px, min(2vw, 3dvh), 30px);
+    gap: var(--gm-controls-gap);
     margin-bottom: 0;
   }
 
   body.game-mode .side {
-    width: min(300px, 38vw, 57dvh);
-    height: clamp(30px, min(5.3vw, 8dvh), 40px);
+    width: var(--gm-side-width);
+    height: var(--gm-side-height);
     margin-left: 0;
     margin-right: 0;
   }
 
   body.game-mode .button {
-    width: min(100px, 14vw, 21dvh);
-    font-size: clamp(0.6em, min(3.4vw, 5.1dvh), 2em);
+    width: var(--gm-button-width);
+    font-size: var(--gm-button-font);
   }
 }
 
@@ -321,6 +334,19 @@ body.game-mode .overlay {
 }
 
 @media (hover: none) and (pointer: coarse) and (orientation: landscape) {
+  body.game-mode {
+    --gm-overlay-padding: clamp(14px, 3.2vh, 100px);
+    --gm-overlay-font: clamp(1em, 2.4vh, 2em);
+    --gm-score-size: clamp(22px, 6vh, 40px);
+    --gm-score-icon-gap: clamp(8px, 2.2vw, 20px);
+    --gm-volume-size: clamp(18px, 5.5vh, 30px);
+    --gm-controls-gap: clamp(8px, 2vw, 30px);
+    --gm-side-width: min(38vw, 300px);
+    --gm-side-height: clamp(30px, 8vh, 40px);
+    --gm-button-width: clamp(58px, 14vw, 100px);
+    --gm-button-font: clamp(1em, 3.4vh, 2em);
+  }
+
   canvas,
   .overlay {
     width: min(100vw, calc(100vh * 1.5));
@@ -331,8 +357,8 @@ body.game-mode .overlay {
 
   .overlay {
     box-sizing: border-box;
-    padding: clamp(14px, 3.2vh, 100px);
-    font-size: clamp(1em, 2.4vh, 2em);
+    padding: var(--gm-overlay-padding);
+    font-size: var(--gm-overlay-font);
   }
 
   .scor {
@@ -340,34 +366,34 @@ body.game-mode .overlay {
   }
 
   .enemies {
-    height: clamp(22px, 6vh, 40px);
+    height: var(--gm-score-size);
   }
 
   .enemies img {
-    width: clamp(22px, 6vh, 40px);
-    height: clamp(22px, 6vh, 40px);
-    margin-right: clamp(8px, 2.2vw, 20px);
+    width: var(--gm-score-size);
+    height: var(--gm-score-size);
+    margin-right: var(--gm-score-icon-gap);
   }
 
   #mobileButtons {
-    gap: clamp(8px, 2vw, 30px);
+    gap: var(--gm-controls-gap);
     margin-bottom: 0;
   }
 
   .side {
-    width: min(38vw, 300px);
-    height: clamp(30px, 8vh, 40px);
+    width: var(--gm-side-width);
+    height: var(--gm-side-height);
     margin-left: 0;
     margin-right: 0;
   }
 
   .button {
-    width: clamp(58px, 14vw, 100px);
-    font-size: clamp(1em, 3.4vh, 2em);
+    width: var(--gm-button-width);
+    font-size: var(--gm-button-font);
   }
 
   .volume {
-    width: clamp(18px, 5.5vh, 30px) !important;
-    height: clamp(18px, 5.5vh, 30px) !important;
+    width: var(--gm-volume-size) !important;
+    height: var(--gm-volume-size) !important;
   }
 }
