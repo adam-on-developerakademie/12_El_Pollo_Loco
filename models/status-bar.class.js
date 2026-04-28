@@ -41,7 +41,10 @@ class StatusBar extends DrawableObject {
 
   constructor(statusBar) {
     super();
-    this.statusBar = eval(`this.${statusBar}`);
+    this.statusBar = this[statusBar];
+    if (!this.statusBar) {
+      throw new Error(`Unknown status bar: ${statusBar}`);
+    }
     this.loadImages(this.statusBar.img);
     this.percentage = this.statusBar.percentage;
     this.setPercentage(this.percentage)

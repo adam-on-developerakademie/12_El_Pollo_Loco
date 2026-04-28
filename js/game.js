@@ -44,8 +44,6 @@ function init() {
   document.getElementById("chicks").innerHTML = world.level.enemies.filter(
     (e) => e instanceof Chick
   ).length;
-
-  console.log(`My character is:`, world);
 }
 
 window.addEventListener("keydown", (e) => {
@@ -60,7 +58,6 @@ window.addEventListener("keydown", (e) => {
   e.code == "ArrowRight" && keyboard.RIGHT == false
     ? (keyboard.RIGHT = true)
     : null;
-  //console.log(`Button is listen:`,e, keyboard)
 });
 
 window.addEventListener("keyup", (e) => {
@@ -75,7 +72,6 @@ window.addEventListener("keyup", (e) => {
   e.code == "ArrowRight" && keyboard.RIGHT == true
     ? (keyboard.RIGHT = false)
     : null;
-  //console.log(`Button is listen:`,e, keyboard);
 });
 
 function run() {

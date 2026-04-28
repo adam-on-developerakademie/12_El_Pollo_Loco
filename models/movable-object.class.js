@@ -183,7 +183,6 @@ class MovableObject extends DrawableObject {
   }
 
   moveRight() {
-    console.log("moving right...");
   }
 
   applyGravity() {
