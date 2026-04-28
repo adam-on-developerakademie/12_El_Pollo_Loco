@@ -80,6 +80,7 @@ class Character extends MovableObject {
   isThrowing = false;
   startGameTime = new Date().getTime();
   alive=true;
+  gameEnded = false;
 
   constructor() {
     super().loadImage("./img/2-character-pepe/3-jump/j-31.png");
@@ -302,7 +303,8 @@ class Character extends MovableObject {
   }
 
   youLose() {
-    if (this.isCharacterDead() && !this.world.level.boss[0].isDead()) {
+    if (this.isCharacterDead() && !this.world.level.boss[0].isDead() && !this.gameEnded) {
+      this.gameEnded = true;
       const score = this.world.killedChickens + this.world.killedChicks * 2;
       localStorage.setItem("highscoreLast", score);
       const best = parseInt(localStorage.getItem("highscoreBest") || 0);
@@ -321,7 +323,8 @@ class Character extends MovableObject {
   }
 
   youWon() {
-    if (this.world.level.boss[0].isDead() && !this.isCharacterDead()) {
+    if (this.world.level.boss[0].isDead() && !this.isCharacterDead() && !this.gameEnded) {
+      this.gameEnded = true;
       const score = this.world.killedChickens + this.world.killedChicks * 2 + 10;
       localStorage.setItem("highscoreLast", score);
       const best = parseInt(localStorage.getItem("highscoreBest") || 0);

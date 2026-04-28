@@ -25,6 +25,6 @@ class EndScreen extends MovableObject {
       } else {
         clearInterval(intervalId);
       }
-    }, 200);
+    }, 2);
   }
 }

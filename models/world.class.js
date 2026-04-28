@@ -271,16 +271,25 @@ class World {
   }
 
   gameOver() {
-    stopGameMusic() 
+    stopGameMusic();
     this.clearAllIntervalIds();
+    this.cleanupLevel();
     document.getElementById("canvas").classList.add("displayNone");
     document.getElementById("startScreen").classList.remove("displayNone");
     document.getElementById("header").classList.remove("displayNone");
     document.getElementById("mobileButtons").classList.remove("center");
     document.getElementById("footer").classList.remove("displayNone");
     document.getElementById("overlay").classList.add("displayNone");
-    
-    
+  }
+
+  cleanupLevel() {
+    this.level.enemies = [];
+    this.level.throwableObjects = [];
+    this.level.bottles = [];
+    this.level.lifeCoins = [];
+    this.level.clouds = [];
+    this.level.intervalIds = {};
+    world = null;
   }
 
 
