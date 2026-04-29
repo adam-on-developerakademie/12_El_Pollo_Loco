@@ -135,3 +135,51 @@ function stopGameMusic() {
     soundMenu.loop = true;
   }
 }
+
+function youLose() {
+  const ch = world && world.character;
+  if (!ch) return;
+  if (ch.isCharacterDead() && !world.level.boss[0].isDead() && !ch.gameEnded) {
+    ch.gameEnded = true;
+    const score = world.killedChickens + world.killedChicks * 2;
+    localStorage.setItem("highscoreLast", score);
+    const best = parseInt(localStorage.getItem("highscoreBest") || 0);
+    if (score > best) {
+      localStorage.setItem("highscoreBest", score);
+    }
+    setTimeout(() => {
+      world.level.endScreens[0].zoomIn(400, 200, () => {
+        setTimeout(() => {
+          world.level.endScreens[0].newPosition(-720, 0, 0);
+          world.level.endScreens[1].zoomIn(300, 200, () => {
+            // Keep game mode active after the endscreen animation.
+          });
+        }, 500);
+      });
+    }, 2000);
+  }
+}
+
+function youWon() {
+  const ch = world && world.character;
+  if (!ch) return;
+  if (world.level.boss[0].isDead() && !ch.isCharacterDead() && !ch.gameEnded) {
+    ch.gameEnded = true;
+    const score = world.killedChickens + world.killedChicks * 2 + 10;
+    localStorage.setItem("highscoreLast", score);
+    const best = parseInt(localStorage.getItem("highscoreBest") || 0);
+    if (score > best) {
+      localStorage.setItem("highscoreBest", score);
+    }
+    setTimeout(() => {
+      world.level.endScreens[2].zoomIn(600, 400, () => {
+        setTimeout(() => {
+          world.level.endScreens[2].newPosition(-720, 0, 0);
+          world.level.endScreens[1].zoomIn(300, 200, () => {
+            // Keep game mode active after the endscreen animation.
+          });
+        }, 500);
+      });
+    }, 2000);
+  }
+}

@@ -76,7 +76,7 @@ class Character extends MovableObject {
   /** Initial vertical position (higher y = lower on screen; canvas origin is top-left). */
   y = 50;
   /** Horizontal movement speed in pixels per delta-time unit. */
-  speed = 3.6;
+  speed = 5.04;
   /** True while SPACE is held and a throw has already been fired this press. */
   isThrowing = false;
   /** Unix timestamp when the game session started. */
@@ -92,7 +92,7 @@ class Character extends MovableObject {
     super().loadImage("./img/2-character-pepe/3-jump/j-31.png");
     this.actionDistance(90, 10, 30, 30);
     if (typeof isMobileUserAgent === "function" && isMobileUserAgent()) {
-      this.speed = 5.4;
+      this.speed = 7.56;
     }
     this.applyGravity();
     this.loadImages(this.IMAGES_WALKING);
@@ -131,9 +131,8 @@ class Character extends MovableObject {
       const canvasWidth = 720;
       const levelWidth = this.world.level.levelEndX[0];
       this.world.camera_x = Math.round(Math.min(0, Math.max(-(levelWidth - canvasWidth), this.world.camera_x)));
-      this.youLose();
-      this.youWon();
-    }, 1000 / 60);
+      if (typeof youLose === "function") youLose();
+      if (typeof youWon === "function") youWon();    }, 1000 / 60);
   }
 
   /**
@@ -429,57 +428,4 @@ class Character extends MovableObject {
     }
   }
 
-  /**
-   * Triggers the lose end-screen sequence when the character dies before the boss.
-   * Saves the session score to localStorage and starts the zoom-in animation chain.
-   * Guarded by gameEnded to prevent double-triggering.
-   */
-  youLose() {
-    if (this.isCharacterDead() && !this.world.level.boss[0].isDead() && !this.gameEnded) {
-      this.gameEnded = true;
-      const score = this.world.killedChickens + this.world.killedChicks * 2;
-      localStorage.setItem("highscoreLast", score);
-      const best = parseInt(localStorage.getItem("highscoreBest") || 0);
-      if (score > best) {
-        localStorage.setItem("highscoreBest", score);
-      }
-      setTimeout(() => {
-        this.world.level.endScreens[0].zoomIn(400, 200, () => {
-          setTimeout(() => {
-            this.world.level.endScreens[0].newPosition(-720, 0, 0);
-            this.world.level.endScreens[1].zoomIn(300, 200, () => {
-              // Keep game mode active after the endscreen animation.
-            });
-          }, 500);
-        });
-      }, 2000);
-    }
-  }
-
-  /**
-   * Triggers the win end-screen sequence when the boss is defeated.
-   * Awards a 10-point bonus on top of the enemy kill score.
-   * Guarded by gameEnded to prevent double-triggering.
-   */
-  youWon() {
-    if (this.world.level.boss[0].isDead() && !this.isCharacterDead() && !this.gameEnded) {
-      this.gameEnded = true;
-      const score = this.world.killedChickens + this.world.killedChicks * 2 + 10;
-      localStorage.setItem("highscoreLast", score);
-      const best = parseInt(localStorage.getItem("highscoreBest") || 0);
-      if (score > best) {
-        localStorage.setItem("highscoreBest", score);
-      }
-      setTimeout(() => {
-        this.world.level.endScreens[2].zoomIn(600, 400, () => {
-          setTimeout(() => {
-            this.world.level.endScreens[2].newPosition(-720, 0, 0);
-            this.world.level.endScreens[1].zoomIn(300, 200, () => {
-              // Keep game mode active after the endscreen animation.
-            });
-          }, 500);
-        });
-      }, 2000);
-    }
-  }
 }
