@@ -174,12 +174,30 @@ footer {
   width: 100%;
   height: 40px;
   display: flex;
+  align-items: center;
   justify-content: end;
+  gap: 6px;
   img {
     width: 40px;
     height: 40px;
-    margin-right: 20px;
   }
+}
+
+.controls-row {
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+}
+
+.sound-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sound-controls #soundVolume {
+  font-size: 14px;
+  color: white;
 }
 
 #mobileButtons {
@@ -327,6 +345,16 @@ body.game-mode .overlay {
     margin-right: var(--gm-score-icon-gap);
   }
 
+  body.game-mode .controls-row .volume {
+    margin-right: 0;
+  }
+
+  body.game-mode #windowSizeBtn {
+    margin-right: var(--gm-score-icon-gap);
+    width: var(--gm-score-size);
+    height: var(--gm-score-size);
+  }
+
   body.game-mode .volume {
     width: var(--gm-volume-size) !important;
     height: var(--gm-volume-size) !important;
@@ -376,12 +404,14 @@ body.game-mode .overlay {
 }
 
 .window-size-btn {
-  font-size: 26px;
-  line-height: 1;
+  width: 26px;
+  height: 26px;
   cursor: pointer;
-  margin-right: 20px;
+  margin-right: 0;
   user-select: none;
   -webkit-user-select: none;
+  display: block;
+  flex-shrink: 0;
 }
 
 @media (hover: none) and (pointer: coarse) {

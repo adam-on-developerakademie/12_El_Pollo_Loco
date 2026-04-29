@@ -1,17 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" fill="none">
-  <defs>
-    <marker id="ah" markerWidth="6" markerHeight="6" refX="6" refY="3" orient="auto">
-      <polygon points="0,0 0,6 6,3" fill="white"/>
-    </marker>
-  </defs>
-  <!-- L-brackets at corners -->
-  <polyline points="14,6 6,6 6,14" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-  <polyline points="26,6 34,6 34,14" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-  <polyline points="14,34 6,34 6,26" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-  <polyline points="26,34 34,34 34,26" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-  <!-- Arrows pointing OUTWARD (tip at corner) -->
-  <line x1="18" y1="18" x2="10" y2="10" stroke="white" stroke-width="2.5" stroke-linecap="round" marker-end="url(#ah)"/>
-  <line x1="22" y1="18" x2="30" y2="10" stroke="white" stroke-width="2.5" stroke-linecap="round" marker-end="url(#ah)"/>
-  <line x1="18" y1="22" x2="10" y2="30" stroke="white" stroke-width="2.5" stroke-linecap="round" marker-end="url(#ah)"/>
-  <line x1="22" y1="22" x2="30" y2="30" stroke="white" stroke-width="2.5" stroke-linecap="round" marker-end="url(#ah)"/>
-</svg>
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>

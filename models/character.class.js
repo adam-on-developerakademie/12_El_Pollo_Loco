@@ -91,6 +91,9 @@ class Character extends MovableObject {
   constructor() {
     super().loadImage("./img/2-character-pepe/3-jump/j-31.png");
     this.actionDistance(90, 10, 30, 30);
+    if (typeof isMobileUserAgent === "function" && isMobileUserAgent()) {
+      this.speed = 5.4;
+    }
     this.applyGravity();
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_JUMPING);

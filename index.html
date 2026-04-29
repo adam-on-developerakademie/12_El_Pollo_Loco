@@ -63,11 +63,13 @@
                 <div id="killedChicks">0</div><span>&nbsp;/&nbsp;</span><div id="chicks">0</div><span>&nbsp;</span>
                 <img src="./img/3-enemies-chicken/chicken-small/1-walk/3-w.png" alt="Chicks">
             </div>
-            <div class="enemies">
-                <div id="soundVolume">1</div><span>&nbsp;</span>
-                 <img class="volume" src="./img/icons/quieter.png" onclick="soundVolumeQuieter()" alt="Sound Volume Quieter">
-                 <img class="volume" src="./img/icons/louder.png" onclick="soundVolumeLouder()" alt="Sound Volume Louder">
-                 <span id="windowSizeBtn" class="window-size-btn" onclick="toggleWindowSize()" title="Vollbild umschalten">&#x26F6;</span>
+            <div class="enemies controls-row">
+                <div class="sound-controls">
+                    <div id="soundVolume">1</div><span>&nbsp;</span>
+                    <img class="volume" src="./img/icons/quieter.png" onclick="soundVolumeQuieter()" alt="Sound Volume Quieter">
+                    <img class="volume" src="./img/icons/louder.png" onclick="soundVolumeLouder()" alt="Sound Volume Louder">
+                </div>
+                <img id="windowSizeBtn" class="window-size-btn" src="./img/icons/expand.svg" onclick="toggleWindowSize()" title="Vollbild umschalten" alt="Vollbild umschalten">
             </div>
         </div>
         <div id="mobileButtons" >

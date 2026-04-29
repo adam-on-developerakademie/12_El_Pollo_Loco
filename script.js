@@ -107,7 +107,7 @@ function closeFullscreen() {
 function toggleWindowSize() {
   const expanded = document.body.classList.toggle("fullsize");
   const btn = document.getElementById("windowSizeBtn");
-  if (btn) btn.textContent = expanded ? "\u229F" : "\u26F6";
+  if (btn) btn.src = expanded ? "./img/icons/compress.svg" : "./img/icons/expand.svg";
 }
 
 function backToMenu() {
