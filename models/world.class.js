@@ -199,16 +199,23 @@ class World {
 
     this.bossBar.setPercentage(this.level.boss[0].energy);
     this.cleanDeathEnemies();
+    this.cleanGroundBottles();
   }
 
   checkCollisionsBottleAndEnemies() {
+    const now = new Date().getTime();
     this.level.enemies.forEach((enemy) => {
       this.level.throwableObjects.forEach((throwableBottle) => {
-        if (enemy.isColliding(throwableBottle)) {
+        if (enemy.isColliding(throwableBottle) && !throwableBottle.isDamaged) {
+          throwableBottle.isDamaged = true;
           enemy.energy = 0;
-          enemy.dethTime = new Date().getTime();
+          enemy.dethTime = now;
           this.soundChick ? this.soundChick.play() : null;
           this.soundChick ? (this.soundChick.volume = this.soundVolume) : null;
+          setTimeout(() => {
+            const idx = this.level.throwableObjects.indexOf(throwableBottle);
+            if (idx !== -1) this.level.throwableObjects.splice(idx, 1);
+          }, 2000);
         }
       });
     });
@@ -244,30 +251,45 @@ class World {
   }
 
   cleanDeathEnemies() {
-    this.level.enemies.forEach((enemy) => {
-      if (0 < enemy.dethTime && enemy.dethTime < new Date().getTime() - 1000) {
-        document.getElementById("chickens").innerHTML =
-          this.level.enemies.filter((e) => e instanceof Chicken).length;
-        document.getElementById("chicks").innerHTML = this.level.enemies.filter(
-          (e) => e instanceof Chick
-        ).length;
-        if (enemy instanceof Chicken) {
-          this.killedChickens++;
-          document.getElementById("killedChickens").innerHTML = this.killedChickens;
-        } else if (enemy instanceof Chick) {
-          this.killedChicks++;
-          document.getElementById("killedChicks").innerHTML = this.killedChicks;
-        }
-        this.level.enemies.splice(this.level.enemies.indexOf(enemy), 1);
+    const toRemove = this.level.enemies.filter(
+      (e) => e.dethTime > 0 && e.dethTime < new Date().getTime() - 1000
+    );
+
+    toRemove.forEach((enemy) => {
+      enemy.dethTime = 0;
+      this.level.enemies.splice(this.level.enemies.indexOf(enemy), 1);
+
+      if (enemy instanceof Chicken) {
+        this.killedChickens++;
+        document.getElementById("killedChickens").innerHTML = this.killedChickens;
+      } else if (enemy instanceof Chick) {
+        this.killedChicks++;
+        document.getElementById("killedChicks").innerHTML = this.killedChicks;
+      }
+
+      document.getElementById("chickens").innerHTML =
+        this.level.enemies.filter((e) => e instanceof Chicken).length;
+      document.getElementById("chicks").innerHTML =
+        this.level.enemies.filter((e) => e instanceof Chick).length;
+
+      if (enemy instanceof Chicken) {
         this.addNewChicken(2, enemy.x);
       }
     });
   }
 
   addNewChicken(chickensNumber, position) {
-    let chicken = new Chicken(position);
     for (let i = 0; i < chickensNumber; i++) {
-      this.level.enemies.push(chicken);
+      this.level.enemies.push(new Chicken(position));
+    }
+  }
+
+  cleanGroundBottles() {
+    for (let i = this.level.throwableObjects.length - 1; i >= 0; i--) {
+      const bottle = this.level.throwableObjects[i];
+      if (!bottle.isDamaged && bottle.y > this.canvas.height) {
+        this.level.throwableObjects.splice(i, 1);
+      }
     }
   }
 
