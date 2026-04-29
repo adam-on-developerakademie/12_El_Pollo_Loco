@@ -70,6 +70,13 @@ function toggleWindowSize() {
   if (btn) btn.textContent = expanded ? "\u229F" : "\u26F6";
 }
 
+function backToMenu() {
+  if (world && typeof world.gameOver === "function") {
+    world.clearAllIntervalIds();
+    world.gameOver();
+  }
+}
+
 function infoButton() {
   document.getElementById("infoModal").classList.remove("displayNone");
 }

@@ -46,7 +46,19 @@ function init() {
   ).length;
 }
 
+function resetKeyboardState() {
+  keyboard.SPACE = false;
+  keyboard.UP = false;
+  keyboard.DOWN = false;
+  keyboard.LEFT = false;
+  keyboard.RIGHT = false;
+}
+
 window.addEventListener("keydown", (e) => {
+  if (!world || !world.isRunning) {
+    return;
+  }
+
   e.code == "Space" && keyboard.SPACE == false ? (keyboard.SPACE = true) : null;
   e.code == "ArrowUp" && keyboard.UP == false ? (keyboard.UP = true) : null;
   e.code == "ArrowDown" && keyboard.DOWN == false
@@ -61,6 +73,10 @@ window.addEventListener("keydown", (e) => {
 });
 
 window.addEventListener("keyup", (e) => {
+  if (!world || !world.isRunning) {
+    return;
+  }
+
   e.code == "Space" && keyboard.SPACE == true ? (keyboard.SPACE = false) : null;
   e.code == "ArrowUp" && keyboard.UP == true ? (keyboard.UP = false) : null;
   e.code == "ArrowDown" && keyboard.DOWN == true
@@ -78,6 +94,7 @@ function run() {
   if (world) {
     world.clearAllIntervalIds();
   }
+  resetKeyboardState();
   init();
 
 }

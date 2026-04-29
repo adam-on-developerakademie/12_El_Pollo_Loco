@@ -465,6 +465,9 @@ class World {
   gameOver() {
     stopGameMusic();
     this.clearAllIntervalIds();
+    if (typeof resetKeyboardState === "function") {
+      resetKeyboardState();
+    }
     this.cleanupLevel();
     document.getElementById("canvas").classList.add("displayNone");
     document.getElementById("startScreen").classList.remove("displayNone");

@@ -199,6 +199,17 @@ footer {
   justify-content: space-around;
 }
 
+.center-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.center-controls .button {
+  width: 90px;
+}
+
 .button {
   font-family: "Zabars", sans-serif;
   background-color: rgba(0, 0, 0, 0.2);
@@ -337,6 +348,14 @@ body.game-mode .overlay {
     width: var(--gm-button-width);
     font-size: var(--gm-button-font);
   }
+
+  body.game-mode .center-controls {
+    gap: var(--gm-controls-gap);
+  }
+
+  body.game-mode .center-controls .button {
+    width: calc(var(--gm-button-width) * 0.9);
+  }
 }
 
 
@@ -450,6 +469,14 @@ body.game-mode .overlay {
   .button {
     width: var(--gm-button-width);
     font-size: var(--gm-button-font);
+  }
+
+  .center-controls {
+    gap: var(--gm-controls-gap);
+  }
+
+  .center-controls .button {
+    width: calc(var(--gm-button-width) * 0.9);
   }
 
   .volume {

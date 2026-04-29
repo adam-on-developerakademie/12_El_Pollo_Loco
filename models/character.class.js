@@ -445,7 +445,7 @@ class Character extends MovableObject {
           setTimeout(() => {
             this.world.level.endScreens[0].newPosition(-720, 0, 0);
             this.world.level.endScreens[1].zoomIn(300, 200, () => {
-              setTimeout(() => this.world.gameOver(), 1500);
+              // Keep game mode active after the endscreen animation.
             });
           }, 500);
         });
@@ -472,7 +472,7 @@ class Character extends MovableObject {
           setTimeout(() => {
             this.world.level.endScreens[2].newPosition(-720, 0, 0);
             this.world.level.endScreens[1].zoomIn(300, 200, () => {
-              setTimeout(() => this.world.gameOver(), 1500);
+              // Keep game mode active after the endscreen animation.
             });
           }, 500);
         });
