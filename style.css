@@ -6,6 +6,10 @@
 body {
   font-family: "Zabars", sans-serif;
   user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
   margin: 0;
   padding: 0;
   display: flex;
@@ -220,6 +224,7 @@ canvas {
   transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
   background-color: #000000;
+  touch-action: none;
 }
 
 body.game-mode canvas,
@@ -250,6 +255,47 @@ body.game-mode .overlay {
 }
 
 @media (hover: hover) and (pointer: fine) {
+  /* Windowed default: 2/3 of viewport */
+  body.game-mode canvas,
+  body.game-mode .overlay {
+    width: min(66.67vw, calc(66.67dvh * 1.5));
+    height: min(calc(66.67vw / 1.5), 66.67dvh);
+  }
+
+  /* Scale all overlay UI elements to 2/3 in windowed mode */
+  body.game-mode {
+    --gm-overlay-padding: min(2.13dvh, 1.42vw);
+    --gm-overlay-font: clamp(0.67em, min(1.6dvh, 1.07vw), 1.13em);
+    --gm-score-size: min(3.11dvh, 2.07vw);
+    --gm-score-icon-gap: min(1.55dvh, 1.03vw);
+    --gm-volume-size: min(2.31dvh, 1.54vw);
+    --gm-controls-gap: clamp(5px, min(1.33vw, 2dvh), 15px);
+    --gm-side-width: min(200px, 25.33vw, 38dvh);
+    --gm-side-height: clamp(20px, min(3.53vw, 5.33dvh), 27px);
+    --gm-button-width: min(67px, 9.33vw, 14dvh);
+    --gm-button-font: clamp(0.4em, min(2.27vw, 3.4dvh), 1.07em);
+  }
+
+  /* Fullsize: fill entire viewport, restore full-size UI variables */
+  body.game-mode.fullsize canvas,
+  body.game-mode.fullsize .overlay {
+    width: min(100vw, calc(100dvh * 1.5));
+    height: min(calc(100vw / 1.5), 100dvh);
+  }
+
+  body.game-mode.fullsize {
+    --gm-overlay-padding: min(3.2dvh, 2.13vw);
+    --gm-overlay-font: clamp(1em, min(2.4dvh, 1.6vw), 1.7em);
+    --gm-score-size: min(4.67dvh, 3.11vw);
+    --gm-score-icon-gap: min(2.33dvh, 1.55vw);
+    --gm-volume-size: min(3.47dvh, 2.31vw);
+    --gm-controls-gap: clamp(8px, min(2vw, 3dvh), 22px);
+    --gm-side-width: min(300px, 38vw, 57dvh);
+    --gm-side-height: clamp(30px, min(5.3vw, 8dvh), 40px);
+    --gm-button-width: min(100px, 14vw, 21dvh);
+    --gm-button-font: clamp(0.6em, min(3.4vw, 5.1dvh), 1.6em);
+  }
+
   body.game-mode .scor {
     height: var(--gm-score-size);
     margin-top: 0;
@@ -310,6 +356,21 @@ body.game-mode .overlay {
   cursor: pointer;
 }
 
+.window-size-btn {
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  margin-right: 20px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .window-size-btn {
+    display: none;
+  }
+}
+
 #rotateHint {
   display: none;
 }
@@ -335,16 +396,15 @@ body.game-mode .overlay {
 
 @media (hover: none) and (pointer: coarse) and (orientation: landscape) {
   body.game-mode {
-    --gm-overlay-padding: clamp(14px, 3.2vh, 100px);
-    --gm-overlay-font: clamp(1em, 2.4vh, 2em);
-    --gm-score-size: clamp(22px, 6vh, 40px);
-    --gm-score-icon-gap: clamp(8px, 2.2vw, 20px);
-    --gm-volume-size: clamp(18px, 5.5vh, 30px);
-    --gm-controls-gap: clamp(8px, 2vw, 30px);
-    --gm-side-width: min(38vw, 300px);
-    --gm-side-height: clamp(30px, 8vh, 40px);
-    --gm-button-width: clamp(58px, 14vw, 100px);
-    --gm-button-font: clamp(1em, 3.4vh, 2em);
+    /* Only override values that need mobile-specific tuning.
+       Side/button dimensions inherit the base vars which already
+       use min(px, vw, dvh) and stay within the dvh-limited canvas. */
+    --gm-overlay-padding: clamp(10px, 3.2dvh, 20px);
+    --gm-overlay-font: clamp(0.9em, 2.4dvh, 2em);
+    --gm-score-size: clamp(20px, 6dvh, 40px);
+    --gm-score-icon-gap: clamp(6px, 2.2dvh, 20px);
+    --gm-volume-size: clamp(16px, 5.5dvh, 30px);
+    --gm-controls-gap: clamp(6px, min(2vw, 3dvh), 22px);
   }
 
   canvas,
