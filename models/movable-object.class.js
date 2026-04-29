@@ -64,11 +64,15 @@ class MovableObject extends DrawableObject {
   }
 
   moveLeft() {
+    let last = performance.now();
     this.moveLeftInterval = setInterval(() => {
+      const now = performance.now();
+      const dt = Math.min((now - last) / 1, 5);
+      last = now;
       if (this.energy != 0) {
         this.width + this.x <= 0
           ? (this.x = this.worldWidth * 5)
-          : (this.x -= this.speed / 100);
+          : (this.x -= (this.speed / 300) * dt);
       } else {
         clearInterval(this.moveLeftInterval);
       }
@@ -76,11 +80,15 @@ class MovableObject extends DrawableObject {
   }
 
   moveRight() {
+    let last = performance.now();
     this.moveRightInterval = setInterval(() => {
+      const now = performance.now();
+      const dt = Math.min((now - last) / 1, 5);
+      last = now;
       if (this.energy != 0) {
         this.width + this.x >= this.worldWidth * 5
           ? (this.x = 0)
-          : (this.x += this.speed / 100);
+          : (this.x += (this.speed / 300) * dt);
       } else {
         clearInterval(this.moveRightInterval);
       }
@@ -189,13 +197,24 @@ class MovableObject extends DrawableObject {
   }
 
   applyGravity() {
-    setInterval(() => {
+    let last = performance.now();
+    this.gravityIntervalId = setInterval(() => {
+      const now = performance.now();
+      const dt = Math.min((now - last) / (1000 / 25), 3);
+      last = now;
       if (this.isAboveGround() || this.speedY > 0) {
         if (!this.energy == 0) {
-          this.y -= this.speedY;
-          this.speedY -= this.acceleration;
+          this.y -= this.speedY * dt;
+          this.speedY -= this.acceleration * dt;
         } else {
-          this.y -= 10;
+          this.y -= 10 * dt;
+        }
+      }
+      if (!(this instanceof ThrowableObject)) {
+        const groundY = this.worldHight - this.height - 55;
+        if (this.y > groundY) {
+          this.y = groundY;
+          this.speedY = 0;
         }
       }
     }, 1000 / 25);

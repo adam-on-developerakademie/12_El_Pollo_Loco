@@ -31,13 +31,29 @@ class ThrowableObject extends MovableObject {
   }
 
   throw(otherDirection, onMove) {
+    let last = performance.now();
     let intervalId = setInterval(() => {
-      otherDirection ? (this.isDamaged ? this.x -= 1 : this.x -= 2 + onMove * 1.5) : (this.isDamaged ? this.x += 1 : this.x += 2 + onMove * 1.5);
+      const now = performance.now();
+      const dt = Math.min((now - last) / 1, 5);
+      last = now;
+      otherDirection
+        ? (this.isDamaged ? this.x -= (1 / 500) * dt : this.x -= ((2 + onMove * 1.5) / 500) * dt * 100)
+        : (this.isDamaged ? this.x += (1 / 500) * dt : this.x += ((2 + onMove * 1.5) / 500) * dt * 100);
     }, 1);
-    this.y = 120 +  this.y--; 
+    this.y = 120 + this.y--;
     this.speedY = 20;
     this.applyGravity();
     return intervalId;
+  }
+
+  isAboveGround() {
+    const groundY = this.worldHight - this.height - 55;
+    if (this.y >= groundY) {
+      this.y = groundY;
+      this.speedY = 0;
+      return false;
+    }
+    return true;
   }
 
 

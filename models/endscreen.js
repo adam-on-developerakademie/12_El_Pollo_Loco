@@ -15,7 +15,7 @@ class EndScreen extends MovableObject {
     this.width = width;
   }
 
-  zoomIn(width, height) {
+  zoomIn(width, height, onDone) {
 
     let intervalId = setInterval(() => {
       if (this.w < width && this.h < height) {
@@ -24,6 +24,7 @@ class EndScreen extends MovableObject {
         this.newPosition(0, this.w, this.h);
       } else {
         clearInterval(intervalId);
+        if (onDone) onDone();
       }
     }, 2);
   }

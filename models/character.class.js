@@ -100,11 +100,15 @@ class Character extends MovableObject {
 
   run() {
     this.buttonPressEvent();
-    setInterval(() => {
+    let last = performance.now();
+    this.runIntervalId = setInterval(() => {
+      const now = performance.now();
+      const dt = Math.min((now - last) / (1000 / 60), 3);
+      last = now;
       if (!this.world || !this.world.level) {
         return;
       }
-      this.characterMove();
+      this.characterMove(dt);
       this.playAnimations(new Date().getTime() - this.lastMoveTime, this.world.soundVolume);
       this.spawnBottle();
       this.throwBottle();
@@ -206,22 +210,22 @@ class Character extends MovableObject {
     }
   }
 
-  characterGoRight() {
+  characterGoRight(dt) {
     if (
       this.world.keyboard.RIGHT &&
       this.x < this.world.level.boss[0].x + 50 &&
       this.x < this.world.level.levelEndX
     ) {
       this.lastMoveTime = new Date().getTime();
-      this.x += this.speed;
+      this.x += this.speed * dt;
       this.otherDirection = false;
     }
   }
 
-  characterGoLeft() {
+  characterGoLeft(dt) {
     if (this.world.keyboard.LEFT && this.x > 150) {
       this.lastMoveTime = new Date().getTime();
-      this.x -= this.speed;
+      this.x -= this.speed * dt;
       this.otherDirection = true;
     }
   }
@@ -254,10 +258,16 @@ class Character extends MovableObject {
     }
   }
 
-  characterMove() {
-    this.characterGoLeft();
-    this.characterGoRight();
+  characterMove(dt) {
+    this.characterGoLeft(dt);
+    this.characterGoRight(dt);
     this.characterJump();
+
+    if (!this.isAboveGround() && this.action == "jump" && this.speedY <= 0) {
+      this.action = false;
+      this.playSound = false;
+      this.img = this.imageCache["./img/2-character-pepe/3-jump/j-31.png"];
+    }
   }
 
   killerJump(mo) {
@@ -343,12 +353,14 @@ class Character extends MovableObject {
         localStorage.setItem("highscoreBest", score);
       }
       setTimeout(() => {
-        this.world.level.endScreens[0].zoomIn(400, 200);
-        setTimeout(() => {
+        this.world.level.endScreens[0].zoomIn(400, 200, () => {
+          setTimeout(() => {
           this.world.level.endScreens[0].newPosition(-720, 0, 0);
-          this.world.level.endScreens[1].zoomIn(300, 200);
-          setTimeout(() => this.world.gameOver(), 3000);
-        }, 3000);
+            this.world.level.endScreens[1].zoomIn(300, 200, () => {
+              setTimeout(() => this.world.gameOver(), 1500);
+            });
+          }, 500);
+        });
       }, 2000);
     }
   }
@@ -363,12 +375,14 @@ class Character extends MovableObject {
         localStorage.setItem("highscoreBest", score);
       }
       setTimeout(() => {
-        this.world.level.endScreens[2].zoomIn(600, 400);
-        setTimeout(() => {
+        this.world.level.endScreens[2].zoomIn(600, 400, () => {
+          setTimeout(() => {
           this.world.level.endScreens[2].newPosition(-720, 0, 0);
-          this.world.level.endScreens[1].zoomIn(300, 200);
-          setTimeout(() => this.world.gameOver(), 3000);
-        }, 3000);
+            this.world.level.endScreens[1].zoomIn(300, 200, () => {
+              setTimeout(() => this.world.gameOver(), 1500);
+            });
+          }, 500);
+        });
       }, 2000);
     }
   }

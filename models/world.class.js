@@ -17,6 +17,8 @@ class World {
   bossBarUnlocked = false;
   killedChicks = 0;
   killedChickens = 0;
+  isRunning = true;
+  animationFrameId = null;
  
 
 
@@ -40,11 +42,12 @@ class World {
   }
 
   startIntervallIDs() {
+    this.isRunning = true;
     this.level.intervalIds["checkCollisions"] = setInterval(() => {
       this.checkCollisions();
     }, 1000 / 60);
 
-    this.level.intervalIds["draw"] = requestAnimationFrame(() => {
+    this.animationFrameId = requestAnimationFrame(() => {
       this.draw();
     });
   }
@@ -57,6 +60,10 @@ class World {
   }
 
   draw() {
+    if (!this.isRunning || !this.level) {
+      return;
+    }
+
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.translate(this.camera_x, 0);
 
@@ -83,7 +90,7 @@ class World {
     this.ctx.translate(-this.camera_x, 0);
 
     let self = this;
-    requestAnimationFrame(() => {
+    this.animationFrameId = requestAnimationFrame(() => {
       self.draw();
     });
   }
@@ -265,9 +272,55 @@ class World {
   }
 
   clearAllIntervalIds() {
-    for (let i = 0; i < 999999; i++) {
-      window.clearInterval(i);
+    this.isRunning = false;
+    if (this.animationFrameId !== null) {
+      cancelAnimationFrame(this.animationFrameId);
+      this.animationFrameId = null;
     }
+
+    this.clearObjectIntervals(this.character);
+
+    if (this.level) {
+      this.clearLevelIntervalIds();
+      this.level.enemies.forEach((enemy) => this.clearObjectIntervals(enemy));
+      this.level.boss.forEach((boss) => this.clearObjectIntervals(boss));
+      this.level.throwableObjects.forEach((obj) => this.clearObjectIntervals(obj));
+      this.level.bottles.forEach((obj) => this.clearObjectIntervals(obj));
+      this.level.lifeCoins.forEach((obj) => this.clearObjectIntervals(obj));
+      this.level.clouds.forEach((obj) => this.clearObjectIntervals(obj));
+      this.level.endScreens.forEach((obj) => this.clearObjectIntervals(obj));
+    }
+  }
+
+  clearLevelIntervalIds() {
+    if (!this.level || !this.level.intervalIds) {
+      return;
+    }
+
+    Object.values(this.level.intervalIds).forEach((entry) => {
+      if (Array.isArray(entry)) {
+        entry.forEach((id) => {
+          if (typeof id === "number") {
+            clearInterval(id);
+          }
+        });
+      } else if (typeof entry === "number") {
+        clearInterval(entry);
+      }
+    });
+  }
+
+  clearObjectIntervals(obj) {
+    if (!obj) {
+      return;
+    }
+
+    Object.keys(obj).forEach((key) => {
+      if (/interval/i.test(key) && typeof obj[key] === "number") {
+        clearInterval(obj[key]);
+        obj[key] = null;
+      }
+    });
   }
 
   gameOver() {
@@ -283,12 +336,14 @@ class World {
   }
 
   cleanupLevel() {
+    this.character.world = null;
     this.level.enemies = [];
     this.level.throwableObjects = [];
     this.level.bottles = [];
     this.level.lifeCoins = [];
     this.level.clouds = [];
     this.level.intervalIds = {};
+    this.level = null;
     world = null;
   }
 
