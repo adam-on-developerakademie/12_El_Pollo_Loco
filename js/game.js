@@ -96,27 +96,24 @@ function run() {
   }
   resetKeyboardState();
   init();
-
 }
 
 function playMenuMusic() {
   if (soundMenu) {
-  soundMenu = new Audio("./audio/menu.mp3");
-  soundMenu.play();
-  soundMenu.volume = soundVolume;
-  soundMenu.loop = true;
+    soundMenu = new Audio("./audio/menu.mp3");
+    soundMenu.play();
+    soundMenu.volume = soundVolume;
+    soundMenu.loop = true;
+  }
 }
 
+function playGameMusic() {
+  soundMenu.pause();
+  soundGame.play();
+  soundGame.volume = soundVolume;
+  soundGame.loop = true;
+  soundGame.musicOn = true;
 }
-
-  function playGameMusic() {  
-    soundMenu.pause();
-     soundGame.play();
-     soundGame.volume = soundVolume;
-     soundGame.loop = true;
-     soundGame.musicOn = true;
-    }
-  
 
 function toggleMute() {
   if (soundGame) {
@@ -151,9 +148,7 @@ function youLose() {
       world.level.endScreens[0].zoomIn(400, 200, () => {
         setTimeout(() => {
           world.level.endScreens[0].newPosition(-720, 0, 0);
-          world.level.endScreens[1].zoomIn(300, 200, () => {
-            // Keep game mode active after the endscreen animation.
-          });
+          world.level.endScreens[1].zoomIn(300, 200, () => {});
         }, 500);
       });
     }, 2000);
@@ -175,9 +170,7 @@ function youWon() {
       world.level.endScreens[2].zoomIn(600, 400, () => {
         setTimeout(() => {
           world.level.endScreens[2].newPosition(-720, 0, 0);
-          world.level.endScreens[1].zoomIn(300, 200, () => {
-            // Keep game mode active after the endscreen animation.
-          });
+          world.level.endScreens[1].zoomIn(300, 200, () => {});
         }, 500);
       });
     }, 2000);

@@ -33,8 +33,9 @@ class ThrowableObject extends MovableObject {
     this.height = 50;
     this.gravity = 2;
     this.throwing = false;
+    const speedFactor = (typeof isMobileUserAgent === "function" && isMobileUserAgent()) ? 1.6 : 1;
     // Store the interval ID so it can be cancelled on game over or on hit.
-    this.intervalId = this.throw(otherDirection, onMove);
+    this.intervalId = this.throw(otherDirection, onMove, speedFactor);
   }
 
   /**
@@ -46,7 +47,7 @@ class ThrowableObject extends MovableObject {
    * @param {number} onMove - Extra speed multiplier when character was moving.
    * @returns {number} The setInterval ID stored as this.intervalId.
    */
-  throw(otherDirection, onMove) {
+  throw(otherDirection, onMove, speedFactor = 1) {
     let last = performance.now();
     let intervalId = setInterval(() => {
       const now = performance.now();
@@ -59,8 +60,8 @@ class ThrowableObject extends MovableObject {
         return;
       }
       otherDirection
-        ? (this.x -= ((2 + onMove * 1.5) / 500) * dt * 100)
-        : (this.x += ((2 + onMove * 1.5) / 500) * dt * 100);
+        ? (this.x -= ((2 + onMove * 1.5) / 500) * dt * 100 * speedFactor)
+        : (this.x += ((2 + onMove * 1.5) / 500) * dt * 100 * speedFactor);
     }, 1);
     // Launch upward slightly and let gravity take over.
     this.y = 120 + this.y--;

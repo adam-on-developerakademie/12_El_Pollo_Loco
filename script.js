@@ -24,7 +24,7 @@ function updateGameplayButtonsVisibility() {
   });
 }
 
-function startButton(){
+function startButton() {
   document.body.classList.add("game-mode");
   document.getElementById("header").classList.add("displayNone");
   document.getElementById("gameOver").classList.add("displayNone");
@@ -35,15 +35,14 @@ function startButton(){
   document.getElementById("mobileButtons").classList.remove("displayNone");
 
   const mobileMode = isMobileUserAgent();
-  SwitschOff = !mobileMode;
+  SwitschOff = !isTouchGameplayDevice();
 
   if (mobileMode) {
     openFullscreen();
   }
 
   updateGameplayButtonsVisibility();
-
- run();
+  run();
 }
 
 function isMobileUserAgent() {
@@ -172,4 +171,4 @@ function soundVolumeQuieter() {
   if (typeof applySoundVolume === "function") {
     applySoundVolume();
   }
-} 
+}

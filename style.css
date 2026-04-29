@@ -159,10 +159,8 @@ footer {
   left: 50%;
   width: 720px;
   height: 480px;
-  /* background-color: rgba(0, 0, 0, 0.5); */
   color: white;
   font-size: 2em;
-  /* border: 5px solid white; */
   border: 5px solid transparent;
   transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
@@ -170,8 +168,6 @@ footer {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-
-
 }
 
 
@@ -235,11 +231,11 @@ footer {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 20px;
 }
 
 .center-controls .button {
-  width: 90px;
+  width: 120px;
   letter-spacing: 0.3em;
   text-indent: 0.3em;
 }
@@ -248,7 +244,6 @@ footer {
   font-family: "Zabars", sans-serif;
   background-color: rgba(0, 0, 0, 0.2);
   color: #ffcd17;
-  /* border: 2px solid black; */
   border-radius: 10px;
   width: 100px;
   height: 100%;
@@ -524,11 +519,12 @@ body.game-mode .overlay {
   }
 
   .center-controls {
-    gap: var(--gm-controls-gap);
+    gap: calc(var(--gm-controls-gap) * 2);
   }
 
   .center-controls .button {
     width: calc(var(--gm-button-width) * 0.9);
+    font-size: calc(var(--gm-button-font) * 0.7);
   }
 
   .volume {
