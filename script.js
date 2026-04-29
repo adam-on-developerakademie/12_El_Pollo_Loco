@@ -1,3 +1,22 @@
+let SwitschOff = false;
+
+function updateGameplayButtonsVisibility() {
+  const actionButtonIds = ["left", "right", "jump", "throw"];
+
+  actionButtonIds.forEach((id) => {
+    const button = document.getElementById(id);
+    if (!button) {
+      return;
+    }
+
+    if (SwitschOff) {
+      button.classList.add("displayNone");
+    } else {
+      button.classList.remove("displayNone");
+    }
+  });
+}
+
 function startButton(){
   document.body.classList.add("game-mode");
   document.getElementById("header").classList.add("displayNone");
@@ -8,11 +27,20 @@ function startButton(){
   document.getElementById("overlay").classList.remove("displayNone");
   document.getElementById("mobileButtons").classList.remove("displayNone");
 
-  if (isTouchGameplayDevice()) {
+  const mobileMode = isMobileUserAgent();
+  SwitschOff = !mobileMode;
+
+  if (mobileMode) {
     openFullscreen();
   }
 
+  updateGameplayButtonsVisibility();
+
  run();
+}
+
+function isMobileUserAgent() {
+  return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 }
 
 function isTouchGameplayDevice() {
@@ -25,6 +53,18 @@ function isTouchGameplayDevice() {
   const emulatedMobileViewport = viewportWidth <= 1024 && viewportHeight <= 1366;
 
   return hasTouchPoints || hasTouchEvent || coarsePointer || userAgentTouch || emulatedMobileViewport;
+}
+
+window.addEventListener("orientationchange", applyRotateHintMode);
+window.addEventListener("resize", applyRotateHintMode);
+
+function applyRotateHintMode() {
+  const isPortraitTouch = isTouchGameplayDevice() &&
+    window.matchMedia("(orientation: portrait)").matches;
+  if (isPortraitTouch) {
+    SwitschOff = false;
+    updateGameplayButtonsVisibility();
+  }
 }
 
 function overlayOff() {
