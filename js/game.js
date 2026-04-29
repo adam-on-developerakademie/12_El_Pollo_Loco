@@ -17,14 +17,7 @@ function setAudioVolume(target) {
   });
 }
 
-function applySoundVolume() {
-  soundGame.volume = soundVolume;
-  soundMenu.volume = soundVolume;
-
-  if (!world) {
-    return;
-  }
-
+function applyWorldAudioVolume() {
   world.soundVolume = soundVolume;
   setAudioVolume(world);
   setAudioVolume(world.character);
@@ -32,18 +25,28 @@ function applySoundVolume() {
   world.level.throwableObjects.forEach((object) => setAudioVolume(object));
 }
 
-function init() {
-  playGameMusic()
-  loadLevel()
-  canvas = document.getElementById("canvas");
-  world = new World(canvas, soundVolume);
-  applySoundVolume();
+function applySoundVolume() {
+  soundGame.volume = soundVolume;
+  soundMenu.volume = soundVolume;
+  if (world) applyWorldAudioVolume();
+}
+
+function updateEnemyHUD() {
   document.getElementById("chickens").innerHTML = world.level.enemies.filter(
     (e) => e instanceof Chicken
   ).length;
   document.getElementById("chicks").innerHTML = world.level.enemies.filter(
     (e) => e instanceof Chick
   ).length;
+}
+
+function init() {
+  playGameMusic();
+  loadLevel();
+  canvas = document.getElementById("canvas");
+  world = new World(canvas, soundVolume);
+  applySoundVolume();
+  updateEnemyHUD();
 }
 
 function resetKeyboardState() {
@@ -54,40 +57,22 @@ function resetKeyboardState() {
   keyboard.RIGHT = false;
 }
 
-window.addEventListener("keydown", (e) => {
-  if (!world || !world.isRunning) {
-    return;
-  }
+function setKeyState(code, isDown) {
+  if (code === "Space") keyboard.SPACE = isDown;
+  else if (code === "ArrowUp") keyboard.UP = isDown;
+  else if (code === "ArrowDown") keyboard.DOWN = isDown;
+  else if (code === "ArrowLeft") keyboard.LEFT = isDown;
+  else if (code === "ArrowRight") keyboard.RIGHT = isDown;
+}
 
-  e.code == "Space" && keyboard.SPACE == false ? (keyboard.SPACE = true) : null;
-  e.code == "ArrowUp" && keyboard.UP == false ? (keyboard.UP = true) : null;
-  e.code == "ArrowDown" && keyboard.DOWN == false
-    ? (keyboard.DOWN = true)
-    : null;
-  e.code == "ArrowLeft" && keyboard.LEFT == false
-    ? (keyboard.LEFT = true)
-    : null;
-  e.code == "ArrowRight" && keyboard.RIGHT == false
-    ? (keyboard.RIGHT = true)
-    : null;
+window.addEventListener("keydown", (e) => {
+  if (!world || !world.isRunning) return;
+  setKeyState(e.code, true);
 });
 
 window.addEventListener("keyup", (e) => {
-  if (!world || !world.isRunning) {
-    return;
-  }
-
-  e.code == "Space" && keyboard.SPACE == true ? (keyboard.SPACE = false) : null;
-  e.code == "ArrowUp" && keyboard.UP == true ? (keyboard.UP = false) : null;
-  e.code == "ArrowDown" && keyboard.DOWN == true
-    ? (keyboard.DOWN = false)
-    : null;
-  e.code == "ArrowLeft" && keyboard.LEFT == true
-    ? (keyboard.LEFT = false)
-    : null;
-  e.code == "ArrowRight" && keyboard.RIGHT == true
-    ? (keyboard.RIGHT = false)
-    : null;
+  if (!world || !world.isRunning) return;
+  setKeyState(e.code, false);
 });
 
 function run() {
@@ -133,17 +118,18 @@ function stopGameMusic() {
   }
 }
 
+function saveScore(score) {
+  localStorage.setItem("highscoreLast", score);
+  const best = parseInt(localStorage.getItem("highscoreBest") || 0);
+  if (score > best) localStorage.setItem("highscoreBest", score);
+}
+
 function youLose() {
   const ch = world && world.character;
   if (!ch) return;
   if (ch.isCharacterDead() && !world.level.boss[0].isDead() && !ch.gameEnded) {
     ch.gameEnded = true;
-    const score = world.killedChickens + world.killedChicks * 2;
-    localStorage.setItem("highscoreLast", score);
-    const best = parseInt(localStorage.getItem("highscoreBest") || 0);
-    if (score > best) {
-      localStorage.setItem("highscoreBest", score);
-    }
+    saveScore(world.killedChickens + world.killedChicks * 2);
     setTimeout(() => {
       world.level.endScreens[0].zoomIn(400, 200, () => {
         setTimeout(() => {
@@ -160,12 +146,7 @@ function youWon() {
   if (!ch) return;
   if (world.level.boss[0].isDead() && !ch.isCharacterDead() && !ch.gameEnded) {
     ch.gameEnded = true;
-    const score = world.killedChickens + world.killedChicks * 2 + 10;
-    localStorage.setItem("highscoreLast", score);
-    const best = parseInt(localStorage.getItem("highscoreBest") || 0);
-    if (score > best) {
-      localStorage.setItem("highscoreBest", score);
-    }
+    saveScore(world.killedChickens + world.killedChicks * 2 + 10);
     setTimeout(() => {
       world.level.endScreens[2].zoomIn(600, 400, () => {
         setTimeout(() => {

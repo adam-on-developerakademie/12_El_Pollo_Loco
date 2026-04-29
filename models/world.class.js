@@ -104,11 +104,20 @@ class World {
     if (!this.isRunning || !this.level) {
       return;
     }
-
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.translate(this.camera_x, 0);
+    this.drawWorldObjects();
+    this.ctx.translate(-this.camera_x, 0);
+    this.drawHUD();
+    this.ctx.translate(this.camera_x, 0);
+    this.ctx.translate(-this.camera_x, 0);
+    let self = this;
+    this.animationFrameId = requestAnimationFrame(() => {
+      self.draw();
+    });
+  }
 
-    // World-space objects (affected by camera scroll).
+  drawWorldObjects() {
     this.addObjectsToMap(this.level.backgroundObjects);
     this.addObjectsToMap(this.level.bottles);
     this.addObjectsToMap(this.level.clouds);
@@ -117,9 +126,9 @@ class World {
     this.addObjectsToMap(this.level.lifeCoins);
     this.addObjectsToMap(this.level.throwableObjects);
     this.addToMap(this.character);
+  }
 
-    // HUD overlay (fixed position, no camera offset).
-    this.ctx.translate(-this.camera_x, 0);
+  drawHUD() {
     this.addToMap(this.coinsBar);
     this.addToMap(this.healthBar);
     this.addToMap(this.bottlesBar);
@@ -127,13 +136,6 @@ class World {
       this.addToMap(this.bossBar);
     }
     this.addObjectsToMap(this.level.endScreens);
-    this.ctx.translate(this.camera_x, 0);
-    this.ctx.translate(-this.camera_x, 0);
-
-    let self = this;
-    this.animationFrameId = requestAnimationFrame(() => {
-      self.draw();
-    });
   }
 
   /**
@@ -185,8 +187,17 @@ class World {
    */
   checkCollisions() {
     this.checkCollisionsBottleAndEnemies();
+    this.checkCharacterVsEnemies();
+    this.checkCharacterVsBoss();
+    this.checkCharacterVsCoins();
+    this.checkCharacterVsGroundBottles();
+    this.checkBottleVsBoss();
+    this.bossBar.setPercentage(this.level.boss[0].energy);
+    this.cleanDeathEnemies();
+    this.cleanGroundBottles();
+  }
 
-    // Character stomps or gets hurt by normal enemies.
+  checkCharacterVsEnemies() {
     this.level.enemies.forEach((enemy) => {
       this.character.killerJump(enemy);
       if (this.character.isColliding(enemy) && !this.level.boss[0].isDead()) {
@@ -194,64 +205,43 @@ class World {
         this.healthBar.setPercentage(this.character.energy);
       }
     });
+  }
 
-    // Character takes damage from the boss.
+  checkCharacterVsBoss() {
     if (this.character.isColliding(this.level.boss[0]) && !this.level.boss[0].isDead()) {
       this.character.hit(0.7);
       this.healthBar.setPercentage(this.character.energy);
     }
+  }
 
-    // Character collects life coins.
+  checkCharacterVsCoins() {
     this.level.lifeCoins.forEach((lifeCoins) => {
-      if (
-        this.character.isColliding(lifeCoins) &&
-        !this.character.isCharacterDead()
-      ) {
-        this.character.takeLifeCoin(
-          this.level.lifeCoins,
-          this.level.lifeCoins.indexOf(lifeCoins)
-        );
+      if (this.character.isColliding(lifeCoins) && !this.character.isCharacterDead()) {
+        this.character.takeLifeCoin(this.level.lifeCoins, this.level.lifeCoins.indexOf(lifeCoins));
         this.coinsBar.setPercentage(this.character.coinsNumber);
       }
     });
+  }
 
-    // Character picks up salsa bottles from the ground.
+  checkCharacterVsGroundBottles() {
     this.level.bottles.forEach((bottle) => {
       if (this.character.isColliding(bottle)) {
-        this.character.takeBottle(
-          this.level.bottles,
-          this.level.bottles.indexOf(bottle),
-          this.soundVolume
-        );
+        this.character.takeBottle(this.level.bottles, this.level.bottles.indexOf(bottle), this.soundVolume);
         this.bottlesBar.setPercentage(this.character.bottlesNumber);
       }
     });
+  }
 
-    // Thrown bottles damage the boss and spawn chicks on hit.
+  checkBottleVsBoss() {
     this.level.throwableObjects.forEach((throwableBottle) => {
-      if (
-        this.level.boss[0].isColliding(throwableBottle) &&
-        !throwableBottle.isDamaged
-      ) {
+      if (this.level.boss[0].isColliding(throwableBottle) && !throwableBottle.isDamaged) {
         throwableBottle.isDamaged = true;
         this.soundHen ? this.soundHen.play() : null;
         this.soundHen ? (this.soundHen.volume = this.soundVolume) : null;
-        this.level.boss[0].energy -= 15;
-        if (this.level.boss[0].energy < 0) {
-          this.level.boss[0].energy = 0;
-        }
+        this.level.boss[0].energy = Math.max(0, this.level.boss[0].energy - 15);
         this.bossBar.setPercentage(this.level.boss[0].energy);
         this.level.boss[0].waitForAttack = false;
-        // Each boss hit spawns 5 new chicks.
-        for (let i = 0; i < 5; i++) {
-          let chick = new Chick(throwableBottle.x);
-          chick.isSpawned = true;
-          this.level.enemies.push(chick);
-        }
-        document.getElementById("chicks").innerHTML = this.level.enemies.filter(
-          (e) => e instanceof Chick
-        ).length;
-        // Remove the bottle after the splash animation finishes (2 s).
+        this.spawnChicksOnBossHit(throwableBottle.x);
         setTimeout(() => {
           this.level.boss[0].bottlesDamage(
             this.level.throwableObjects,
@@ -260,10 +250,17 @@ class World {
         }, 2000);
       }
     });
+  }
 
-    this.bossBar.setPercentage(this.level.boss[0].energy);
-    this.cleanDeathEnemies();
-    this.cleanGroundBottles();
+  spawnChicksOnBossHit(spawnX) {
+    for (let i = 0; i < 5; i++) {
+      let chick = new Chick(spawnX);
+      chick.isSpawned = true;
+      this.level.enemies.push(chick);
+    }
+    document.getElementById("chicks").innerHTML = this.level.enemies.filter(
+      (e) => e instanceof Chick
+    ).length;
   }
 
   /**

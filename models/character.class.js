@@ -126,13 +126,17 @@ class Character extends MovableObject {
       this.spawnBottle();
       this.throwBottle();
       this.bottleReloaded();
-      // Follow the character with the camera, clamped to level boundaries.
-      this.world.camera_x = -this.x + 150;
-      const canvasWidth = 720;
-      const levelWidth = this.world.level.levelEndX[0];
-      this.world.camera_x = Math.round(Math.min(0, Math.max(-(levelWidth - canvasWidth), this.world.camera_x)));
+      this.updateCamera();
       if (typeof youLose === "function") youLose();
-      if (typeof youWon === "function") youWon();    }, 1000 / 60);
+      if (typeof youWon === "function") youWon();
+    }, 1000 / 60);
+  }
+
+  updateCamera() {
+    const canvasWidth = 720;
+    const levelWidth = this.world.level.levelEndX[0];
+    this.world.camera_x = -this.x + 150;
+    this.world.camera_x = Math.round(Math.min(0, Math.max(-(levelWidth - canvasWidth), this.world.camera_x)));
   }
 
   /**
@@ -368,42 +372,29 @@ class Character extends MovableObject {
    * @param {string} buttonId - ID of the DOM element to bind.
    * @param {string} key - Keyboard state key to set (e.g. "LEFT", "SPACE").
    */
+  createKeyHandler(key, value) {
+    return (event) => {
+      if (event.cancelable) event.preventDefault();
+      if (!this.world || !this.world.keyboard) return;
+      this.world.keyboard[key] = value;
+    };
+  }
+
   bindControlButton(buttonId, key) {
-    let button = document.getElementById(buttonId);
-    if (!button) {
-      return;
-    }
-
-    let pressButton = (event) => {
-      if (event.cancelable) {
-        event.preventDefault();
-      }
-      if (!this.world || !this.world.keyboard) {
-        return;
-      }
-      this.world.keyboard[key] = true;
-    };
-
-    let releaseButton = (event) => {
-      if (event.cancelable) {
-        event.preventDefault();
-      }
-      if (!this.world || !this.world.keyboard) {
-        return;
-      }
-      this.world.keyboard[key] = false;
-    };
-
-    button.ontouchstart    = pressButton;
-    button.ontouchend      = releaseButton;
-    button.ontouchcancel   = releaseButton;
-    button.onpointerdown   = pressButton;
-    button.onpointerup     = releaseButton;
-    button.onpointercancel = releaseButton;
-    button.onpointerleave  = releaseButton;
-    button.onmousedown     = pressButton;
-    button.onmouseup       = releaseButton;
-    button.onmouseleave    = releaseButton;
+    const button = document.getElementById(buttonId);
+    if (!button) return;
+    const press   = this.createKeyHandler(key, true);
+    const release = this.createKeyHandler(key, false);
+    button.ontouchstart    = press;
+    button.ontouchend      = release;
+    button.ontouchcancel   = release;
+    button.onpointerdown   = press;
+    button.onpointerup     = release;
+    button.onpointercancel = release;
+    button.onpointerleave  = release;
+    button.onmousedown     = press;
+    button.onmouseup       = release;
+    button.onmouseleave    = release;
   }
 
   /**
