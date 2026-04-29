@@ -7,6 +7,9 @@ function startButton(){
   document.getElementById("canvas").classList.remove("displayNone");
   document.getElementById("overlay").classList.remove("displayNone");
 
+  if (/Mobi|Android|iPhone|iPad|iPod|Touch/i.test(navigator.userAgent)) {
+    openFullscreen();
+  }
 
  run();
 }

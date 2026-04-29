@@ -1,4 +1,6 @@
+﻿/** Player-controlled character. Handles input, movement, animations, and game-end conditions. */
 class Character extends MovableObject {
+  // --- Animation frame arrays ---
   IMAGES_WALKING = [
     "./img/2-character-pepe/2-walk/w-21.png",
     "./img/2-character-pepe/2-walk/w-22.png",
@@ -9,9 +11,6 @@ class Character extends MovableObject {
     "./img/2-character-pepe/2-walk/w-21.png",
   ];
   IMAGES_JUMPING = [
-    //"./img/2-character-pepe/3-jump/j-31.png",
-    //"./img/2-character-pepe/3-jump/j-32.png",
-    //"./img/2-character-pepe/3-jump/j-33.png",
     "./img/2-character-pepe/3-jump/j-34.png",
     "./img/2-character-pepe/3-jump/j-35.png",
     "./img/2-character-pepe/3-jump/j-36.png",
@@ -19,7 +18,6 @@ class Character extends MovableObject {
     "./img/2-character-pepe/3-jump/j-38.png",
     "./img/2-character-pepe/3-jump/j-39.png",
     "./img/2-character-pepe/3-jump/j-32.png",
-    //"./img/2-character-pepe/3-jump/j-31.png",
   ];
   IMAGES_DEAD = [
     "./img/2-character-pepe/5-dead/d-51.png",
@@ -35,9 +33,9 @@ class Character extends MovableObject {
     "img/2-character-pepe/4-hurt/h-42.png",
     "img/2-character-pepe/4-hurt/h-43.png",
   ];
-  IMAGE_STAY = ["./img/2-character-pepe/3-jump/j-31.png"];
-  IMAGE_LOST = ["./img/You-won-you-lost/you-lost.png"];
-  IMAGE_IDLE = [
+  IMAGE_STAY   = ["./img/2-character-pepe/3-jump/j-31.png"];
+  IMAGE_LOST   = ["./img/You-won-you-lost/you-lost.png"];
+  IMAGE_IDLE   = [
     "./img/2-character-pepe/1-idle/idle/i-1.png",
     "./img/2-character-pepe/1-idle/idle/i-2.png",
     "./img/2-character-pepe/1-idle/idle/i-3.png",
@@ -49,8 +47,7 @@ class Character extends MovableObject {
     "./img/2-character-pepe/1-idle/idle/i-9.png",
     "./img/2-character-pepe/1-idle/idle/i-10.png",
   ];
-
-  IMAGE_SLEEP = [
+  IMAGE_SLEEP  = [
     "./img/2-character-pepe/1-idle/long-idle/i-11.png",
     "./img/2-character-pepe/1-idle/long-idle/i-12.png",
     "./img/2-character-pepe/1-idle/long-idle/i-13.png",
@@ -63,24 +60,32 @@ class Character extends MovableObject {
     "./img/2-character-pepe/1-idle/long-idle/i-20.png",
   ];
 
-
-  soundWalk = new Audio("./audio/walk.wav");
-  soundJump = new Audio("./audio/jump.wav");
-  soundThrow = new Audio("./audio/throw.wav");
-  soundHurt = new Audio("./audio/hurt.wav");
-  soundDead = new Audio("./audio/dead.wav");
-  soundCoin = new Audio("./audio/coin.wav");
+  // --- Sound effects ---
+  soundWalk   = new Audio("./audio/walk.wav");
+  soundJump   = new Audio("./audio/jump.wav");
+  soundThrow  = new Audio("./audio/throw.wav");
+  soundHurt   = new Audio("./audio/hurt.wav");
+  soundDead   = new Audio("./audio/dead.wav");
+  soundCoin   = new Audio("./audio/coin.wav");
   soundBottle = new Audio("./audio/bottle.ogg");
-  soundChick= new Audio("./audio/chick.wav");
-  soundHen= new Audio("./audio/hen.wav");
+  soundChick  = new Audio("./audio/chick.wav");
+  soundHen    = new Audio("./audio/hen.wav");
 
+  /** Reference to the World instance, set by World.setWorld(). */
   world;
+  /** Initial vertical position (higher y = lower on screen; canvas origin is top-left). */
   y = 50;
+  /** Horizontal movement speed in pixels per delta-time unit. */
   speed = 3.6;
+  /** True while SPACE is held and a throw has already been fired this press. */
   isThrowing = false;
+  /** Unix timestamp when the game session started. */
   startGameTime = new Date().getTime();
-  alive=true;
+  /** True until the character plays the death animation once. */
+  alive = true;
+  /** Prevents youLose / youWon from triggering more than once. */
   gameEnded = false;
+  /** True when the character was hit while airborne; cleared on landing. */
   hurtInAir = false;
 
   constructor() {
@@ -98,6 +103,11 @@ class Character extends MovableObject {
     this.lastMoveTime = new Date().getTime();
   }
 
+  /**
+   * Starts the main character update loop at 60 Hz.
+   * Each tick: reads input, moves, plays animations, handles throwing,
+   * updates the camera position, and checks win/lose conditions.
+   */
   run() {
     this.buttonPressEvent();
     let last = performance.now();
@@ -113,12 +123,21 @@ class Character extends MovableObject {
       this.spawnBottle();
       this.throwBottle();
       this.bottleReloaded();
+      // Follow the character with the camera, clamped to level boundaries.
       this.world.camera_x = -this.x + 150;
+      const canvasWidth = 720;
+      const levelWidth = this.world.level.levelEndX[0];
+      this.world.camera_x = Math.round(Math.min(0, Math.max(-(levelWidth - canvasWidth), this.world.camera_x)));
       this.youLose();
       this.youWon();
     }, 1000 / 60);
   }
 
+  /**
+   * Chooses and plays the correct animation based on the current game state.
+   * Priority: dead > hurt/air-hurt > waiting (idle/sleep) > ready (walk/jump).
+   * @param {number} waitingTime - Milliseconds since last movement.
+   */
   playAnimations(waitingTime) {
     if (this.isCharacterDead() && !this.world.level.boss[0].isDead()) {
       this.action = "dead";
@@ -132,9 +151,16 @@ class Character extends MovableObject {
       this.playAnimation(this.IMAGES_HURT, this.soundHurt, this.world.soundVolume);
     } else if (waitingTime > 1000) {
       this.playWaitingAnimation(waitingTime);
-    } else this.playReadyAnimation();
+    } else {
+      this.playReadyAnimation();
+    }
   }
 
+  /**
+   * Plays the idle or sleep animation depending on how long the character has been still.
+   * Jump animations take priority and suppress idle/sleep.
+   * @param {number} waitingTime - Milliseconds since last movement.
+   */
   playWaitingAnimation(waitingTime) {
     if (waitingTime < 2500 && this.action != "jump") {
       this.playSequenceAnimation(this.IMAGE_IDLE, 2, this.world.soundVolume);
@@ -143,31 +169,45 @@ class Character extends MovableObject {
     }
   }
 
+  /**
+   * Plays the appropriate animation when the character is active (not waiting).
+   * Shows the jump sequence, walk cycle, or a static pose as needed.
+   */
   playReadyAnimation() {
     if (this.action == "jump") {
       this.playAnimationJump(this.IMAGES_JUMPING, this.soundJump, this.world.soundVolume);
     } else if ((this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && !this.isAboveGround()) {
+      // Walk animation plays slightly slower than 60 Hz for a natural look.
       this.playAnimationSlower(this.IMAGES_WALKING, this.soundWalk, 2.6, this.world.soundVolume);
     } else if (this.isAboveGround()) {
+      // Airborne without a formal jump action — show peak-jump pose.
       this.img = this.imageCache["./img/2-character-pepe/3-jump/j-39.png"];
     } else {
+      // Standing still on the ground.
       this.img = this.imageCache["./img/2-character-pepe/3-jump/j-31.png"];
     }
   }
 
+  /**
+   * Returns true while the character is airborne after being hit.
+   * Automatically clears the hurtInAir flag once the character lands.
+   * @returns {boolean}
+   */
   isAirHurtActive() {
     if (!this.hurtInAir) {
       return false;
     }
-
     if (!this.isAboveGround()) {
       this.hurtInAir = false;
       return false;
     }
-
     return true;
   }
 
+  /**
+   * Creates and launches a new ThrowableObject if the character has bottles
+   * and SPACE is pressed for the first time this press cycle.
+   */
   throwBottle() {
     if (this.isReadyToThrow()) {
       this.isThrowing = true;
@@ -178,16 +218,17 @@ class Character extends MovableObject {
         this.world.keyboard.RIGHT || this.world.keyboard.LEFT ? 1 : 0
       );
       this.world.level.throwableObjects.push(throwableBottle);
-      this.world.pushIntervallIDs(
-        "throwableObjects",
-        throwableBottle.intervalId
-      );
-      this.soundThrow ? (this.soundThrow.play(),this.soundThrow.volume = this.world.soundVolume) : null;
+      this.world.pushIntervallIDs("throwableObjects", throwableBottle.intervalId);
+      this.soundThrow ? (this.soundThrow.play(), this.soundThrow.volume = this.world.soundVolume) : null;
       this.world.character.bottlesNumber--;
       this.world.bottlesBar.setPercentage(this.world.character.bottlesNumber);
     }
   }
 
+  /**
+   * Returns true when the character can throw: has a bottle and SPACE was just pressed.
+   * @returns {boolean}
+   */
   isReadyToThrow() {
     if (this.world.character.bottlesNumber > 0) {
       if (this.world.keyboard.SPACE && !this.isThrowing) {
@@ -197,12 +238,17 @@ class Character extends MovableObject {
     return false;
   }
 
+  /** Resets isThrowing once SPACE is released, allowing the next throw. */
   bottleReloaded() {
     if (!this.world.keyboard.SPACE) {
       this.isThrowing = false;
     }
   }
 
+  /**
+   * Randomly spawns a salsa bottle near the character''s position.
+   * Capped at 50 bottles in the level at any time.
+   */
   spawnBottle() {
     if (Math.random() > 0.995 && this.world.level.bottles.length < 50) {
       let bottle = new Bottle(this.x);
@@ -210,6 +256,11 @@ class Character extends MovableObject {
     }
   }
 
+  /**
+   * Moves the character to the right while within level and boss boundaries.
+   * Updates lastMoveTime so idle/sleep timers reset.
+   * @param {number} dt - Delta-time multiplier for device-independent speed.
+   */
   characterGoRight(dt) {
     if (
       this.world.keyboard.RIGHT &&
@@ -222,6 +273,10 @@ class Character extends MovableObject {
     }
   }
 
+  /**
+   * Moves the character to the left, stopping at x = 150 (left boundary).
+   * @param {number} dt - Delta-time multiplier for device-independent speed.
+   */
   characterGoLeft(dt) {
     if (this.world.keyboard.LEFT && this.x > 150) {
       this.lastMoveTime = new Date().getTime();
@@ -230,6 +285,10 @@ class Character extends MovableObject {
     }
   }
 
+  /**
+   * Initiates a jump when UP is pressed and the character is on the ground.
+   * Prevents double-jumping via the isAboveGround() guard.
+   */
   characterJump() {
     if (this.world.keyboard.UP && !this.isAboveGround()) {
       this.world.keyboard.UP = false;
@@ -246,23 +305,29 @@ class Character extends MovableObject {
     }
   }
 
+  /**
+   * Overrides MovableObject.hit to additionally set hurtInAir when hit while airborne.
+   * @param {number} x - Damage amount.
+   */
   hit(x) {
     let energyBeforeHit = this.energy;
     let lastHitBeforeHit = this.lastHit;
-
     super.hit(x);
-
     let tookDamage = this.energy < energyBeforeHit || this.lastHit !== lastHitBeforeHit;
     if (tookDamage && this.isAboveGround()) {
       this.hurtInAir = true;
     }
   }
 
+  /**
+   * Processes all movement inputs for one tick and clears the jump pose on landing.
+   * @param {number} dt - Delta-time multiplier for device-independent speed.
+   */
   characterMove(dt) {
     this.characterGoLeft(dt);
     this.characterGoRight(dt);
     this.characterJump();
-
+    // Clear jump pose when the character lands (speedY <= 0 while on ground).
     if (!this.isAboveGround() && this.action == "jump" && this.speedY <= 0) {
       this.action = false;
       this.playSound = false;
@@ -270,6 +335,12 @@ class Character extends MovableObject {
     }
   }
 
+  /**
+   * Kills an enemy when the character lands on top of it (stomp mechanic).
+   * Only triggers when falling (speedY < 0) while airborne.
+   * @param {MovableObject} mo - The enemy to test against.
+   * @returns {boolean} True if the enemy was stomped this tick.
+   */
   killerJump(mo) {
     let checkThis =
       this.isColliding(mo) && this.speedY < 0 && this.isAboveGround() == true;
@@ -281,6 +352,7 @@ class Character extends MovableObject {
     return checkThis;
   }
 
+  /** Binds all four on-screen control buttons to keyboard state keys. */
   buttonPressEvent() {
     this.bindControlButton("left", "LEFT");
     this.bindControlButton("right", "RIGHT");
@@ -288,9 +360,14 @@ class Character extends MovableObject {
     this.bindControlButton("throw", "SPACE");
   }
 
+  /**
+   * Attaches press/release handlers to a DOM button so it mirrors a keyboard key.
+   * Handles touch, pointer, and mouse events for broad device compatibility.
+   * @param {string} buttonId - ID of the DOM element to bind.
+   * @param {string} key - Keyboard state key to set (e.g. "LEFT", "SPACE").
+   */
   bindControlButton(buttonId, key) {
     let button = document.getElementById(buttonId);
-
     if (!button) {
       return;
     }
@@ -315,21 +392,27 @@ class Character extends MovableObject {
       this.world.keyboard[key] = false;
     };
 
-    button.ontouchstart = pressButton;
-    button.ontouchend = releaseButton;
-    button.ontouchcancel = releaseButton;
-    button.onpointerdown = pressButton;
-    button.onpointerup = releaseButton;
+    button.ontouchstart    = pressButton;
+    button.ontouchend      = releaseButton;
+    button.ontouchcancel   = releaseButton;
+    button.onpointerdown   = pressButton;
+    button.onpointerup     = releaseButton;
     button.onpointercancel = releaseButton;
-    button.onpointerleave = releaseButton;
-    button.onmousedown = pressButton;
-    button.onmouseup = releaseButton;
-    button.onmouseleave = releaseButton;
+    button.onpointerleave  = releaseButton;
+    button.onmousedown     = pressButton;
+    button.onmouseup       = releaseButton;
+    button.onmouseleave    = releaseButton;
   }
 
+  /**
+   * Returns true when the character is dead and has no coins left to spend.
+   * If coins remain, spends 25 coins to revive instead of dying.
+   * @returns {boolean}
+   */
   isCharacterDead() {
     if (this.isDead()) {
       if (this.coinsNumber !== 0) {
+        // Spend a coin life to revive.
         this.coinsNumber -= 25;
         this.world.coinsBar.setPercentage(this.coinsNumber);
         this.energy = 100;
@@ -343,6 +426,11 @@ class Character extends MovableObject {
     }
   }
 
+  /**
+   * Triggers the lose end-screen sequence when the character dies before the boss.
+   * Saves the session score to localStorage and starts the zoom-in animation chain.
+   * Guarded by gameEnded to prevent double-triggering.
+   */
   youLose() {
     if (this.isCharacterDead() && !this.world.level.boss[0].isDead() && !this.gameEnded) {
       this.gameEnded = true;
@@ -355,7 +443,7 @@ class Character extends MovableObject {
       setTimeout(() => {
         this.world.level.endScreens[0].zoomIn(400, 200, () => {
           setTimeout(() => {
-          this.world.level.endScreens[0].newPosition(-720, 0, 0);
+            this.world.level.endScreens[0].newPosition(-720, 0, 0);
             this.world.level.endScreens[1].zoomIn(300, 200, () => {
               setTimeout(() => this.world.gameOver(), 1500);
             });
@@ -365,6 +453,11 @@ class Character extends MovableObject {
     }
   }
 
+  /**
+   * Triggers the win end-screen sequence when the boss is defeated.
+   * Awards a 10-point bonus on top of the enemy kill score.
+   * Guarded by gameEnded to prevent double-triggering.
+   */
   youWon() {
     if (this.world.level.boss[0].isDead() && !this.isCharacterDead() && !this.gameEnded) {
       this.gameEnded = true;
@@ -377,7 +470,7 @@ class Character extends MovableObject {
       setTimeout(() => {
         this.world.level.endScreens[2].zoomIn(600, 400, () => {
           setTimeout(() => {
-          this.world.level.endScreens[2].newPosition(-720, 0, 0);
+            this.world.level.endScreens[2].newPosition(-720, 0, 0);
             this.world.level.endScreens[1].zoomIn(300, 200, () => {
               setTimeout(() => this.world.gameOver(), 1500);
             });
