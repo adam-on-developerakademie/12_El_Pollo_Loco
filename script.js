@@ -138,6 +138,10 @@ function creditsButton() {
   document.getElementById("creditsModal").classList.remove("displayNone");
 }
 
+function impressumButton() {
+  document.getElementById("impressumModal").classList.remove("displayNone");
+}
+
 function closeModal(id) {
   document.getElementById(id).classList.add("displayNone");
 }
