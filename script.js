@@ -1,5 +1,12 @@
 let SwitschOff = false;
 
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("soundVolume").innerHTML = Math.round(soundVolume * 10);
+  if (typeof applySoundVolume === "function") {
+    applySoundVolume();
+  }
+});
+
 function updateGameplayButtonsVisibility() {
   const actionButtonIds = ["left", "right", "jump", "throw"];
 
@@ -144,6 +151,8 @@ function resetHighscore() {
 
 function soundVolumeLouder() {
   soundVolume = Math.min(soundVolume + 0.1, 1);
+  soundVolume = parseFloat(soundVolume.toFixed(1));
+  localStorage.setItem("soundVolume", soundVolume);
   document.getElementById("soundVolume").innerHTML = Math.round(soundVolume * 10);
   if (typeof applySoundVolume === "function") {
     applySoundVolume();
@@ -152,6 +161,8 @@ function soundVolumeLouder() {
 
 function soundVolumeQuieter() {
   soundVolume = Math.max(soundVolume - 0.1, 0);
+  soundVolume = parseFloat(soundVolume.toFixed(1));
+  localStorage.setItem("soundVolume", soundVolume);
   document.getElementById("soundVolume").innerHTML = Math.round(soundVolume * 10);
   if (typeof applySoundVolume === "function") {
     applySoundVolume();

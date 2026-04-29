@@ -3,7 +3,7 @@ let world;
 let keyboard = new Keyboard();
 let soundGame = new Audio("./audio/game.wav");
 let soundMenu = new Audio("./audio/menu.mp3");
-let soundVolume = 0.1;
+let soundVolume = parseFloat(localStorage.getItem("soundVolume") ?? "1");
 
 function setAudioVolume(target) {
   if (!target) {

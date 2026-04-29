@@ -345,6 +345,11 @@ body.game-mode .overlay {
     margin-right: var(--gm-score-icon-gap);
   }
 
+  body.game-mode .sound-controls #soundVolume {
+    font-size: var(--gm-score-size);
+    line-height: 1;
+  }
+
   body.game-mode .controls-row .volume {
     margin-right: 0;
   }
