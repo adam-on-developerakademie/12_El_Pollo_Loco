@@ -171,9 +171,17 @@ class World {
    * @param {number} bossX - Horizontal position of the boss (spawn location).
    */
   spawnInitialChicks(bossX) {
-    for (let i = 0; i < 5; i++) {
-      this.level.enemies.push(new Chick(bossX));
+    this.spawnChicks(5, bossX);
+    this.updateChickCountHUD();
+  }
+
+  spawnChicks(count, spawnX) {
+    for (let i = 0; i < count; i++) {
+      this.level.enemies.push(new Chick(spawnX));
     }
+  }
+
+  updateChickCountHUD() {
     document.getElementById("chicks").innerHTML = this.level.enemies.filter(
       (e) => e instanceof Chick
     ).length;
@@ -253,14 +261,8 @@ class World {
   }
 
   spawnChicksOnBossHit(spawnX) {
-    for (let i = 0; i < 5; i++) {
-      let chick = new Chick(spawnX);
-      chick.isSpawned = true;
-      this.level.enemies.push(chick);
-    }
-    document.getElementById("chicks").innerHTML = this.level.enemies.filter(
-      (e) => e instanceof Chick
-    ).length;
+    this.spawnChicks(5, spawnX);
+    this.updateChickCountHUD();
   }
 
   /**
@@ -274,18 +276,29 @@ class World {
       this.level.throwableObjects.forEach((throwableBottle) => {
         if (enemy.isColliding(throwableBottle) && !throwableBottle.isDamaged) {
           throwableBottle.isDamaged = true;
-          enemy.energy = 0;
-          enemy.dethTime = now;
-          this.soundChick ? this.soundChick.play() : null;
-          this.soundChick ? (this.soundChick.volume = this.soundVolume) : null;
-          // Delay removal so the splash animation can finish.
-          setTimeout(() => {
-            const idx = this.level.throwableObjects.indexOf(throwableBottle);
-            if (idx !== -1) this.level.throwableObjects.splice(idx, 1);
-          }, 2000);
+          this.killEnemyByBottle(enemy, now);
+          this.scheduleBottleRemoval(throwableBottle);
         }
       });
     });
+  }
+
+  killEnemyByBottle(enemy, timestamp) {
+    enemy.energy = 0;
+    enemy.dethTime = timestamp;
+    this.playSoundBottleHit();
+  }
+
+  playSoundBottleHit() {
+    this.soundChick ? this.soundChick.play() : null;
+    this.soundChick ? (this.soundChick.volume = this.soundVolume) : null;
+  }
+
+  scheduleBottleRemoval(throwableBottle) {
+    setTimeout(() => {
+      const idx = this.level.throwableObjects.indexOf(throwableBottle);
+      if (idx !== -1) this.level.throwableObjects.splice(idx, 1);
+    }, 2000);
   }
 
   /**
@@ -331,37 +344,37 @@ class World {
   /**
    * Removes enemies whose death animation has played for at least 1 second.
    * Uses a snapshot (filter) to avoid mutating the array during iteration.
-   * After removal: increments kill counters, updates HUD, and spawns replacement chickens.
    */
   cleanDeathEnemies() {
     const toRemove = this.level.enemies.filter(
       (e) => e.dethTime > 0 && e.dethTime < new Date().getTime() - 1000
     );
-
     toRemove.forEach((enemy) => {
-      // Reset dethTime first to prevent re-processing on the next tick.
       enemy.dethTime = 0;
       this.level.enemies.splice(this.level.enemies.indexOf(enemy), 1);
-
-      if (enemy instanceof Chicken) {
-        this.killedChickens++;
-        document.getElementById("killedChickens").innerHTML = this.killedChickens;
-      } else if (enemy instanceof Chick) {
-        this.killedChicks++;
-        document.getElementById("killedChicks").innerHTML = this.killedChicks;
-      }
-
-      // Update live enemy counts in the HUD.
-      document.getElementById("chickens").innerHTML =
-        this.level.enemies.filter((e) => e instanceof Chicken).length;
-      document.getElementById("chicks").innerHTML =
-        this.level.enemies.filter((e) => e instanceof Chick).length;
-
-      // Each killed Chicken is replaced by two new ones (escalating difficulty).
-      if (enemy instanceof Chicken) {
-        this.addNewChicken(2, enemy.x);
-      }
+      this.updateKillCounters(enemy);
+      this.respawnEnemyReplacement(enemy);
     });
+  }
+
+  updateKillCounters(enemy) {
+    if (enemy instanceof Chicken) {
+      this.killedChickens++;
+      document.getElementById("killedChickens").innerHTML = this.killedChickens;
+    } else if (enemy instanceof Chick) {
+      this.killedChicks++;
+      document.getElementById("killedChicks").innerHTML = this.killedChicks;
+    }
+    document.getElementById("chickens").innerHTML =
+      this.level.enemies.filter((e) => e instanceof Chicken).length;
+    document.getElementById("chicks").innerHTML =
+      this.level.enemies.filter((e) => e instanceof Chick).length;
+  }
+
+  respawnEnemyReplacement(enemy) {
+    if (enemy instanceof Chicken) {
+      this.addNewChicken(2, enemy.x);
+    }
   }
 
   /**
