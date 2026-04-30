@@ -82,6 +82,17 @@ function resetKeyboardState() {
 }
 
 /**
+ * Resets the displayed kill counters in the HUD to 0.
+ * Called before each new game start (START and NEU).
+ */
+function resetKillCountersUI() {
+  const killedChickensEl = document.getElementById("killedChickens");
+  const killedChicksEl = document.getElementById("killedChicks");
+  if (killedChickensEl) killedChickensEl.innerHTML = 0;
+  if (killedChicksEl) killedChicksEl.innerHTML = 0;
+}
+
+/**
  * Maps a KeyboardEvent code to the corresponding keyboard state flag.
  * @param {string} code - KeyboardEvent.code value (e.g. "ArrowLeft").
  * @param {boolean} isDown - True for keydown, false for keyup.
@@ -114,6 +125,7 @@ function run() {
     world.clearAllIntervalIds();
   }
   resetKeyboardState();
+  resetKillCountersUI();
   init();
 }
 
