@@ -88,6 +88,10 @@ class Character extends MovableObject {
   /** True when the character was hit while airborne; cleared on landing. */
   hurtInAir = false;
 
+  /**
+   * Creates the player character, sets collision box, initialises speed and images,
+   * and starts the gravity loop.
+   */
   constructor() {
     super().loadImage("./img/2-character-pepe/3-jump/j-31.png");
     this.actionDistance(90, 10, 30, 30);
@@ -97,12 +101,14 @@ class Character extends MovableObject {
     this.lastMoveTime = new Date().getTime();
   }
 
+  /** Sets a higher movement speed on mobile devices. */
   initializeSpeed() {
     if (typeof isMobileUserAgent === "function" && isMobileUserAgent()) {
       this.speed = 7.56;
     }
   }
 
+  /** Pre-loads all animation image sets into the image cache. */
   initializeImages() {
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_JUMPING);
@@ -140,6 +146,10 @@ class Character extends MovableObject {
     }, 1000 / 60);
   }
 
+  /**
+   * Updates the world camera so the character stays centred in view.
+   * Clamped to the level boundaries so the background never scrolls past the edges.
+   */
   updateCamera() {
     const canvasWidth = 720;
     const levelWidth = this.world.level.levelEndX[0];
@@ -232,20 +242,31 @@ class Character extends MovableObject {
     }
   }
 
+  /**
+   * Instantiates a new ThrowableObject at the character's current position.
+   * Adds a movement bonus if the character is walking at throw time.
+   * @returns {ThrowableObject}
+   */
   createThrowableBottle() {
     const movement = this.world.keyboard.RIGHT || this.world.keyboard.LEFT ? 1 : 0;
     return new ThrowableObject(this.x, this.y, this.otherDirection, movement);
   }
 
+  /**
+   * Adds the thrown bottle to the level's throwable list and registers its interval ID.
+   * @param {ThrowableObject} throwableBottle - The newly created bottle.
+   */
   registerThrowableBottle(throwableBottle) {
     this.world.level.throwableObjects.push(throwableBottle);
     this.world.pushIntervallIDs("throwableObjects", throwableBottle.intervalId);
   }
 
+  /** Plays the throw sound effect at the current volume, if available. */
   playThrowSound() {
     this.soundThrow ? (this.soundThrow.play(), this.soundThrow.volume = this.world.soundVolume) : null;
   }
 
+  /** Decrements the bottle counter and updates the bottles HUD bar. */
   consumeBottle() {
     this.world.character.bottlesNumber--;
     this.world.bottlesBar.setPercentage(this.world.character.bottlesNumber);
@@ -400,6 +421,12 @@ class Character extends MovableObject {
     };
   }
 
+  /**
+   * Attaches press/release event handlers to a DOM button so it mirrors a keyboard key.
+   * Handles touch, pointer, and mouse events for broad device compatibility.
+   * @param {string} buttonId - The DOM element ID of the button to bind.
+   * @param {string} key - The keyboard state key to toggle (e.g. "LEFT").
+   */
   bindControlButton(buttonId, key) {
     const button = document.getElementById(buttonId);
     if (!button) return;

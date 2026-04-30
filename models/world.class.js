@@ -117,6 +117,7 @@ class World {
     });
   }
 
+  /** Draws all world-space objects (background, enemies, character, bottles, etc.) with the camera offset applied. */
   drawWorldObjects() {
     this.addObjectsToMap(this.level.backgroundObjects);
     this.addObjectsToMap(this.level.bottles);
@@ -128,6 +129,7 @@ class World {
     this.addToMap(this.character);
   }
 
+  /** Draws all fixed HUD elements (status bars, end screens) without the camera offset. */
   drawHUD() {
     this.addToMap(this.coinsBar);
     this.addToMap(this.healthBar);
@@ -155,6 +157,10 @@ class World {
     return isVisible;
   }
 
+  /**
+   * Returns true when any part of the boss sprite is within the canvas viewport.
+   * @returns {boolean}
+   */
   isBossVisible() {
     const boss = this.level.boss[0];
     if (!boss) return false;
@@ -163,6 +169,7 @@ class World {
     return bossScreenRight > 0 && bossScreenLeft < this.canvas.width;
   }
 
+  /** Permanently unlocks the boss health bar and triggers the initial chick spawn. */
   unlockBossBar() {
     this.bossBarUnlocked = true;
     this.spawnInitialChicks(this.level.boss[0].x);
@@ -177,12 +184,18 @@ class World {
     this.updateChickCountHUD();
   }
 
+  /**
+   * Adds a given number of new Chick enemies at the specified x position.
+   * @param {number} count - How many chicks to spawn.
+   * @param {number} spawnX - Horizontal spawn position.
+   */
   spawnChicks(count, spawnX) {
     for (let i = 0; i < count; i++) {
       this.level.enemies.push(new Chick(spawnX));
     }
   }
 
+  /** Refreshes the chick count display in the HUD. */
   updateChickCountHUD() {
     document.getElementById("chicks").innerHTML = this.level.enemies.filter(
       (e) => e instanceof Chick
@@ -207,6 +220,10 @@ class World {
     this.cleanGroundBottles();
   }
 
+  /**
+   * Tests collision between each enemy and each thrown bottle.
+   * Damages the enemy and marks the bottle as spent on contact.
+   */
   checkCharacterVsEnemies() {
     this.level.enemies.forEach((enemy) => {
       this.character.killerJump(enemy);
@@ -217,6 +234,9 @@ class World {
     });
   }
 
+  /**
+   * Damages the character if it collides with the boss while the boss is still alive.
+   */
   checkCharacterVsBoss() {
     if (this.character.isColliding(this.level.boss[0]) && !this.level.boss[0].isDead()) {
       this.character.hit(0.7);
@@ -224,6 +244,9 @@ class World {
     }
   }
 
+  /**
+   * Collects any coin the living character walks over and updates the coins HUD.
+   */
   checkCharacterVsCoins() {
     this.level.lifeCoins.forEach((lifeCoins) => {
       if (this.character.isColliding(lifeCoins) && !this.character.isCharacterDead()) {
@@ -233,6 +256,9 @@ class World {
     });
   }
 
+  /**
+   * Picks up any ground bottle the character walks over and updates the bottles HUD.
+   */
   checkCharacterVsGroundBottles() {
     this.level.bottles.forEach((bottle) => {
       if (this.character.isColliding(bottle)) {
@@ -242,6 +268,9 @@ class World {
     });
   }
 
+  /**
+   * Tests each thrown bottle against the boss and triggers the hit handler on contact.
+   */
   checkBottleVsBoss() {
     this.level.throwableObjects.forEach((throwableBottle) => {
       if (this.level.boss[0].isColliding(throwableBottle) && !throwableBottle.isDamaged) {
@@ -250,6 +279,11 @@ class World {
     });
   }
 
+  /**
+   * Handles a confirmed bottle-hits-boss event: marks bottle spent, plays sound,
+   * damages the boss, spawns chicks, and schedules bottle cleanup.
+   * @param {ThrowableObject} throwableBottle - The bottle that struck the boss.
+   */
   handleBossBottleHit(throwableBottle) {
     throwableBottle.isDamaged = true;
     this.playBossHitSound();
@@ -258,17 +292,23 @@ class World {
     this.scheduleBottleRemovalFromBoss(throwableBottle);
   }
 
+  /** Plays the boss hit sound at the current volume, if available. */
   playBossHitSound() {
     this.soundHen ? this.soundHen.play() : null;
     this.soundHen ? (this.soundHen.volume = this.soundVolume) : null;
   }
 
+  /** Reduces the boss's energy by 15, updates the boss HUD, and enables the next attack. */
   damageBoss() {
     this.level.boss[0].energy = Math.max(0, this.level.boss[0].energy - 15);
     this.bossBar.setPercentage(this.level.boss[0].energy);
     this.level.boss[0].waitForAttack = false;
   }
 
+  /**
+   * Schedules removal of a bottle that hit the boss after 2 seconds.
+   * @param {ThrowableObject} throwableBottle - The bottle to remove.
+   */
   scheduleBottleRemovalFromBoss(throwableBottle) {
     setTimeout(() => {
       this.level.boss[0].bottlesDamage(
@@ -278,6 +318,10 @@ class World {
     }, 2000);
   }
 
+  /**
+   * Spawns 5 new chicks at the boss's position when the boss is hit.
+   * @param {number} spawnX - Horizontal spawn position (bottle impact x).
+   */
   spawnChicksOnBossHit(spawnX) {
     this.spawnChicks(5, spawnX);
     this.updateChickCountHUD();
@@ -301,17 +345,27 @@ class World {
     });
   }
 
+  /**
+   * Instantly kills the given enemy and records the death timestamp.
+   * @param {MovableObject} enemy - The enemy to kill.
+   * @param {number} timestamp - Current time in ms (used for death animation timing).
+   */
   killEnemyByBottle(enemy, timestamp) {
     enemy.energy = 0;
     enemy.dethTime = timestamp;
     this.playSoundBottleHit();
   }
 
+  /** Plays the bottle-hit-enemy sound at the current volume, if available. */
   playSoundBottleHit() {
     this.soundChick ? this.soundChick.play() : null;
     this.soundChick ? (this.soundChick.volume = this.soundVolume) : null;
   }
 
+  /**
+   * Schedules removal of a bottle that hit an enemy after 2 seconds.
+   * @param {ThrowableObject} throwableBottle - The bottle to remove.
+   */
   scheduleBottleRemoval(throwableBottle) {
     setTimeout(() => {
       const idx = this.level.throwableObjects.indexOf(throwableBottle);
@@ -375,6 +429,10 @@ class World {
     });
   }
 
+  /**
+   * Increments kill counters for the dead enemy type and refreshes all kill/enemy HUD elements.
+   * @param {MovableObject} enemy - The enemy that was just removed.
+   */
   updateKillCounters(enemy) {
     if (enemy instanceof Chicken) {
       this.killedChickens++;
@@ -389,6 +447,10 @@ class World {
       this.level.enemies.filter((e) => e instanceof Chick).length;
   }
 
+  /**
+   * Spawns replacement chickens when a normal chicken is killed.
+   * @param {MovableObject} enemy - The enemy that died.
+   */
   respawnEnemyReplacement(enemy) {
     if (enemy instanceof Chicken) {
       this.addNewChicken(2, enemy.x);

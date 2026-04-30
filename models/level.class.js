@@ -10,6 +10,19 @@ class Level {
   intervalIds = {};
   endScreens;
 
+  /**
+   * Creates a Level with all its object collections.
+   * @param {LifeCoin[]} lifeCoins - Collectible coins placed in the level.
+   * @param {Bottle[]} bottles - Ground bottles the character can pick up.
+   * @param {ThrowableObject[]} throwableObjects - Bottles currently in flight.
+   * @param {MovableObject[]} enemies - Normal enemy instances.
+   * @param {Endboss[]} boss - The boss array (single entry).
+   * @param {Cloud[]} clouds - Background cloud objects.
+   * @param {BackgroundObject[]} backgroundObjects - Parallax background layers.
+   * @param {number[]} levelEndX - Right boundary x coordinate(s) of the level.
+   * @param {object} intervalIds - Registry of all active interval IDs.
+   * @param {EndScreen[]} endScreens - Win / lose end-screen objects.
+   */
   constructor(
     lifeCoins,
     bottles,

@@ -125,6 +125,12 @@ class MovableObject extends DrawableObject {
     this.startMovementLoop(this.moveRightInterval, 1);
   }
 
+  /**
+   * Internal helper used by moveLeft() and moveRight().
+   * Creates a delta-time interval that moves the object until energy reaches 0.
+   * @param {number|null} intervalRef - Unused reference parameter (direction determines slot).
+   * @param {number} direction - Movement direction: -1 for left, 1 for right.
+   */
   startMovementLoop(intervalRef, direction) {
     let last = performance.now();
     const intervalId = setInterval(() => {
@@ -144,6 +150,11 @@ class MovableObject extends DrawableObject {
     }
   }
 
+  /**
+   * Moves the object one step in the given direction with world-edge wrapping.
+   * @param {number} direction - -1 for left, 1 for right.
+   * @param {number} dt - Delta-time factor for frame-rate independence.
+   */
   applyMovement(direction, dt) {
     const speed = (this.speed / 300) * dt;
     const newX = this.x + direction * speed;
@@ -264,6 +275,11 @@ class MovableObject extends DrawableObject {
     }
   }
 
+  /**
+   * Plays the jump sound exactly once per jump action.
+   * @param {HTMLAudioElement} sound - The jump sound effect.
+   * @param {number} soundVolume - Volume level (0–1).
+   */
   playJumpSoundOnce(sound, soundVolume) {
     if (this.playSound == false) {
       sound ? (sound.play(), sound.volume = soundVolume) : null;
@@ -271,6 +287,10 @@ class MovableObject extends DrawableObject {
     }
   }
 
+  /**
+   * Returns which jump animation frame should be shown based on elapsed time.
+   * @returns {number} Frame index (0–5), or -1 when the jump sequence is over.
+   */
   getJumpFrameIndex() {
     const elapsed = new Date().getTime() - this.jumpTime;
     const timings = [300, 500, 800, 900, 1000, 1100];
@@ -282,6 +302,12 @@ class MovableObject extends DrawableObject {
     return -1;
   }
 
+  /**
+   * Applies the computed frame index to the canvas image and resets action flags
+   * once the last jump frame is reached.
+   * @param {string[]} images - Jump animation frame paths.
+   * @param {number} frameIndex - Index returned by getJumpFrameIndex().
+   */
   updateJumpFrame(images, frameIndex) {
     if (frameIndex >= 0 && frameIndex < images.length) {
       this.img = this.imageCache[images[frameIndex]];
@@ -338,6 +364,11 @@ class MovableObject extends DrawableObject {
     }, 1000 / 25);
   }
 
+  /**
+   * Applies gravity: moves the object vertically and reduces upward speed.
+   * Dead objects drift downward at a fixed rate instead.
+   * @param {number} dt - Delta-time factor for frame-rate independence.
+   */
   updateVerticalPosition(dt) {
     if (this.isAboveGround() || this.speedY > 0) {
       if (!this.energy == 0) {
@@ -349,6 +380,10 @@ class MovableObject extends DrawableObject {
     }
   }
 
+  /**
+   * Prevents non-throwable objects from falling below the ground level.
+   * Stops vertical movement once the object reaches the floor.
+   */
   clampToGround() {
     if (!(this instanceof ThrowableObject)) {
       const groundY = this.worldHight - this.height - 55;

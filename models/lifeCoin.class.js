@@ -3,6 +3,10 @@ class LifeCoin extends MovableObject {
 
   y = this.worldHeight - this.height - 55;
 
+  /**
+   * Creates a LifeCoin at the given horizontal position and starts its animation.
+   * @param {number} positionX - Horizontal spawn position (x coordinate).
+   */
   constructor(positionX) {
     super().loadImage(this.IMAGES_LIFECOINS[0]);
     this.actionDistance(55, 55, 55, 55);
@@ -14,6 +18,7 @@ class LifeCoin extends MovableObject {
     this.animate();
   }
 
+  /** Starts the coin spin animation loop. */
   animate() {
     let endbossIntervalId = setInterval(() => {
       this.playAnimation(this.IMAGES_LIFECOINS);

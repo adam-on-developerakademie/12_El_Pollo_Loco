@@ -54,11 +54,19 @@ class ThrowableObject extends MovableObject {
     return this.intervalId;
   }
 
+  /** Sets the initial vertical position and upward velocity before launch. */
   initializeThrowState() {
     this.y = 120 + this.y--;
     this.speedY = 20;
   }
 
+  /**
+   * Starts the delta-time horizontal movement interval.
+   * Stops automatically when the bottle is marked as damaged.
+   * @param {boolean} otherDirection - True if the bottle travels left.
+   * @param {number} onMove - 1 if the character was moving when thrown.
+   * @param {number} speedFactor - Additional speed multiplier (1.6 on mobile).
+   */
   startHorizontalMovement(otherDirection, onMove, speedFactor) {
     let last = performance.now();
     this.intervalId = setInterval(() => {
@@ -74,6 +82,13 @@ class ThrowableObject extends MovableObject {
     }, 1);
   }
 
+  /**
+   * Moves the bottle one step in the correct horizontal direction.
+   * @param {boolean} otherDirection - True if the bottle travels left.
+   * @param {number} onMove - 1 if the character was moving when thrown.
+   * @param {number} speedFactor - Additional speed multiplier.
+   * @param {number} dt - Delta-time factor for frame-rate independence.
+   */
   moveBottleHorizontally(otherDirection, onMove, speedFactor, dt) {
     const baseSpeed = (2 + onMove * 1.5) / 500;
     const adjustedSpeed = baseSpeed * dt * 100 * speedFactor;

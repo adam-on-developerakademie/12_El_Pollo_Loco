@@ -40,6 +40,9 @@ class Endboss extends MovableObject {
   animationSpeed = 200;
   endbossIntervalId;
 
+  /**
+   * Creates the Endboss, loads all animation sets, and starts the animation loop.
+   */
   constructor() {
     super().loadImage(this.IMAGES_WALKING[0]);
     this.actionDistance(70, 120, 80, 50);
@@ -55,6 +58,9 @@ class Endboss extends MovableObject {
     this.animate();
   }
 
+  /**
+   * Starts the animation interval that calls setImages() at each tick.
+   */
   animate() {
     this.setImages();
     this.endbossIntervalId = setInterval(() => {
@@ -73,6 +79,10 @@ class Endboss extends MovableObject {
     }
   }
 
+  /**
+   * Begins the walk→attack sequence: sets walking images, boosts speed,
+   * and schedules the three timed phase changes.
+   */
   startAttackSequence() {
     this.IMAGES = this.IMAGES_WALKING;
     this.speed = 100;
@@ -81,12 +91,14 @@ class Endboss extends MovableObject {
     this.scheduleAttackEnd();
   }
 
+  /** Schedules the start of the boss's leftward walk after a short delay. */
   scheduleWalkStart() {
     setTimeout(() => {
       this.moveLeftInterval ? null : this.moveLeft();
     }, 400);
   }
 
+  /** Schedules the transition to the attack animation after the walk phase. */
   scheduleAttackStart() {
     setTimeout(() => {
       clearInterval(this.moveLeftInterval);
@@ -95,6 +107,7 @@ class Endboss extends MovableObject {
     }, 1500);
   }
 
+  /** Schedules the end of the attack and re-enables the wait-for-attack flag. */
   scheduleAttackEnd() {
     setTimeout(() => {
       this.waitForAttack = true;

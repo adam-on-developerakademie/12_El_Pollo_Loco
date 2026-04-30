@@ -39,6 +39,10 @@ class StatusBar extends DrawableObject {
   statusBar = {};
    percentage;
 
+  /**
+   * Creates a StatusBar using one of the named bar configurations.
+   * @param {string} statusBar - Key of the bar definition to use (e.g. "HEALTH_BAR").
+   */
   constructor(statusBar) {
     super();
     this.statusBar = this[statusBar];
@@ -54,11 +58,19 @@ class StatusBar extends DrawableObject {
     this.height = 50;
   }
 
+  /**
+   * Updates the displayed image to match the given percentage value.
+   * @param {number} percentage - Current value (0–100) of the bar.
+   */
   setPercentage(percentage) {
     this.percentage = percentage * this.statusBar.multiplier;
     let path = this.statusBar.img[this.resolveImageIndex()];
     this.img = this.imageCache[path];
   }
+  /**
+   * Maps the current percentage to an image array index (0–5).
+   * @returns {number} Index into the bar's image array.
+   */
   resolveImageIndex() {
     if (this.percentage == 100) {
       return 5;

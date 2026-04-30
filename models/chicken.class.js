@@ -7,6 +7,10 @@ class Chicken extends MovableObject {
 
   IMAGE_DEAD = ["./img/3-enemies-chicken/chicken-normal/2-dead/dead.png"];
 
+  /**
+   * Creates a normal chicken enemy ahead of the given x position.
+   * @param {number} x - Base horizontal spawn position.
+   */
   constructor(x) {
     super().loadImage("./img/3-enemies-chicken/chicken-normal/1-walk/1-w.png");
     
@@ -20,17 +24,26 @@ class Chicken extends MovableObject {
     this.intervalId = this.animate();
   }
 
+  /**
+   * Starts movement and the animation loop.
+   * @returns {number} The animation interval ID.
+   */
   animate() {
     this.startMovement();
     return this.startAnimationLoop();
   }
 
+  /** Starts leftward movement if the chicken is still alive. */
   startMovement() {
     if (this.energy !== 0) {
       this.moveLeft();
     }
   }
 
+  /**
+   * Starts the 60 ms animation interval that updates state and plays frames.
+   * @returns {number} The interval ID.
+   */
   startAnimationLoop() {
     let intervalId = setInterval(() => {
       this.updateAnimationState();
@@ -39,6 +52,7 @@ class Chicken extends MovableObject {
     return intervalId;
   }
 
+  /** Adjusts the collision box depending on whether the chicken is alive or dead. */
   updateAnimationState() {
     if (this.energy == 0) {
       this.actionDistance(50, 5, 5, 5);
@@ -47,6 +61,7 @@ class Chicken extends MovableObject {
     }
   }
 
+  /** Plays the correct animation frame and clears the interval when the chicken dies. */
   playAnimationFrame() {
     const images = this.energy == 0 ? this.IMAGE_DEAD : this.IMAGES_WALKING;
     this.playAnimation(images);
