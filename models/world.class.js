@@ -430,15 +430,23 @@ class World {
   }
 
   /**
-   * Increments kill counters for the dead enemy type and refreshes all kill/enemy HUD elements.
+    * Increments kill counters for the dead enemy type and refreshes all kill/enemy HUD elements.
+    * Score counting is locked once the boss is dead.
    * @param {MovableObject} enemy - The enemy that was just removed.
    */
   updateKillCounters(enemy) {
+    const boss = this.level && this.level.boss ? this.level.boss[0] : null;
+    const scoreLocked = !!(boss && boss.isDead());
+
     if (enemy instanceof Chicken) {
-      this.killedChickens++;
+      if (!scoreLocked) {
+        this.killedChickens++;
+      }
       document.getElementById("killedChickens").innerHTML = this.killedChickens;
     } else if (enemy instanceof Chick) {
-      this.killedChicks++;
+      if (!scoreLocked) {
+        this.killedChicks++;
+      }
       document.getElementById("killedChicks").innerHTML = this.killedChicks;
     }
     document.getElementById("chickens").innerHTML =
