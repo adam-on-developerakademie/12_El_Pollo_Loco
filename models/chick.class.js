@@ -20,20 +20,38 @@ class Chick extends MovableObject {
     this.intervalId = this.animate();
   }
 
-  animate() {    
+  animate() {
+    this.startMovement();
+    return this.startAnimationLoop();
+  }
+
+  startMovement() {
     if (this.energy !== 0) {
       this.moveLeft();
     }
+  }
+
+  startAnimationLoop() {
     let IntervalId = setInterval(() => {
-      if (this.energy == 0) {
-        this.actionDistance(50, 5, 5, 5);
-        this.playAnimation(this.IMAGE_DEAD);
-        clearInterval(IntervalId);        
-      } else {
-        this.actionDistance(0, 5, 5, 5);
-        this.playAnimation(this.IMAGES_WALKING);
-      }
+      this.updateAnimationState();
+      this.playAnimationFrame();
     }, 60);
-   return IntervalId; 
+    return IntervalId;
+  }
+
+  updateAnimationState() {
+    if (this.energy == 0) {
+      this.actionDistance(50, 5, 5, 5);
+    } else {
+      this.actionDistance(0, 5, 5, 5);
+    }
+  }
+
+  playAnimationFrame() {
+    const images = this.energy == 0 ? this.IMAGE_DEAD : this.IMAGES_WALKING;
+    this.playAnimation(images);
+    if (this.energy == 0) {
+      clearInterval(this.intervalId);
+    }
   }
 }

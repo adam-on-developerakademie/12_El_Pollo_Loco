@@ -23,16 +23,29 @@ class Bottle extends MovableObject {
 
 
   setBottleImage() {
-    let random=Math.random();
-    let i=0
-    setTimeout(() => {  
-    
-    if(random>0.66){i=0}else if(random<0.33){i=1 , this.x-=12}else{i=2, this.x+=12};
-    this.loadImage(this.IMAGES_BOTTLE[i]);
+    const index = this.determineBottleIndex();
+    this.scheduleImageChange(index);
+    return index;
+  }
 
-    }, 3000 + i * 10000);
+  determineBottleIndex() {
+    const random = Math.random();
+    if (random > 0.66) return 0;
+    if (random < 0.33) return 1;
+    return 2;
+  }
 
-    return i;
+  scheduleImageChange(index) {
+    const delay = 3000 + index * 10000;
+    setTimeout(() => {
+      this.applyBottleVariation(index);
+      this.loadImage(this.IMAGES_BOTTLE[index]);
+    }, delay);
+  }
+
+  applyBottleVariation(index) {
+    if (index === 1) this.x -= 12;
+    if (index === 2) this.x += 12;
   }
 
   newBottlePlacement(characterPosition) {

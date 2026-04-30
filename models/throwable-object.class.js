@@ -48,26 +48,40 @@ class ThrowableObject extends MovableObject {
    * @returns {number} The setInterval ID stored as this.intervalId.
    */
   throw(otherDirection, onMove, speedFactor = 1) {
+    this.initializeThrowState();
+    this.startHorizontalMovement(otherDirection, onMove, speedFactor);
+    this.applyGravity();
+    return this.intervalId;
+  }
+
+  initializeThrowState() {
+    this.y = 120 + this.y--;
+    this.speedY = 20;
+  }
+
+  startHorizontalMovement(otherDirection, onMove, speedFactor) {
     let last = performance.now();
-    let intervalId = setInterval(() => {
+    this.intervalId = setInterval(() => {
       const now = performance.now();
       const dt = Math.min((now - last) / 1, 5);
       last = now;
-      // Stop movement as soon as the bottle hits something.
       if (this.isDamaged) {
         clearInterval(this.intervalId);
         clearInterval(this.gravityIntervalId);
         return;
       }
-      otherDirection
-        ? (this.x -= ((2 + onMove * 1.5) / 500) * dt * 100 * speedFactor)
-        : (this.x += ((2 + onMove * 1.5) / 500) * dt * 100 * speedFactor);
+      this.moveBottleHorizontally(otherDirection, onMove, speedFactor, dt);
     }, 1);
-    // Launch upward slightly and let gravity take over.
-    this.y = 120 + this.y--;
-    this.speedY = 20;
-    this.applyGravity();
-    return intervalId;
+  }
+
+  moveBottleHorizontally(otherDirection, onMove, speedFactor, dt) {
+    const baseSpeed = (2 + onMove * 1.5) / 500;
+    const adjustedSpeed = baseSpeed * dt * 100 * speedFactor;
+    if (otherDirection) {
+      this.x -= adjustedSpeed;
+    } else {
+      this.x += adjustedSpeed;
+    }
   }
 
   /**

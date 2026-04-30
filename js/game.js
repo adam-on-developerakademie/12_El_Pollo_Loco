@@ -3,7 +3,9 @@ let world;
 let keyboard = new Keyboard();
 let soundGame = new Audio("./audio/game.wav");
 let soundMenu = new Audio("./audio/menu.mp3");
-let soundVolume = parseFloat(localStorage.getItem("soundVolume") ?? "1");
+const _storedVolume = localStorage.getItem("soundVolume");
+if (_storedVolume === null) localStorage.setItem("soundVolume", "1");
+let soundVolume = _storedVolume !== null ? parseFloat(_storedVolume) : 1;
 
 function setAudioVolume(target) {
   if (!target) {
@@ -130,14 +132,7 @@ function youLose() {
   if (ch.isCharacterDead() && !world.level.boss[0].isDead() && !ch.gameEnded) {
     ch.gameEnded = true;
     saveScore(world.killedChickens + world.killedChicks * 2);
-    setTimeout(() => {
-      world.level.endScreens[0].zoomIn(400, 200, () => {
-        setTimeout(() => {
-          world.level.endScreens[0].newPosition(-720, 0, 0);
-          world.level.endScreens[1].zoomIn(300, 200, () => {});
-        }, 500);
-      });
-    }, 2000);
+    displayLoseAnimation();
   }
 }
 
@@ -147,13 +142,36 @@ function youWon() {
   if (world.level.boss[0].isDead() && !ch.isCharacterDead() && !ch.gameEnded) {
     ch.gameEnded = true;
     saveScore(world.killedChickens + world.killedChicks * 2 + 10);
-    setTimeout(() => {
-      world.level.endScreens[2].zoomIn(600, 400, () => {
-        setTimeout(() => {
-          world.level.endScreens[2].newPosition(-720, 0, 0);
-          world.level.endScreens[1].zoomIn(300, 200, () => {});
-        }, 500);
-      });
-    }, 2000);
+    displayWinAnimation();
   }
+}
+
+function displayLoseAnimation() {
+  setTimeout(() => {
+    world.level.endScreens[0].zoomIn(400, 200, () => {
+      scheduleSecondLoseAnimation();
+    });
+  }, 2000);
+}
+
+function scheduleSecondLoseAnimation() {
+  setTimeout(() => {
+    world.level.endScreens[0].newPosition(-720, 0, 0);
+    world.level.endScreens[1].zoomIn(300, 200, () => {});
+  }, 500);
+}
+
+function displayWinAnimation() {
+  setTimeout(() => {
+    world.level.endScreens[2].zoomIn(600, 400, () => {
+      scheduleSecondWinAnimation();
+    });
+  }, 2000);
+}
+
+function scheduleSecondWinAnimation() {
+  setTimeout(() => {
+    world.level.endScreens[2].newPosition(-720, 0, 0);
+    world.level.endScreens[1].zoomIn(300, 200, () => {});
+  }, 500);
 }

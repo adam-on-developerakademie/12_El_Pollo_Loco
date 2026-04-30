@@ -148,22 +148,24 @@ class World {
     if (this.bossBarUnlocked) {
       return true;
     }
-
-    let boss = this.level.boss[0];
-    if (!boss) {
-      return false;
+    const isVisible = this.isBossVisible();
+    if (isVisible && !this.bossBarUnlocked) {
+      this.unlockBossBar();
     }
+    return isVisible;
+  }
 
-    let bossScreenLeft  = boss.x + this.camera_x;
-    let bossScreenRight = bossScreenLeft + boss.width;
-    let bossIsVisible   = bossScreenRight > 0 && bossScreenLeft < this.canvas.width;
+  isBossVisible() {
+    const boss = this.level.boss[0];
+    if (!boss) return false;
+    const bossScreenLeft = boss.x + this.camera_x;
+    const bossScreenRight = bossScreenLeft + boss.width;
+    return bossScreenRight > 0 && bossScreenLeft < this.canvas.width;
+  }
 
-    if (bossIsVisible) {
-      this.bossBarUnlocked = true;
-      this.spawnInitialChicks(boss.x);
-    }
-
-    return bossIsVisible;
+  unlockBossBar() {
+    this.bossBarUnlocked = true;
+    this.spawnInitialChicks(this.level.boss[0].x);
   }
 
   /**
@@ -243,21 +245,37 @@ class World {
   checkBottleVsBoss() {
     this.level.throwableObjects.forEach((throwableBottle) => {
       if (this.level.boss[0].isColliding(throwableBottle) && !throwableBottle.isDamaged) {
-        throwableBottle.isDamaged = true;
-        this.soundHen ? this.soundHen.play() : null;
-        this.soundHen ? (this.soundHen.volume = this.soundVolume) : null;
-        this.level.boss[0].energy = Math.max(0, this.level.boss[0].energy - 15);
-        this.bossBar.setPercentage(this.level.boss[0].energy);
-        this.level.boss[0].waitForAttack = false;
-        this.spawnChicksOnBossHit(throwableBottle.x);
-        setTimeout(() => {
-          this.level.boss[0].bottlesDamage(
-            this.level.throwableObjects,
-            this.level.throwableObjects.indexOf(throwableBottle)
-          );
-        }, 2000);
+        this.handleBossBottleHit(throwableBottle);
       }
     });
+  }
+
+  handleBossBottleHit(throwableBottle) {
+    throwableBottle.isDamaged = true;
+    this.playBossHitSound();
+    this.damageBoss();
+    this.spawnChicksOnBossHit(throwableBottle.x);
+    this.scheduleBottleRemovalFromBoss(throwableBottle);
+  }
+
+  playBossHitSound() {
+    this.soundHen ? this.soundHen.play() : null;
+    this.soundHen ? (this.soundHen.volume = this.soundVolume) : null;
+  }
+
+  damageBoss() {
+    this.level.boss[0].energy = Math.max(0, this.level.boss[0].energy - 15);
+    this.bossBar.setPercentage(this.level.boss[0].energy);
+    this.level.boss[0].waitForAttack = false;
+  }
+
+  scheduleBottleRemovalFromBoss(throwableBottle) {
+    setTimeout(() => {
+      this.level.boss[0].bottlesDamage(
+        this.level.throwableObjects,
+        this.level.throwableObjects.indexOf(throwableBottle)
+      );
+    }, 2000);
   }
 
   spawnChicksOnBossHit(spawnX) {

@@ -5,6 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
   if (typeof applySoundVolume === "function") {
     applySoundVolume();
   }
+  document.getElementById("highscoreBest").textContent = localStorage.getItem("highscoreBest") || 0;
+  document.getElementById("highscoreLast").textContent = localStorage.getItem("highscoreLast") || 0;
 });
 
 function updateGameplayButtonsVisibility() {

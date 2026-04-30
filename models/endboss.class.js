@@ -66,24 +66,38 @@ class Endboss extends MovableObject {
   setImages() {
     if (this.isDead()) {
       this.IMAGES = this.IMAGES_DEAD;
+    } else if (this.waitForAttack) {
+      this.IMAGES = this.IMAGES_LOOKING;
     } else {
-      if (this.waitForAttack) {
-        this.IMAGES = this.IMAGES_LOOKING;
-      } else {
-        this.IMAGES = this.IMAGES_WALKING;
-        this.speed = 100;
-        setTimeout(() => {
-          this.moveLeftInterval ? null : this.moveLeft();
-        }, 400);
-        setTimeout(() => {
-          clearInterval(this.moveLeftInterval);
-          this.moveLeftInterval = null;
-          this.IMAGES = this.IMAGES_ATTACK;
-        }, 1500);
-        setTimeout(() => {
-          this.waitForAttack = true;
-        }, 1200);
-      }
+      this.startAttackSequence();
     }
+  }
+
+  startAttackSequence() {
+    this.IMAGES = this.IMAGES_WALKING;
+    this.speed = 100;
+    this.scheduleWalkStart();
+    this.scheduleAttackStart();
+    this.scheduleAttackEnd();
+  }
+
+  scheduleWalkStart() {
+    setTimeout(() => {
+      this.moveLeftInterval ? null : this.moveLeft();
+    }, 400);
+  }
+
+  scheduleAttackStart() {
+    setTimeout(() => {
+      clearInterval(this.moveLeftInterval);
+      this.moveLeftInterval = null;
+      this.IMAGES = this.IMAGES_ATTACK;
+    }, 1500);
+  }
+
+  scheduleAttackEnd() {
+    setTimeout(() => {
+      this.waitForAttack = true;
+    }, 1200);
   }
 }

@@ -113,19 +113,7 @@ class MovableObject extends DrawableObject {
    * Stops automatically when energy reaches 0.
    */
   moveLeft() {
-    let last = performance.now();
-    this.moveLeftInterval = setInterval(() => {
-      const now = performance.now();
-      const dt = Math.min((now - last) / 1, 5);
-      last = now;
-      if (this.energy != 0) {
-        this.width + this.x <= 0
-          ? (this.x = this.worldWidth * 5)
-          : (this.x -= (this.speed / 300) * dt);
-      } else {
-        clearInterval(this.moveLeftInterval);
-      }
-    }, 1);
+    this.startMovementLoop(this.moveLeftInterval, -1);
   }
 
   /**
@@ -134,19 +122,37 @@ class MovableObject extends DrawableObject {
    * Stops automatically when energy reaches 0.
    */
   moveRight() {
+    this.startMovementLoop(this.moveRightInterval, 1);
+  }
+
+  startMovementLoop(intervalRef, direction) {
     let last = performance.now();
-    this.moveRightInterval = setInterval(() => {
+    const intervalId = setInterval(() => {
       const now = performance.now();
       const dt = Math.min((now - last) / 1, 5);
       last = now;
       if (this.energy != 0) {
-        this.width + this.x >= this.worldWidth * 5
-          ? (this.x = 0)
-          : (this.x += (this.speed / 300) * dt);
+        this.applyMovement(direction, dt);
       } else {
-        clearInterval(this.moveRightInterval);
+        clearInterval(intervalId);
       }
     }, 1);
+    if (direction === -1) {
+      this.moveLeftInterval = intervalId;
+    } else {
+      this.moveRightInterval = intervalId;
+    }
+  }
+
+  applyMovement(direction, dt) {
+    const speed = (this.speed / 300) * dt;
+    const newX = this.x + direction * speed;
+    const worldBound = this.worldWidth * 5;
+    if (direction === -1) {
+      this.x = this.width + newX <= 0 ? worldBound : newX;
+    } else {
+      this.x = this.width + newX >= worldBound ? 0 : newX;
+    }
   }
 
   /**
@@ -252,28 +258,37 @@ class MovableObject extends DrawableObject {
    */
   playAnimationJump(images, sound, soundVolume) {
     if (this.action == "jump") {
-      if (this.playSound == false) {
-        sound ? (sound.play(), sound.volume = soundVolume) : null;
-        this.playSound = true;
+      this.playJumpSoundOnce(sound, soundVolume);
+      const frameIndex = this.getJumpFrameIndex();
+      this.updateJumpFrame(images, frameIndex);
+    }
+  }
+
+  playJumpSoundOnce(sound, soundVolume) {
+    if (this.playSound == false) {
+      sound ? (sound.play(), sound.volume = soundVolume) : null;
+      this.playSound = true;
+    }
+  }
+
+  getJumpFrameIndex() {
+    const elapsed = new Date().getTime() - this.jumpTime;
+    const timings = [300, 500, 800, 900, 1000, 1100];
+    for (let i = 0; i < timings.length; i++) {
+      if (elapsed < timings[i]) {
+        return i;
       }
-      if (new Date().getTime() < this.jumpTime + 300) {
-        this.img = this.imageCache[images[0]];
-      } else if (new Date().getTime() < this.jumpTime + 500) {
-        this.img = this.imageCache[images[1]];
-      } else if (new Date().getTime() < this.jumpTime + 800) {
-        this.img = this.imageCache[images[2]];
-      } else if (new Date().getTime() < this.jumpTime + 900) {
-        this.img = this.imageCache[images[3]];
-      } else if (new Date().getTime() < this.jumpTime + 1000) {
-        this.img = this.imageCache[images[4]];
-      } else if (new Date().getTime() < this.jumpTime + 1100) {
-        this.img = this.imageCache[images[5]];
-        this.action = false;
-        this.playSound = false;
-      } else {
-        this.action = false;
-        this.playSound = false;
-      }
+    }
+    return -1;
+  }
+
+  updateJumpFrame(images, frameIndex) {
+    if (frameIndex >= 0 && frameIndex < images.length) {
+      this.img = this.imageCache[images[frameIndex]];
+    }
+    if (frameIndex >= 5) {
+      this.action = false;
+      this.playSound = false;
     }
   }
 
@@ -318,24 +333,30 @@ class MovableObject extends DrawableObject {
       const now = performance.now();
       const dt = Math.min((now - last) / (1000 / 25), 3);
       last = now;
-      if (this.isAboveGround() || this.speedY > 0) {
-        if (!this.energy == 0) {
-          this.y -= this.speedY * dt;
-          this.speedY -= this.acceleration * dt;
-        } else {
-          // Dead objects drift downward at a fixed rate.
-          this.y -= 10 * dt;
-        }
-      }
-      // Prevent non-bottle objects from falling through the floor.
-      if (!(this instanceof ThrowableObject)) {
-        const groundY = this.worldHight - this.height - 55;
-        if (this.y > groundY) {
-          this.y = groundY;
-          this.speedY = 0;
-        }
-      }
+      this.updateVerticalPosition(dt);
+      this.clampToGround();
     }, 1000 / 25);
+  }
+
+  updateVerticalPosition(dt) {
+    if (this.isAboveGround() || this.speedY > 0) {
+      if (!this.energy == 0) {
+        this.y -= this.speedY * dt;
+        this.speedY -= this.acceleration * dt;
+      } else {
+        this.y -= 10 * dt;
+      }
+    }
+  }
+
+  clampToGround() {
+    if (!(this instanceof ThrowableObject)) {
+      const groundY = this.worldHight - this.height - 55;
+      if (this.y > groundY) {
+        this.y = groundY;
+        this.speedY = 0;
+      }
+    }
   }
 
   /**

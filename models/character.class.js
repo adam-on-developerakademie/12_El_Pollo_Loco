@@ -91,10 +91,19 @@ class Character extends MovableObject {
   constructor() {
     super().loadImage("./img/2-character-pepe/3-jump/j-31.png");
     this.actionDistance(90, 10, 30, 30);
+    this.initializeSpeed();
+    this.applyGravity();
+    this.initializeImages();
+    this.lastMoveTime = new Date().getTime();
+  }
+
+  initializeSpeed() {
     if (typeof isMobileUserAgent === "function" && isMobileUserAgent()) {
       this.speed = 7.56;
     }
-    this.applyGravity();
+  }
+
+  initializeImages() {
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_JUMPING);
     this.loadImages(this.IMAGES_DEAD);
@@ -103,7 +112,6 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGE_LOST);
     this.loadImages(this.IMAGE_IDLE);
     this.loadImages(this.IMAGE_SLEEP);
-    this.lastMoveTime = new Date().getTime();
   }
 
   /**
@@ -217,18 +225,30 @@ class Character extends MovableObject {
   throwBottle() {
     if (this.isReadyToThrow()) {
       this.isThrowing = true;
-      let throwableBottle = new ThrowableObject(
-        this.world.character.x,
-        this.world.character.y,
-        this.otherDirection,
-        this.world.keyboard.RIGHT || this.world.keyboard.LEFT ? 1 : 0
-      );
-      this.world.level.throwableObjects.push(throwableBottle);
-      this.world.pushIntervallIDs("throwableObjects", throwableBottle.intervalId);
-      this.soundThrow ? (this.soundThrow.play(), this.soundThrow.volume = this.world.soundVolume) : null;
-      this.world.character.bottlesNumber--;
-      this.world.bottlesBar.setPercentage(this.world.character.bottlesNumber);
+      const throwableBottle = this.createThrowableBottle();
+      this.registerThrowableBottle(throwableBottle);
+      this.playThrowSound();
+      this.consumeBottle();
     }
+  }
+
+  createThrowableBottle() {
+    const movement = this.world.keyboard.RIGHT || this.world.keyboard.LEFT ? 1 : 0;
+    return new ThrowableObject(this.x, this.y, this.otherDirection, movement);
+  }
+
+  registerThrowableBottle(throwableBottle) {
+    this.world.level.throwableObjects.push(throwableBottle);
+    this.world.pushIntervallIDs("throwableObjects", throwableBottle.intervalId);
+  }
+
+  playThrowSound() {
+    this.soundThrow ? (this.soundThrow.play(), this.soundThrow.volume = this.world.soundVolume) : null;
+  }
+
+  consumeBottle() {
+    this.world.character.bottlesNumber--;
+    this.world.bottlesBar.setPercentage(this.world.character.bottlesNumber);
   }
 
   /**
